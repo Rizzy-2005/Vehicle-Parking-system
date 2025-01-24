@@ -3,194 +3,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vehicle Registration</title>
+  <title>New Vehicle Registration</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
+    /* Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
     body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
       display: flex;
-      height: 100vh;
-      background: linear-gradient(135deg, #e0eafc, #cfdef3);
-      color: #343a40;
+      background-color: #f7f9fc;
     }
 
+    /* Sidebar Styling */
     .sidebar {
-      width: 20%;
-      background: linear-gradient(135deg, #556270, #4ecdc4);
+      background-color: #343a40;
+      width: 240px;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      color: #fff;
-      border-right: 2px solid #dee2e6;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
+      text-align: center;
+      height: 100vh;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     }
 
     .sidebar h2 {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      color: #f8f9fa;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 1.5rem;
     }
 
-    .sidebar button {
-      width: 80%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 25px;
+    .sidebar a {
+      display: block;
+      margin: 15px 0;
+      padding: 12px 15px;
+      text-decoration: none;
+      color: #ced4da;
       font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+      font-weight: 500;
+      border-radius: 5px;
+      background-color: transparent;
+      transition: all 0.3s;
     }
 
-    .sidebar .btn-register {
-      background: linear-gradient(135deg, #ffd700, #ffeb3b);
+    .sidebar a.active,
+    .sidebar a:hover {
+      background-color: #ffc107;
       color: #343a40;
-      box-shadow: 0 4px 8px rgba(255, 215, 0, 0.4);
+      font-weight: 600;
     }
 
-    .sidebar .btn-update, .sidebar .btn-checkout {
-      background: linear-gradient(135deg, #343a40, #495057);
-      color: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .sidebar .logout {
-      background: linear-gradient(135deg, #d6d8db, #e9ecef);
-      color: #495057;
-      box-shadow: 0 4px 8px rgba(211, 211, 211, 0.4);
-    }
-
-    .sidebar button:hover {
-      transform: scale(1.08);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-
+    /* Main Content Styling */
     .main {
-      width: 80%;
-      background: #fff;
+      flex-grow: 1;
       padding: 40px;
-      border-left: 2px solid #dee2e6;
-      border-radius: 20px 0 0 20px;
-      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    .main h1 {
-      font-size: 2.5rem;
+    h1 {
+      font-size: 2rem;
       color: #495057;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      margin-bottom: 30px;
+      font-weight: 600;
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      width: 60%;
-      margin: 0 auto;
+    .form-section {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    label {
-      font-size: 1.1rem;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #495057;
+    .form-group {
+      margin-bottom: 20px;
     }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #ced4da;
-      border-radius: 25px;
-      outline: none;
+    .form-group label {
+      display: block;
+      font-size: 0.95rem;
+      color: #6c757d;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 90%; /* Reduced width */
+      padding: 12px 15px;
       font-size: 1rem;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      transition: border-color 0.3s;
     }
 
-    input:focus {
-      border-color: #80bdff;
-      box-shadow: 0 0 10px rgba(128, 189, 255, 0.5);
+    .form-group input:focus {
+      border-color: #495057;
+      outline: none;
+    }
+
+    /* Buttons Styling */
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .slots-button,
+    .register-button {
+      width: 48%; /* Adjusted width */
+      text-align: center;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
     }
 
     .slots-button {
-      background-color: #ff6f61;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      padding: 12px;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.3s ease, background-color 0.3s ease;
+      background-color: #007bff;
+      color: #ffffff;
     }
 
     .slots-button:hover {
-      background-color: #e0554f;
-      transform: scale(1.05);
+      background-color: #0056b3;
     }
 
     .register-button {
-      background-color: #6f42c1;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      padding: 12px;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.3s ease, background-color 0.3s ease;
+      background-color: #28a745;
+      color: #ffffff;
     }
 
     .register-button:hover {
-      background-color: #5933a6;
-      transform: scale(1.05);
+      background-color: #1e7e34;
     }
 
-    .form-footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #6c757d;
-      margin-top: 20px;
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main {
+        padding: 20px;
+      }
+      .form-group input {
+        width: 100%; /* Full width on small screens */
+      }
+      .button-container {
+        flex-direction: column; /* Stack buttons vertically on small screens */
+      }
+      .slots-button,
+      .register-button {
+        width: 100%; /* Full width on small screens */
+        margin-bottom: 10px;
+      }
     }
-
   </style>
 </head>
 <body>
   <div class="sidebar">
     <h2>Welcome User</h2>
-    <button class="btn-register">Register</button>
-    <button class="btn-update">Update</button>
-    <button class="btn-checkout">Checkout</button>
-    <button class="logout">Log out</button>
+    <a href="Attendent-Reg.html" class="btn-register active">Register</a>
+    <a href="Attendent-Update.html" class="btn-update">Update</a>
+    <a href="#" class="btn-checkout">Checkout</a>
+    <a href="#" class="logout">Log out</a>
   </div>
   <div class="main">
     <h1>New Vehicle Registration</h1>
-    <form>
-      <div>
-        <label for="userid">Userid:</label>
-        <input type="text" id="userid" placeholder="Enter your user ID">
+    <div class="form-section">
+      <div class="form-group">
+        <label for="user-id">User ID:</label>
+        <input type="text" id="user-id" placeholder="Enter User ID">
       </div>
-      <div>
-        <label for="vehicle-name">Vehicle name:</label>
-        <input type="text" id="vehicle-name" placeholder="Enter vehicle name">
+      <div class="form-group">
+        <label for="vehicle-name">Vehicle Name:</label>
+        <input type="text" id="vehicle-name" placeholder="Enter Vehicle Name">
       </div>
-      <div>
-        <label for="license-plate">License plate:</label>
-        <input type="text" id="license-plate" placeholder="Enter license plate">
+      <div class="form-group">
+        <label for="license-plate">License Plate:</label>
+        <input type="text" id="license-plate" placeholder="Enter License Plate">
       </div>
-      <button type="button" class="slots-button">View Slots</button>
-      <button type="submit" class="register-button">Register</button>
-      <p class="form-footer">Ensure all details are accurate before submitting.</p>
-    </form>
+      <div class="button-container">
+        <button class="slots-button" id="slots-button">Slots</button>
+        <button class="register-button" id="register-button">Register</button>
+      </div>
+    </div>
   </div>
+  <script>
+    // Event listener for the "Slots" button
+    document.getElementById('slots-button').addEventListener('click', () => {
+      alert('Displaying available slots...');
+      // Add logic for displaying slots here
+    });
+
+    // Event listener for the "Register" button
+    document.getElementById('register-button').addEventListener('click', () => {
+      const userId = document.getElementById('user-id').value.trim();
+      const vehicleName = document.getElementById('vehicle-name').value.trim();
+      const licensePlate = document.getElementById('license-plate').value.trim();
+
+      if (!userId || !vehicleName || !licensePlate) {
+        alert('Please fill out all fields before registering.');
+        return;
+      }
+
+      alert(`Registering vehicle:
+      User ID: ${userId}
+      Vehicle Name: ${vehicleName}
+      License Plate: ${licensePlate}`);
+      // Add registration logic here
+    });
+  </script>
 </body>
 </html>
