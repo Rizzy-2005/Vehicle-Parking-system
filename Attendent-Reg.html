@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Registration</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      color: #343a40;
+    }
+
+    .sidebar {
+      width: 20%;
+      background: linear-gradient(135deg, #556270, #4ecdc4);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      border-right: 2px solid #dee2e6;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar button {
+      width: 80%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .sidebar .btn-register {
+      background: linear-gradient(135deg, #ffd700, #ffeb3b);
+      color: #343a40;
+      box-shadow: 0 4px 8px rgba(255, 215, 0, 0.4);
+    }
+
+    .sidebar .btn-update, .sidebar .btn-checkout {
+      background: linear-gradient(135deg, #343a40, #495057);
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar .logout {
+      background: linear-gradient(135deg, #d6d8db, #e9ecef);
+      color: #495057;
+      box-shadow: 0 4px 8px rgba(211, 211, 211, 0.4);
+    }
+
+    .sidebar button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .main {
+      width: 80%;
+      background: #fff;
+      padding: 40px;
+      border-left: 2px solid #dee2e6;
+      border-radius: 20px 0 0 20px;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .main h1 {
+      font-size: 2.5rem;
+      color: #495057;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 60%;
+      margin: 0 auto;
+    }
+
+    label {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #495057;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ced4da;
+      border-radius: 25px;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #80bdff;
+      box-shadow: 0 0 10px rgba(128, 189, 255, 0.5);
+    }
+
+    .slots-button {
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .slots-button:hover {
+      background-color: #e0554f;
+      transform: scale(1.05);
+    }
+
+    .register-button {
+      background-color: #6f42c1;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .register-button:hover {
+      background-color: #5933a6;
+      transform: scale(1.05);
+    }
+
+    .form-footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Welcome User</h2>
+    <button class="btn-register">Register</button>
+    <button class="btn-update">Update</button>
+    <button class="btn-checkout">Checkout</button>
+    <button class="logout">Log out</button>
+  </div>
+  <div class="main">
+    <h1>New Vehicle Registration</h1>
+    <form>
+      <div>
+        <label for="userid">Userid:</label>
+        <input type="text" id="userid" placeholder="Enter your user ID">
+      </div>
+      <div>
+        <label for="vehicle-name">Vehicle name:</label>
+        <input type="text" id="vehicle-name" placeholder="Enter vehicle name">
+      </div>
+      <div>
+        <label for="license-plate">License plate:</label>
+        <input type="text" id="license-plate" placeholder="Enter license plate">
+      </div>
+      <button type="button" class="slots-button">View Slots</button>
+      <button type="submit" class="register-button">Register</button>
+      <p class="form-footer">Ensure all details are accurate before submitting.</p>
+    </form>
+  </div>
+</body>
+</html>

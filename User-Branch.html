@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Spots Near You</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      color: #343a40;
+    }
+
+    .sidebar {
+      width: 20%;
+      background: linear-gradient(135deg, #2c3e50, #4ca1af);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      border-right: 2px solid #dee2e6;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar button {
+      width: 80%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .sidebar .btn-branches {
+      background: linear-gradient(135deg, #ff9a8b, #ff6f61);
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(255, 105, 97, 0.4);
+    }
+
+    .sidebar .btn-vehicle {
+      background: linear-gradient(135deg, #495057, #343a40);
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar .logout {
+      background: linear-gradient(135deg, #d6d8db, #e9ecef);
+      color: #495057;
+      box-shadow: 0 4px 8px rgba(211, 211, 211, 0.4);
+    }
+
+    .sidebar button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .main {
+      width: 80%;
+      background: #fff;
+      padding: 40px;
+      border-left: 2px solid #dee2e6;
+      border-radius: 20px 0 0 20px;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .main h1 {
+      font-size: 2.5rem;
+      color: #495057;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .filter-section {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    select, button {
+      padding: 12px;
+      border: 2px solid #ced4da;
+      border-radius: 25px;
+      font-size: 1rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    select {
+      width: 200px;
+    }
+
+    button.search {
+      background: linear-gradient(135deg, #6f42c1, #5933a6);
+      color: white;
+      border: none;
+    }
+
+    button.search:hover {
+      background: linear-gradient(135deg, #5a34a1, #452787);
+      transform: scale(1.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border: 1px solid #dee2e6;
+    }
+
+    th {
+      background: #495057;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    tr:hover {
+      background: #e9ecef;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Welcome User</h2>
+    <button class="btn-branches">Available Branches</button>
+    <button class="btn-vehicle">Vehicle Details</button>
+    <button class="logout">Log out</button>
+  </div>
+  <div class="main">
+    <h1>Parking Spots Near You</h1>
+    <div class="filter-section">
+      <select name="state" id="state">
+        <option value="">Select State</option>
+        <option value="kerala">Kerala</option>
+        <option value="tamilnadu">Tamil Nadu</option>
+        <option value="karnataka">Karnataka</option>
+      </select>
+      <select name="city" id="city">
+        <option value="">Select City</option>
+        <option value="pandalam">Pandalam</option>
+        <option value="chennai">Chennai</option>
+        <option value="bangalore">Bangalore</option>
+      </select>
+      <button class="search">Search</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Branch Name</th>
+          <th>Address</th>
+          <th>Availability</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pandalam</td>
+          <td>Near Anup Book Stall</td>
+          <td>
+            <span>🛵 14</span> <span>🚗 8</span>
+          </td>
+          <td>+91 9875465325</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
