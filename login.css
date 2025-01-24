@@ -1,0 +1,127 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('back.png') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-image {
+    width: 300px; /* Set your desired width */
+    margin: 0 auto 0px; /* Center the logo */
+    display: block;
+    transform: translateY(-70px)
+}
+
+
+        /* Main container styling */
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.25);
+            padding: 10px 10px 60px; /* Extra padding for buttons at the bottom */
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            width: 90%; /* Responsive width */
+            max-width: 300px; /* Keeps it responsive */
+            position: relative; /* Enables absolute positioning for buttons inside */
+            transform: translateY(-70px)
+        }
+
+        /* Top logo inside the container */
+
+        /* Heading styling */
+        .login-container h1 {
+            padding-top: 9px;
+            font-size: 28px;
+            color: #F9FCCB;
+            margin-bottom: 3px;
+            font-family: 'Alata', sans-serif;
+            position: relative;
+            font-weight: 40;
+            margin-top: 0;
+            
+        }
+
+        /* Input fields */
+        .login-container input {
+            width: 80%;
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            font-size: 16px;
+            height: 19px;
+            padding-bottom: 10px;
+        }
+
+        .login-container input::placeholder {
+            font-family: 'Arvo', serif;
+            color: #C1C1C1;
+            padding-left: 7px;
+        }
+        
+
+        /* Footer button container */
+        .button-container {
+            position: absolute;
+            bottom: 0px; /* Keeps the buttons at the bottom */
+            left: 0;
+            width: 100%; /* Buttons span the entire container */
+            display: flex;
+            
+            justify-content: center;
+             /* Matches container padding */
+        }
+
+        /* Button styling */
+        .login-container button {
+            width: 48%; /* Ensures buttons are side-by-side */
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            flex: 1;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-container button.login-btn {
+            background-color: #DFCB95;
+            color: #333;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
+            border-bottom-left-radius: 15px;
+            height: 43px;
+            font-family: 'Cousine', monospace;
+            border-right: 2px solid #050303; 
+            font-size: 14px;
+            font-weight: 600;
+           
+        }
+
+        .login-container button.signup-btn {
+            background-color: #c0babaec;
+            color: #333;
+            border: 1px solid #ccc;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 15px;
+            font-family: 'Cousine', monospace;
+            font-size: 14px;
+            font-weight: 600;
+        
+
+        }
+
+
+
+        /* Button hover effect */
+        .login-container button:hover {
+            opacity: 0.4;
+        }
+
+
