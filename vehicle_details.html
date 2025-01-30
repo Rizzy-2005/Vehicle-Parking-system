@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicles Parked</title>
+  <style>
+    /* Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background-color: #f7f9fc;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      background-color: #343a40; /* Uniform dark sidebar */
+      width: 240px;
+      padding: 20px;
+      text-align: center;
+      height: 100vh;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .sidebar h2 {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 15px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 10px 0;
+      text-decoration: none;
+      color: white;
+      border-radius: 5px;
+      transition: 0.3s;
+      background-color: transparent; /* Seamless with sidebar */
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #ffc107;
+      color: black;
+    }
+
+    /* Logout Button Styling */
+    .logout-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      background-color: transparent; /* Seamless with sidebar */
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #ffc107;
+      color: black;
+    }
+
+    /* Main Content Styling */
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #343a40;
+      background-color: #262c44;
+      padding: 15px;
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    /* Table Styling */
+    .vehicle-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .vehicle-table th, .vehicle-table td {
+      padding: 15px;
+      text-align: left;
+      
+        padding: 12px 15px;
+        text-align: center;
+        border: 1px solid #ddd;
+    
+    }
+
+    .vehicle-table th {
+        background-color: #6c5d4f;
+        color: white;
+      font-weight: 600;
+    }
+
+    .vehicle-table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    /* Status Badge Styling */
+    .status {
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-weight: 600;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .checked-out {
+      background-color: #ff4d4d;
+      color: white;
+    }
+
+    .parked {
+      background-color: #28a745;
+      color: white;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      .vehicle-table th, .vehicle-table td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Welcome User</h2>
+    <a href="available_branches.html">Available Branches</a>
+    <a href="#" class="active">Vehicle Details</a>
+    <button class="logout-btn">Log out</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <h1 class="title">Vehicles Parked</h1>
+
+    <!-- Table -->
+    <table class="vehicle-table">
+      <thead>
+        <tr>
+          <th>Vehicle Name</th>
+          <th>Branch</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Maruti 800</td>
+          <td>Adoor</td>
+          <td><span class="status checked-out">Checked out</span></td>
+        </tr>
+        <tr>
+          <td>Audi R8</td>
+          <td>Pandalam</td>
+          <td><span class="status parked">Parked</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>
