@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login.css">
     <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alata&family=Arvo&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="signup.css">
     <style>
         .alert {
             padding: 10px;
@@ -96,29 +96,26 @@
             background-color: #c82333;
         }
     </style>
-</head>
 
+
+</head>
 <body>
     <img src="images/logo.png" alt="Top Logo" class="top-image">
-    <div id='login-container' class="login-container">
-        <h1>Sign Up</h1>
-        <input id= 'Name' type="text" class="inputbox" placeholder="Name" required>
-        <input id= 'Phone' type="tel" class="inputbox" placeholder="Phone Number" required>
-        <input id= 'UserId' type="text" class="inputbox" placeholder="New UserId" required>
-        <input id= 'pass' type="password" class="inputbox" placeholder="Password" required>
-        <input id= 'cpass' type="password" class="inputbox" placeholder="Confirm Password" required>
+    <div class="login-container">
+        <h1>Login</h1>
+        <input type="text" id="Id" class="inputbox" placeholder="UserId" required>
+        <input type="password" id="pass" class="inputbox" placeholder="Password" required>
         <div class="button-container">
             <button id="login-btn" class="login-btn">LOGIN</button>
-            <button id="signup-btn" class="signup-btn">SIGN UP</button>
+            <button onclick="window.location.href='/signup'">Sign Up</button>
         </div>
-        <div id="message-box"></div>
     </div>
     
-    <!-- Popup Structure -->
+    <!-- Add the missing popup HTML structure -->
     <div id="popup-overlay" class="popup-overlay">
         <div id="popup-content" class="popup-content">
-            <h2 id="popup-title" class="popup-title">Notification</h2>
-            <p id="popup-message" class="popup-message">Message goes here</p>
+            <h2 id="popup-title" class="popup-title">Title</h2>
+            <p id="popup-message" class="popup-message">Message</p>
             <button id="popup-close-btn" class="popup-btn">OK</button>
         </div>
     </div>
