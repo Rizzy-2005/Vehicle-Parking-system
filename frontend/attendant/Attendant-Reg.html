@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Vehicle Registration</title>
+  <style>
+    /* Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background-color: #f7f9fc;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      background-color: #343a40;
+      width: 240px;
+      padding: 20px;
+      text-align: center;
+      height: 100vh;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+      color: #f8f9fa;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 15px 0;
+      padding: 12px 15px;
+      text-decoration: none;
+      color: #ced4da;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 5px;
+      background-color: transparent;
+      transition: all 0.3s;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background-color: #ffc107;
+      color: #343a40;
+      font-weight: 600;
+    }
+
+    /* Main Content Styling */
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #495057;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .form-section {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.95rem;
+      color: #6c757d;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 90%; /* Reduced width */
+      padding: 12px 15px;
+      font-size: 1rem;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: #495057;
+      outline: none;
+    }
+
+    /* Buttons Styling */
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .slots-button,
+    .register-button {
+      width: 48%; /* Adjusted width */
+      text-align: center;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .slots-button {
+      background-color: #007bff;
+      color: #ffffff;
+    }
+
+    .slots-button:hover {
+      background-color: #0056b3;
+    }
+
+    .register-button {
+      background-color: #28a745;
+      color: #ffffff;
+    }
+
+    .register-button:hover {
+      background-color: #1e7e34;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main {
+        padding: 20px;
+      }
+      .form-group input {
+        width: 100%; /* Full width on small screens */
+      }
+      .button-container {
+        flex-direction: column; /* Stack buttons vertically on small screens */
+      }
+      .slots-button,
+      .register-button {
+        width: 100%; /* Full width on small screens */
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Welcome Attendant</h2>
+    <a href="Attendant-Reg.html" class="btn-register active">Register</a>
+    <a href="Attendant-Update.html" class="btn-update">Update</a>
+    <a href="Attendant-Checkout.html" class="btn-checkout">Checkout</a>
+    <a href="#" class="logout">Log out</a>
+  </div>
+  <div class="main">
+    <h1>New Vehicle Registration</h1>
+    <div class="form-section">
+      <div class="form-group">
+        <label for="user-id">User ID:</label>
+        <input type="text" id="user-id" placeholder="Enter User ID">
+      </div>
+      <div class="form-group">
+        <label for="vehicle-name">Vehicle Name:</label>
+        <input type="text" id="vehicle-name" placeholder="Enter Vehicle Name">
+      </div>
+      <div class="form-group">
+        <label for="license-plate">License Plate:</label>
+        <input type="text" id="license-plate" placeholder="Enter License Plate">
+      </div>
+      <div class="button-container">
+        <button class="slots-button" id="slots-button">Slots</button>
+        <button class="register-button" id="register-button">Register</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Event listener for the "Slots" button
+    document.getElementById('slots-button').addEventListener('click', () => {
+      alert('Displaying available slots...');
+      // Add logic for displaying slots here
+    });
+
+    // Event listener for the "Register" button
+    document.getElementById('register-button').addEventListener('click', () => {
+      const userId = document.getElementById('user-id').value.trim();
+      const vehicleName = document.getElementById('vehicle-name').value.trim();
+      const licensePlate = document.getElementById('license-plate').value.trim();
+
+      if (!userId || !vehicleName || !licensePlate) {
+        alert('Please fill out all fields before registering.');
+        return;
+      }
+
+      alert(`Registering vehicle:
+      User ID: ${userId}
+      Vehicle Name: ${vehicleName}
+      License Plate: ${licensePlate}`);
+      // Add registration logic here
+    });
+  </script>
+</body>
+</html>
