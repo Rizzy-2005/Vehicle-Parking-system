@@ -8,10 +8,10 @@ const PORT = process.env.PORT || 3000;
 
 // Database connection
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "vscode",
-    password: process.env.DB_PASS || "password",
-    database: process.env.DB_NAME || "ez_park",
+    host: process.env.DB_HOST ,
+    user:  "vscode",
+    password: "password",
+    database: process.env.DB_DATABASE,
 });
 
 db.connect(err => {
