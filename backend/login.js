@@ -1,57 +1,17 @@
-//libraries
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
-const jwt = require('jsonwebtoken');
-const app = express();
-const PORT = 3000;
+const router = express.Router();
+const db = require("./db");
 
-// Middleware
-app.use(express.json());
-app.use(cors());
-app.use(express.static(path.join(__dirname)));  // Serves current directory files
-app.use(express.static(path.join(__dirname, '..'))); // Serves parent directory files
+router.use(express.json());
+router.use(cors());
 
-// Database connection
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'tiger',
-    database: 'vehicle_parking',
-});
-//establishing connection
-db.connect((err) => {
-    if (err) {
-        console.error('Database Connection Failed: ', err);
-    } else {
-        console.log('Connected to MySQL Database');
-    }
-});
-
-
-// Serve login page
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
-});
-
-// Serve signup page
-app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname, 'signup.html'));
-});
-
-// Login API endpoint
-app.post('/login', (req, res) => {
+router.post('/login', (req, res) => {
     const { userID, password } = req.body;
-    const secretkey = "HelloWorld";
-
-    if (!userID || !password) {
-        return res.status(400).json({ message: "All fields are required" });
-    }
-
-    const checkSql = 'SELECT * FROM users WHERE userID = ?';
+    
+    const checkSql = 'SELECT * FROM users WHERE user_id = ?';
     db.query(checkSql, [userID], (err, results) => {
-
         if (err) {
             console.error('Database error: ', err);
             return res.status(500).json({ message: 'Server error' });
@@ -61,54 +21,20 @@ app.post('/login', (req, res) => {
             return res.status(409).json({ message: "User ID doesn't exist" });
         }
 
-        if (results[0].password !== password) {
+        if (results[0].user_password !== password) {
             return res.status(401).json({ message: 'Invalid password' });
         }
 
         console.log('Login successful');
-        const UserData = {
-            id: results[0].id,
-            name: results[0].name
-        };
-        req.session.userid = results[0].id;
-        const token = jwt.sign(UserData,secretkey,{ expiresIn:'2h' });
-        res.status(200).json({ message: 'Login Successful',token });
+        req.session.userid = results[0].user_id;
+        res.json({ success: true, message: "Logged in successfully", redirectUrl: "/user/available_branches.html" });        
     });
 });
 
-// Signup API endpoint
-app.get('/available_branches.html',(req,res)=>{
-    res.sendFile(path.join(__dirname,'available_branches.html'))
-})
+router.post('/signup', (req, res) => {
+    const { name, gender, phone, userId, password} = req.body;
 
-app.get('/branch', (req, res) => {
-    try {
-        const query = "SELECT * FROM branch";
-        
-        db.query(query, (err, results) => {
-            if (err) {
-                console.error("Database Query Error:", err.message);
-                return res.status(500).json({ message: "Failed to fetch branches" });
-            }
-
-            console.log("Database Response:", results); // Debugging
-            res.json(results); // Send the query result as JSON
-        });
-
-    } catch (err) {
-        console.error("Server Error:", err.message);
-        res.status(500).json({ message: err.message });
-    }
-});
-
-app.post('/signup', (req, res) => {
-    const { name, phone, userId, password } = req.body;
-
-    if (!name || !phone || !userId || !password) {
-        return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const checkUserSql = 'SELECT * FROM users WHERE userId = ?';
+    const checkUserSql = 'SELECT * FROM users WHERE user_id = ?';
     db.query(checkUserSql, [userId], (err, results) => {
         if (err) {
             console.error('Database error:', err);
@@ -119,9 +45,8 @@ app.post('/signup', (req, res) => {
             return res.status(409).json({ message: 'User ID already exists. Choose another.' });
         }
 
-        // Insert new user
-        const insertUserSql = 'INSERT INTO users (name, phone, userId, password) VALUES (?, ?, ?, ?)';
-        db.query(insertUserSql, [name, phone, userId, password], (err) => {
+        const insertUserSql = 'INSERT INTO users (user_id, user_name, phone_no, gender, user_password) VALUES (?, ?, ?, ?, ?)';
+        db.query(insertUserSql, [userId, name, phone, gender, password], (err) => {
             if (err) {
                 console.error('Error inserting data:', err);
                 return res.status(500).json({ message: 'Server error' });
@@ -133,7 +58,4 @@ app.post('/signup', (req, res) => {
     });
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+module.exports = router;
