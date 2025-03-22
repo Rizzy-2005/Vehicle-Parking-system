@@ -1,35 +1,16 @@
 require("dotenv").config();
 const express = require("express");
-const mysql = require("mysql2");
 const cors = require("cors");
+const db  = require("./db");
+const router = express.Router();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Database connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST ,
-    user:  "vscode",
-    password: "password",
-    database: process.env.DB_DATABASE,
-});
-
-db.connect(err => {
-    if (err) {
-        console.error("Database connection failed:", err);
-        process.exit(1);
-    } else {
-        console.log("Connected to MySQL database");
-    }
-});
-
-// Middleware
-app.use(cors());
-app.use(express.json());
+router.use(cors());
+router.use(express.json());
 
 // Route: Get all states
-app.get("/get_states", (req, res) => {
+router.get("/get_states", (req, res) => {
     const sql = "SELECT DISTINCT state FROM branch ORDER BY state";
+    console.log(req.session.userid);
     db.query(sql, (err, results) => {
         if (err) {
             console.error("Error fetching states:", err);
@@ -40,7 +21,7 @@ app.get("/get_states", (req, res) => {
 });
 
 // Route: Get cities for a state
-app.get("/get_cities", (req, res) => {
+router.get("/get_cities", (req, res) => {
     const { state } = req.query;
     if (!state) return res.status(400).json({ error: "State is required" });
 
@@ -55,7 +36,7 @@ app.get("/get_cities", (req, res) => {
 });
 
 // Route: Get branches for a city & state
-app.get('/search_branches', (req, res) => {
+router.get('/search_branches', (req, res) => {
     let { state, city } = req.query;
 
     // Build dynamic SQL query
@@ -100,9 +81,4 @@ app.get('/search_branches', (req, res) => {
         res.json(results);
     });
 });
-
-
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+module.exports = router;

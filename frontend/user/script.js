@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Fetch states and populate dropdown
     function loadStates() {
-        fetch("http://localhost:3000/get_states")
+        fetch("http://localhost:3000/user/get_states")
             .then(response => response.json())
             .then(states => {
                 stateSelect.innerHTML = '<option value="">Select State</option>';
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch(`http://localhost:3000/get_cities?state=${encodeURIComponent(state)}`)
+        fetch(`http://localhost:3000/user/get_cities?state=${encodeURIComponent(state)}`)
             .then(response => response.json())
             .then(cities => {
                 citySelect.innerHTML = '<option value="">Select City</option>';
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const state = stateSelect.value.trim();
         const city = citySelect.value.trim();
     
-        let url = "http://localhost:3000/search_branches";
+        let url = "http://localhost:3000/user/search_branches";
         const params = new URLSearchParams();
     
         if (state) params.append("state", state);
