@@ -10,7 +10,6 @@ router.use(express.json());
 // Route: Get all states
 router.get("/get_states", (req, res) => {
     const sql = "SELECT DISTINCT state FROM branch ORDER BY state";
-    console.log(req.session.userid);
     db.query(sql, (err, results) => {
         if (err) {
             console.error("Error fetching states:", err);
