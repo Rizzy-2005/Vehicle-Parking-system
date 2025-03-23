@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicles Parked</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background-color: #f4f7fc;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background-color: #dfcb95;
+      width: 240px;
+      padding: 20px;
+      text-align: center;
+      height: 100vh;
+      color: black;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+    }
+
+    .sidebar h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 15px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 10px 0;
+      text-decoration: none;
+      color: black;
+      border-radius: 5px;
+      transition: 0.3s;
+      background-color: transparent;
+    }
+
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #2d2f3b;
+      color: white;
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      background-color: transparent;
+      color: black;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .main {
+      margin-left: 260px;
+      padding: 40px;
+      flex-grow: 1;
+    }
+
+    .container {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .status {
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .checked-out {
+      background-color: #ff4d4d;
+      color: white;
+    }
+
+    .parked {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #2d2f3b;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover {
+      background-color: #f44336;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main {
+        margin-left: 0;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Welcome User</h2>
+    <a href="available_branches.html">Available Branches</a>
+    <a href="vehicle_details.html" class="active">Vehicle Details</a>
+    <button class="logout-btn">Log out</button>
+  </div>
+
+  <div class="main">
+    <div class="container">
+      <h2>Vehicle Information</h2>
+      <table>
+        <tr>
+          <td><strong>Vehicle Name:</strong></td>
+          <td id="vehicleName"></td>
+        </tr>
+        <tr>
+          <td><strong>Branch:</strong></td>
+          <td id="branch"></td>
+        </tr>
+        <tr>
+          <td><strong>Slot ID:</strong></td>
+          <td id="slotId"></td>
+        </tr>
+        <tr>
+          <td><strong>Status:</strong></td>
+          <td><span id="status" class="status"></span></td>
+        </tr>
+      </table>
+      <a href="vehicle_details.html" class="back-btn">Back to Vehicles</a>
+    </div>
+  </div>
+
+  <script>
+    function getQueryParams() {
+      let params = new URLSearchParams(window.location.search);
+      return {
+        vehicle: params.get("vehicle"),
+        branch: params.get("branch"),
+        slot: params.get("slot"),
+        status: params.get("status")
+      };
+    }
+
+    let details = getQueryParams();
+    document.getElementById("vehicleName").innerText = details.vehicle || "N/A";
+    document.getElementById("branch").innerText = details.branch || "N/A";
+    document.getElementById("slotId").innerText = details.slot || "N/A";
+    document.getElementById("status").innerText = details.status || "N/A";
+
+    let statusEl = document.getElementById("status");
+    if (details.status) {
+      let statusLower = details.status.trim().toLowerCase();
+      if (statusLower === "checked out") {
+        statusEl.classList.add("checked-out");
+      } else if (statusLower === "parked") {
+        statusEl.classList.add("parked");
+      }
+    }
+  </script>
+</body>
+</html>

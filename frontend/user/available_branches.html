@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Spots Near You</title>
+  <style>
+    /* Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background-color: #f4f7fc;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      background-color: #DFCB95;
+      width: 240px;
+      padding: 20px;
+      text-align: center;
+      height: 100vh;
+      color: black;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .sidebar h2 {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 15px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 10px 0;
+      text-decoration: none;
+      color: white;
+      border-radius: 5px;
+      transition: 0.3s;
+      background-color: transparent;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #2d2f3b;
+      color: white;
+    }
+
+    /* Logout Button Styling */
+    .logout-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      background-color: transparent;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #f44336;
+      color: black;
+    }
+
+    /* Main Content Styling */
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #343a40;
+      background-color: #1f2937;
+      padding: 15px;
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    /* Search Container Styling */
+    .search-container {
+      margin: 20px 0;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    select {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      min-width: 200px;
+    }
+
+    .search-btn {
+      padding: 8px 20px;
+      background-color: #2d2f3b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .search-btn:hover {
+      background-color: #388e3c;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #2d2f3b;
+      color: white;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    /* Availability Styling */
+    .availability {
+      display: flex;
+      gap: 20px;
+    }
+
+    .vehicle-count {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .nav-button, .search-btn, .logout-btn {
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .nav-button:hover, .search-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Welcome User</h2>
+    <a href="available_branches.html" class="active">Available Branches</a>
+    <a href="vehicle_details.html" style="color: black;">Vehicle Details</a>
+    <button class="logout-btn">Log out</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <h1 class="title">Parking Spots Near You</h1>
+
+    <!-- Search Container -->
+    <div class="search-container">
+      <div class="search-group">
+        <label for="state">State:</label>
+        <select id="state">
+          <option value="">Select State</option>
+          <option value="kerala">Kerala</option>
+        </select>
+      </div>
+
+      <div class="search-group">
+        <label for="city">City:</label>
+        <select id="city">
+          <option value="">Select City</option>
+          <option value="thiruvananthapuram">Thiruvananthapuram</option>
+          <option value="kochi">Kochi</option>
+          <option value="kottayam">Kottayam</option>
+        </select>
+      </div>
+
+      <button class="search-btn" id = "searchBtn">Search</button>
+    </div>
+
+    <!-- Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Branch Name</th>
+          <th>Address</th>
+          <th>Availability</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody id = "branchesTableBody">
+        
+      </tbody>
+    </table>
+  </div>
+
+<script src = "script.js"></script>
+
+</body>
+</html>
