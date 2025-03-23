@@ -155,19 +155,35 @@
       <table>
         <tr>
           <td><strong>Vehicle Name:</strong></td>
-          <td id="vehicleName"></td>
+          <td id="showVehicleName"></td>
+        </tr>
+        <tr>
+          <td><strong>Vehicle Number:</strong></td>
+          <td id="showVehicleNumber"></td>
+        </tr>
+        <tr>
+          <td><strong>Secret Number:</strong></td>
+          <td id="showSecretNumber"></td>
         </tr>
         <tr>
           <td><strong>Branch:</strong></td>
-          <td id="branch"></td>
+          <td id="showBranch"></td>
         </tr>
         <tr>
           <td><strong>Slot ID:</strong></td>
-          <td id="slotId"></td>
+          <td id="showSlotId"></td>
         </tr>
         <tr>
           <td><strong>Status:</strong></td>
-          <td><span id="status" class="status"></span></td>
+          <td><span id="showStatus" class="status"></span></td>
+        </tr>
+        <tr>
+          <td><strong>Entry Time:</strong></td>
+          <td id="showEntryTime"></td>
+        </tr>
+        <tr>
+          <td><strong>Exit Time:</strong></td>
+          <td id="showExitTime"></td>
         </tr>
       </table>
       <a href="vehicle_details.html" class="back-btn">Back to Vehicles</a>
@@ -175,31 +191,30 @@
   </div>
 
   <script>
-    function getQueryParams() {
-      let params = new URLSearchParams(window.location.search);
-      return {
-        vehicle: params.get("vehicle"),
-        branch: params.get("branch"),
-        slot: params.get("slot"),
-        status: params.get("status")
-      };
-    }
-
-    let details = getQueryParams();
-    document.getElementById("vehicleName").innerText = details.vehicle || "N/A";
-    document.getElementById("branch").innerText = details.branch || "N/A";
-    document.getElementById("slotId").innerText = details.slot || "N/A";
-    document.getElementById("status").innerText = details.status || "N/A";
-
-    let statusEl = document.getElementById("status");
-    if (details.status) {
-      let statusLower = details.status.trim().toLowerCase();
-      if (statusLower === "checked out") {
-        statusEl.classList.add("checked-out");
-      } else if (statusLower === "parked") {
-        statusEl.classList.add("parked");
-      }
-    }
-  </script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const vehicle = JSON.parse(localStorage.getItem("selectedVehicle"));
+        
+        if (!vehicle) {
+            console.error("No vehicle data found.");
+            return;
+        }
+    
+        // Populate the fields
+        document.getElementById("showVehicleName").textContent = vehicle.vehicle_name || "N/A";
+        document.getElementById("showVehicleNumber").textContent = vehicle.vehicle_no || "N/A";
+        document.getElementById("showSecretNumber").textContent = vehicle.secret_no || "N/A";
+        document.getElementById("showBranch").textContent = vehicle.branch_name || "N/A";
+        document.getElementById("showSlotId").textContent = vehicle.slot_id || "N/A";
+        
+        // Status formatting
+        const statusElement = document.getElementById("showStatus");
+        statusElement.textContent = vehicle.status || "Unknown";
+        statusElement.className = `status ${vehicle.status === "Parked" ? "parked" : "checked-out"}`;
+        
+        document.getElementById("showEntryTime").textContent = vehicle.registered_at || "N/A";
+        document.getElementById("showExitTime").textContent = vehicle.checkout_at || "N/A";
+    });
+    </script>
+    
 </body>
 </html>
