@@ -19,7 +19,7 @@ function showPopup(title, message, type,redirectUrl) {
     popupOverlay.classList.add("active");
     
     popupBtn.onclick = () => {
-        if(redirectUrl)
+        if(redirectUrl || title == "Sign Up Successful")
         {
             window.location.href = redirectUrl;
         }
@@ -234,7 +234,7 @@ function initSignupPage() {
             }
     
             clearSignupForm();
-            showPopup("Sign Up Successful", "Your account has been created successfully!", "success");
+            showPopup("Sign Up Successful", "Your account has been created successfully!", "success","login.html");
         } catch (error) {
             console.error("Error:", error);
             showPopup("Sign Up Failed", "An error occurred. Please try again.", "error");
