@@ -109,7 +109,7 @@ WHERE p.id = (
     SELECT MAX(p2.id) 
     FROM parking_record p2 
     WHERE p2.vehicle_no = v.vehicle_no
-) and v.user_id=? order by v.registered_at desc limit 1;
+) and v.user_id=? order by v.registered_at desc;
 
     `;
 
