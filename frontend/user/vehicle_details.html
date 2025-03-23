@@ -236,7 +236,7 @@
   <!-- Main Content -->
   <div class="main">
     <h1 class="title">Vehicles Parked</h1>
-
+    
     <!-- Table -->
     <table class="vehicle-table">
       <thead>
@@ -248,46 +248,11 @@
         </tr>
       </thead>
       <tbody id="vehicleTableBody">
-        <tr onclick="showDetails(this)">
-          <td>Maruti 800</td>
-          <td>Adoor</td>
-          <td>1</td>
-          <td><span class="status checked-out">Checked out</span></td>
-        </tr>
-        <tr onclick="showDetails(this)">
-          <td>Audi R8</td>
-          <td>Pandalam</td>
-          <td>2</td>
-          <td><span class="status parked">Parked</span></td>
-        </tr>
+        <!-- Dynamic Table Data Will Be Inserted Here -->
       </tbody>
     </table>
   </div>
 
-  <!-- Modal -->
-  <div id="vehicleModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h2>Vehicle Details</h2>
-      <p><strong>Vehicle Name:</strong> <span id="modalVehicleName"></span></p>
-      <p><strong>Branch:</strong> <span id="modalBranch"></span></p>
-      <p><strong>Slot ID:</strong> <span id="modalSlotId"></span></p>
-      <p><strong>Status:</strong> <span id="modalStatus"></span></p>
-    </div>
-  </div>
-
-  <script>
-    function showDetails(row) {
-      let vehicleName = row.cells[0].innerText;
-      let branch = row.cells[1].innerText;
-      let slotId = row.cells[2].innerText;
-      let status = row.cells[3].innerText;
-    
-      // Encode details in the URL and navigate
-      window.location.href = `vehicle_info.html?vehicle=${encodeURIComponent(vehicleName)}&branch=${encodeURIComponent(branch)}&slot=${encodeURIComponent(slotId)}&status=${encodeURIComponent(status)}`;
-    }
-    
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>

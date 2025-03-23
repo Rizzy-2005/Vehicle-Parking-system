@@ -10,7 +10,6 @@ router.use(express.json());
 // Route: Get all states
 router.get("/get_states", (req, res) => {
     const sql = "SELECT DISTINCT state FROM branch ORDER BY state";
-    console.log(req.session.userid);
     db.query(sql, (err, results) => {
         if (err) {
             console.error("Error fetching states:", err);
@@ -81,4 +80,48 @@ router.get('/search_branches', (req, res) => {
         res.json(results);
     });
 });
+
+
+router.get('/vehicle_details', (req, res) => {
+    if (!req.session.userid) {
+        return res.status(401).json({ error: "Unauthorized. Please log in." });
+    }
+
+    let query = `
+       SELECT 
+    v.vehicle_no,
+    v.vehicle_name,
+    v.slot_id,
+    v.registered_at,
+    v.secret_no,
+    v.checkout_at,
+    p.branch_name,
+    p.id,
+    CASE 
+        WHEN v.checkout_at IS NULL THEN 'Parked'
+        ELSE 'Checked Out'
+    END AS status
+FROM vehicles v
+JOIN parking_record p 
+    ON v.vehicle_no = p.vehicle_no
+WHERE p.id = (
+    SELECT MAX(p2.id) 
+    FROM parking_record p2 
+    WHERE p2.vehicle_no = v.vehicle_no
+) and v.user_id=? order by v.registered_at desc;
+
+    `;
+
+    db.query(query, [req.session.userid], (err, results) => {
+        if (err) {
+            console.error("Error fetching vehicles:", err);
+            return res.status(500).json({ error: "Database query failed" });
+        }
+        res.json(results);
+    });
+});
+
+
+
+
 module.exports = router;
