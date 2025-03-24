@@ -7,10 +7,9 @@ const path = require("path");
 const session = require("express-session");
 /*
 const admin = require("./admin");
-const attendant = require("./attendant");
 
 app.use("/admin",admin);
-app.use("/attendant",attendant); I am commanding this for now since we have not definied 
+I am commanding this for now since we have not definied 
 the content in each login.js, user.js.. etc then only we can porperly export it and use it 
 otherwise error in listening the server 
 */
@@ -27,9 +26,11 @@ app.use(session({
 
 const login = require("./login");
 const user = require("./user");
+const attendant = require("./attendant");
 
 app.use("/login",login);
 app.use("/user",user);
+app.use("/attendant",attendant);
 
 app.use(express.static(path.join(__dirname,"../frontend")));
 
