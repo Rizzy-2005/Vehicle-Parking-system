@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./adminLogin.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Login</h1>
+        </div>
+        
+        <form class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button id ='signIn' type="button" class="submit-btn">Sign In</button>
+        </form>
+    </div>
+
+    <div id="popup-overlay" class="popup-overlay">
+        <div id="popup-content" class="popup-content">
+            <h2 id="popup-title" class="popup-title">Notification</h2>
+            <p id="popup-message" class="popup-message">Message goes here</p>
+            <button id="popup-close-btn" class="popup-btn">OK</button>
+        </div>
+    </div>
+
+
+</body>
+</html>
