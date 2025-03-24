@@ -35,6 +35,7 @@ function showPopup(title, message, type,redirectUrl) {
 }
 const isLoginPage = window.location.pathname.includes('login.html');
 const isSignupPage = window.location.pathname.includes('signup.html');
+const isAdminPage = window.location.pathname.includes('staff_portal.html');
 
 document.addEventListener('DOMContentLoaded', function() {
     if (isLoginPage) {
@@ -42,6 +43,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (isSignupPage) {
         initSignupPage();
+    }
+    if (isAdminPage){
+        initAdminPage();
     }
 });
 
@@ -90,16 +94,11 @@ function initLoginPage() {
             const result = await response.json();
 
             console.log(response.status);
+
             if (response.status === 409) {
                 clearLoginForm();
-                return showPopup("Login Failed", "User ID doesn't exist", "error");
+                return showPopup("Login Failed", "Invalid Credentials", "error");
             }
-    
-            if (response.status === 401) {
-                clearLoginForm();
-                return showPopup("Login Failed", "Invalid password", "error");
-            }
-    
             if (!response.ok) {
                 throw new Error(result.message);
             }
@@ -241,3 +240,63 @@ function initSignupPage() {
         }
     }
 }
+function initAdminPage(){
+    const signInBtn = document.getElementById('signIn');
+    if (signInBtn){
+        signInBtn.addEventListener('click',handleSignIn)
+    }
+
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    if (togglePassword) {
+        togglePassword.addEventListener('click', function () {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                togglePassword.textContent = 'visibility'
+            } else {
+                passwordInput.type = 'password';
+                togglePassword.textContent = 'visibility_off'
+            }
+        });
+    }
+
+    function clearLoginForm() {
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+    }
+
+    async function handleSignIn() {
+        const userName = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+    
+        if (!userName || !password) {
+            return showPopup("Field Empty Error", "All Fields are required", "error");
+        }
+    
+        signData = { userName, password }
+    
+        try {
+            const response = await fetch("http://localhost:3000/login/admin", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(signData)
+            });
+    
+            const result = await response.json();
+
+            if (response.status === 401) {
+                clearLoginForm();
+                return showPopup("Login Failed", result.message, "error");
+            }
+            if (!response.ok) {
+                clearLoginForm();
+                throw new Error(result.message || "Login failed");  
+            }
+
+            showPopup("Login Successful", "You have successfully logged in!", "success",result.redirectUrl);
+
+        } catch (error) {
+            console.error("Error:", error);
+            showPopup("Login Failed", "An error occurred. Please try again.", "error");
+        }
+    }}
