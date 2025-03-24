@@ -35,7 +35,7 @@ function showPopup(title, message, type,redirectUrl) {
 }
 const isLoginPage = window.location.pathname.includes('login.html');
 const isSignupPage = window.location.pathname.includes('signup.html');
-const isAdminPage = window.location.pathname.includes('adminLogin.html');
+const isAdminPage = window.location.pathname.includes('staff_portal.html');
 
 document.addEventListener('DOMContentLoaded', function() {
     if (isLoginPage) {
