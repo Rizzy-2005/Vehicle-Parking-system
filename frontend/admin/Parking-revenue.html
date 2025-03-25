@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Parking Revenue</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+    }
+
+    .sidebar {
+      background-color: #63807a;
+      width: 240px;
+      padding: 20px;
+      text-align: center;
+      height: 100vh;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sidebar h2 {
+      color: #f8f9fa;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 15px 0;
+      padding: 12px 15px;
+      text-decoration: none;
+      color: #ced4da;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background-color: beige;
+      color: #343a40;
+      font-weight: 600;
+    }
+
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+      background-color: #f7f9fc;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #495057;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .container {
+      width: 90%;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .summary div {
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #6c5d4f;
+      color: white;
+    }
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      margin-top: 40px;
+    }
+
+    .filters input, .filters select {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #604637;
+      border-radius: 10px;
+      background-color: #f8f7f5;
+    }
+    #rate-per-hour {
+      width: 80px;
+      padding: 8px;
+      font-size: 1rem;
+      border: 2px solid #2c3e50;
+      border-radius: 8px;
+      text-align: center;
+      background-color: #ecf0f1;
+      font-weight: 600;
+      color: #34495e;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    #rate-per-hour:focus {
+      border-color: #2980b9;
+      background-color: #ffffff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Welcome<br> Admin</h2>
+    <a href="Manage-attendant.html">Manage Attendants</a>
+    <a href="User-details.html">Users List</a>
+    <a href="Parking-revenue.html" class="active">Parking Revenue</a>
+    <a href="#">Log out</a>
+  </div>
+
+  <div class="main">
+    <div class="container">
+      <h1>Revenue & Registrations</h1>
+      <div class="summary">
+        <div>
+          <h3>Total Revenue</h3>
+          <p id="total-revenue">$0</p>
+        </div>
+        <div>
+          <h3>Active Users</h3>
+          <p id="active-users">0</p>
+        </div>
+        <div>
+          <h3>Registered Vehicles</h3>
+          <p id="registered-vehicles">0</p>
+        </div>
+        <div>
+          <h3>Rate per Hour: <span id="rate-display">$5</span></h3>
+          <input type="number" id="rate-per-hour" value="5" min="1" step="0.5">
+        </div>
+      </div>
+    
+      
+       
+      <div class="filters">
+        <label>Filter by:</label>
+        <select id="time-filter">
+          <option value="">Select</option>
+          <option value="day">Day</option>
+          <option value="week">Week</option>
+          <option value="month">Month</option>
+        </select>
+        <input type="date" id="day-filter" style="display: none;">
+        <input type="week" id="week-filter" style="display: none;">
+        <select id="month-filter" style="display: none;">
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+
+      <table id="revenue-table">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Vehicle No</th>
+            <th>Attendant checked-in</th>
+            <th>Attendant checked-out</th>
+            <th>Check-in Time</th>
+            <th>Check-out Time</th>
+            <th>Revenue ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1564</td>
+            <td>KL60 L 4259</td>
+            <td>Sunil</td>
+            <td>Aswin</td>
+            <td>2025-03-24 08:00 AM</td>
+            <td>2025-03-24 12:00 PM</td>
+            <td class="revenue"></td>
+          </tr>
+          <tr>
+            <td>8765</td>
+            <td>KL60 L 9999</td>
+            <td>Lijo</td>
+            <td>David</td>
+            <td>2025-02-24 08:00 AM</td>
+            <td>2025-02-24 09:00 AM</td>
+            <td class="revenue"></td>
+          </tr>
+          <tr>
+            <td>5567</td>
+            <td>KL60 C 5578</td>
+            <td>Amal</td>
+            <td></td>
+            <td>2025-08-24 07:00 AM</td>
+            <td></td>
+            <td class="revenue"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("time-filter").addEventListener("change", function() {
+      document.getElementById("day-filter").style.display = this.value === "day" ? "block" : "none";
+      document.getElementById("week-filter").style.display = this.value === "week" ? "block" : "none";
+      document.getElementById("month-filter").style.display = this.value === "month" ? "block" : "none";
+    });
+
+    document.getElementById("day-filter").addEventListener("change", function() {
+      filterTableByDate(this.value);
+    });
+    document.getElementById("week-filter").addEventListener("change", function() {
+      filterTableByWeek(this.value);
+  });
+  
+    document.getElementById("month-filter").addEventListener("change", function() {
+      filterTableByMonth(this.value);
+    });
+
+    function filterTableByDate(selectedDate) {
+      document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
+        row.style.display = row.cells[4].textContent.includes(selectedDate) ? "table-row" : "none";
+      });
+    }
+
+    function filterTableByMonth(selectedMonth) {
+      document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
+        row.style.display = row.cells[4].textContent.includes(`-${selectedMonth}-`) ? "table-row" : "none";
+      });
+    }
+    
+    document.getElementById("rate-per-hour").addEventListener("input", function() {
+      document.getElementById("rate-display").textContent = `$${this.value}`;
+      calculateMetrics();
+    });
+    function filterTableByWeek(selectedWeek) {
+      if (!selectedWeek) return;
+      
+      // Extract year and week number
+      let year = parseInt(selectedWeek.split("-W")[0]);
+      let week = parseInt(selectedWeek.split("-W")[1]);
+  
+      // Get the first day of the selected week (Monday)
+      let weekStart = new Date(year, 0, (week - 1) * 7 + 1);
+      let dayOfWeek = weekStart.getDay();
+      let diff = weekStart.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust to Monday
+      weekStart.setDate(diff);
+      
+      // Get the last day of the week (Sunday)
+      let weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+  
+      let rows = document.querySelectorAll("#revenue-table tbody tr");
+      rows.forEach(row => {
+          let checkInDate = new Date(row.cells[4].textContent); // Check-in date in table
+  
+          if (checkInDate >= weekStart && checkInDate <= weekEnd) {
+              row.style.display = "";
+          } else {
+              row.style.display = "none";
+          }
+      });
+  }
+  
+
+    function getHoursBetween(start, end) {
+      let startTime = new Date(start);
+      let endTime = new Date(end);
+      return (endTime - startTime) / (1000 * 60 * 60); // Convert milliseconds to hours
+  }
+  
+
+    function calculateMetrics() {
+      let totalRevenue = 0;
+      let activeUsers = 0;
+      let vehicleSet = new Set();
+      let ratePerHour = parseFloat(document.getElementById("rate-per-hour").value);
+      let rows = document.querySelectorAll("#revenue-table tbody tr");
+
+      rows.forEach(row => {
+        let checkIn = row.cells[4].textContent;
+        let checkOut = row.cells[5].textContent;
+        let vehicle = row.cells[1].textContent;
+
+        vehicleSet.add(vehicle);
+        let revenue = 0;
+        if (checkOut.trim() !== "") {
+          let hoursParked = getHoursBetween(checkIn, checkOut);
+          revenue = hoursParked * ratePerHour;
+        } else {
+          activeUsers++;
+        }
+        row.cells[6].textContent = `$${revenue.toFixed(2)}`;
+        totalRevenue += revenue;
+      });
+
+      document.getElementById("total-revenue").textContent = `$${totalRevenue.toFixed(2)}`;
+      document.getElementById("active-users").textContent = activeUsers;
+      document.getElementById("registered-vehicles").textContent = vehicleSet.size;
+    }
+
+    window.onload = calculateMetrics;
+  </script>
+</body>
+</html>

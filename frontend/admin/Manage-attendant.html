@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Manage attendants</title>
+  <style>
+    /* Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      background-color: #63807a;
+      width: 240px;
+      padding: 20px;
+      text-align: center;
+      height: 100vh;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .top-bar {
+      background: linear-gradient(to right, #453c32db, #4836202d);
+      width: calc(100% - 240px);
+  
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 280px;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color:white;
+      z-index: 1000;
+    }
+
+
+    .sidebar h2 {
+      color: #f8f9fa;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 15px 0;
+      padding: 12px 15px;
+      text-decoration: none;
+      color: #ced4da;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 5px;
+      background-color: transparent;
+      transition: all 0.3s;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background-color: beige;
+      color: #343a40;
+      font-weight: 600;
+    }
+
+    /* Main Content Styling */
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+      background-color: #f7f9fc;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #495057;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .form-section,
+    .update-section {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 100px;
+    }
+
+    /* Search Bar Styling */
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-bar label {
+      font-weight: bold;
+      margin-right: 10px;
+      min-width: 80px; /* Ensure the label doesn't shift */
+    }
+    
+
+    .search-bar input {
+      width: calc(100% - 130px); /* Adjust to give space for button */
+      padding: 8px 12px;
+      font-size: 1rem;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    .search-bar input:focus {
+      border-color: #495057;
+      outline: none;
+    }
+
+    .search-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #040f1c;
+      color: white;
+      width: 100px;
+      margin-left: 10px;
+    }
+
+    .search-button:hover {
+      background-color: #0056b3;
+    }
+    .search-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      margin-top: 70px;
+    }
+    
+    .search-container input {
+      padding: 8px 12px;
+      font-size: 1rem;
+      border: 1px solid #ced4da;
+      border-radius: 12px;
+      transition: border-color 0.3s;
+      background-color: #f9f6f4;
+    }
+    
+    .search-container input:focus {
+      border-color: #495057;
+      outline: none;
+    }
+    
+    .search-container .button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: #5d554cdb;
+      color: white;
+    }
+    
+    .search-container .add-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color:#5d554cdb;
+      color: white;
+    }
+    .search-container button:hover,
+    .search-container .add-button:hover {
+      background-color: rgb(42, 80, 111);
+    }
+
+    /* Update Table Styling */
+    .update-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .update-table th,
+    .update-table td {
+      padding: 12px 15px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .update-table th {
+      background-color: #6c5d4f;
+      color: white;
+    }
+
+    .update-table td {
+      background-color: #fdfdfd;
+    }
+
+    .update-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+    }
+    .delete-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #ad2626;
+      color: white;
+    }
+
+    .update-button:hover {
+      background-color: #1e7e34;
+    }
+    .delete-button:hover {
+      background-color: #7c1414;
+
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main {
+        padding: 20px;
+      }
+      .form-group input,
+      .search-bar input {
+        width: 100%;
+      }
+      .search-button {
+        width: 100%;
+        margin-top: 10px;
+      }
+      .button-container {
+        flex-direction: column;
+      }
+      .slots-button,
+      .register-button {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+    .edit-window {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .edit-window h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .edit-window input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+    }
+
+    .edit-window button {
+      width: 48%;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .update-save {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .update-save:hover {
+      background-color: #1e7e34;
+    }
+
+    .cancel-button {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .cancel-button:hover {
+      background-color: #b52a37;
+    }
+
+    /* Overlay for background blur effect */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="top-bar">Attendants List</div>
+  <div class="sidebar">
+    <h2>Welcome<br> Admin</h2>
+    <a href="Manage-attendant.html" class="btn-register active">Manage Attendants</a>
+    <a href="User-details.html" class="btn-update ">Users List</a>
+    <a href="Parking-revenue.html" class="btn-checkout">Parking Revenue</a>
+    <a href="#" class="logout">Log out</a>
+  </div>
+  <div class="main">
+    <div class="search-container">
+      <label for="attendant-name">Name:</label>
+      <input type="text" id="attendant-name" placeholder="Enter Name">
+      <button class="button">Search</button>
+      <button class="add-button">Add Attendant</button>
+      
+    </div>
+    
+    <div class="update-section">
+     
+      <table class="update-table">
+        <thead>
+          <tr>
+            <th>Member ID</th>
+            <th>Attendant</th>
+            <th>Phone</th>
+            <th>Shift</th>
+            <th></th>
+            <th></th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1276</td>
+            <td>Nidak123</td>
+            <td>9876543456</td>
+            <td>Morning</td>
+            <td><button class="update-button">Update</button></td>
+            <td><button class="delete-button">Delete</button></td>
+            
+          </tr>
+          <tr>
+            <td>2388</td>
+            <td>Rishak</td>
+            <td>8765455654</td>
+            <td>Evening</td>
+            <td><button class="update-button">Update</button></td>
+            <td><button class="delete-button">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="overlay"></div>
+
+  <!-- Edit Window -->
+  <div class="edit-window">
+    <h2>Edit Attendant</h2>
+    <label for="edit-id">Member ID:</label>
+    <input type="text" id="edit-id" disabled>
+    
+    <label for="edit-name">Attendant:</label>
+    <input type="text" id="edit-name">
+    
+    <label for="edit-phone">Phone:</label>
+    <input type="text" id="edit-phone">
+
+    <label for="edit-shift">Shift:</label>
+    <input type="text" id="edit-shift">
+    
+    <div style="display: flex; justify-content: space-between;">
+      <button class="update-save">Update</button>
+      <button class="cancel-button">Cancel</button>
+    </div>
+  </div>
+  <script>
+    
+      document.querySelector('.button').addEventListener('click', () => {
+        const attendantName = document.querySelector('#attendant-name').value.trim();
+        if (!attendantName) {
+          alert('Please enter a Name to search.');
+        } 
+      });
+    
+    
+
+    
+
+    $(document).ready(function() {
+      
+      // Show Edit Window with Data
+      $(".update-button").click(function() {
+        const row = $(this).closest("tr");
+        const memberId = row.find("td:eq(0)").text();
+        const attendant = row.find("td:eq(1)").text();
+        const phone = row.find("td:eq(2)").text();
+        const shift = row.find("td:eq(3)").text();
+
+        $("#edit-id").val(memberId);
+        $("#edit-name").val(attendant);
+        $("#edit-phone").val(phone);
+        $("#edit-shift").val(shift);
+
+
+        $(".overlay, .edit-window").fadeIn();
+      });
+
+      // Hide Edit Window on Cancel
+      $(".cancel-button, .overlay").click(function() {
+        $(".edit-window, .overlay").fadeOut();
+      });
+
+      // Handle Update Button Inside Edit Window
+      $(".update-save").click(function() {
+        const updatedId = $("#edit-id").val();
+        const updatedName = $("#edit-name").val();
+        const updatedPhone = $("#edit-phone").val();
+        const updatedShift = $("#edit-shift").val();
+
+        if (updatedName.trim() === "" || updatedPhone.trim() === ""|| updatedShift.trim() === "") {
+          alert("Please fill out all fields before updating.");
+          return;
+        }
+
+        // Find the corresponding row in the table
+        $(".update-table tbody tr").each(function() {
+          if ($(this).find("td:eq(0)").text() === updatedId) {
+            $(this).find("td:eq(1)").text(updatedName);
+            $(this).find("td:eq(2)").text(updatedPhone);
+            $(this).find("td:eq(3)").text(updatedShift);
+          }
+        });
+
+        alert("Attendant details updated successfully!");
+        $(".edit-window, .overlay").fadeOut();
+      });
+
+    });
+    $(".button").click(function() {
+      const searchText = $("#attendant-name").val().toLowerCase().trim();
+  
+      $(".update-table tbody tr").each(function() {
+        const attendantName = $(this).find("td:eq(1)").text().toLowerCase();
+        if (attendantName.includes(searchText)) {
+          $(this).show();  // Show row if it matches the search
+        } else {
+          $(this).hide();  // Hide row if it doesn't match
+        }
+      });
+  
+      if (searchText === "") {
+        $(".update-table tbody tr").show(); // Show all rows if search box is empty
+      }
+    });
+  
+  
+  </script>
+</body>
+</html>

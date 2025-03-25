@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Users List</title>
+  <style>
+    /* Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      background-color: #63807a;
+      width: 240px;
+      padding: 20px;
+      text-align: center;
+      height: 100vh;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .top-bar {
+      background: linear-gradient(to right, #453c32db, #4836202d);
+      width: calc(100% - 240px);
+  
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 280px;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color:white;
+      z-index: 1000;
+    }
+
+
+    .sidebar h2 {
+      color: #f8f9fa;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 15px 0;
+      padding: 12px 15px;
+      text-decoration: none;
+      color: #ced4da;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 5px;
+      background-color: transparent;
+      transition: all 0.3s;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background-color: beige;
+      color: #343a40;
+      font-weight: 600;
+    }
+
+    /* Main Content Styling */
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+      background-color: #f7f9fc;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #495057;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .form-section,
+    .update-section {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 100px;
+    }
+
+    /* Search Bar Styling */
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-bar label {
+      font-weight: bold;
+      margin-right: 10px;
+      min-width: 80px; /* Ensure the label doesn't shift */
+    }
+    
+
+    .search-bar input {
+      width: calc(100% - 130px); /* Adjust to give space for button */
+      padding: 8px 12px;
+      font-size: 1rem;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    .search-bar input:focus {
+      border-color: #495057;
+      outline: none;
+    }
+
+    .search-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #040f1c;
+      color: white;
+      width: 100px;
+      margin-left: 10px;
+    }
+
+    .search-button:hover {
+      background-color: #0056b3;
+    }
+    .search-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      margin-top: 70px;
+    }
+    
+    .search-container input {
+      padding: 8px 12px;
+      font-size: 1rem;
+      border: 1px solid #ced4da;
+      border-radius: 12px;
+      transition: border-color 0.3s;
+      background-color: #f9f6f4;
+    }
+    
+    .search-container input:focus {
+      border-color: #495057;
+      outline: none;
+    }
+    
+    .search-container .button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: #5d554cdb;
+      color: white;
+    }
+    
+    .search-container .add-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color:#5d554cdb;
+      color: white;
+    }
+    .search-container button:hover,
+    .search-container .add-button:hover {
+      background-color: rgb(42, 80, 111);
+    }
+
+    /* Update Table Styling */
+    .update-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .update-table th,
+    .update-table td {
+      padding: 12px 15px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .update-table th {
+      background-color: #6c5d4f;
+      color: white;
+    }
+
+    .update-table td {
+      background-color: #fdfdfd;
+    }
+
+    .update-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+    }
+    .delete-button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+    }
+
+    .update-button:hover,.delete-button:hover {
+      background-color: #1e7e34;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main {
+        padding: 20px;
+      }
+      .form-group input,
+      .search-bar input {
+        width: 100%;
+      }
+      .search-button {
+        width: 100%;
+        margin-top: 10px;
+      }
+      .button-container {
+        flex-direction: column;
+      }
+      .slots-button,
+      .register-button {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+    .edit-window {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .edit-window h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .edit-window input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+    }
+
+    .edit-window button {
+      width: 48%;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .update-save {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .update-save:hover {
+      background-color: #1e7e34;
+    }
+
+    .cancel-button {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .cancel-button:hover {
+      background-color: #b52a37;
+    }
+
+    /* Overlay for background blur effect */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="top-bar">User Details</div>
+  <div class="sidebar">
+    <h2>Welcome<br> Admin</h2>
+    <a href="Manage-attendant.html" class="btn-register">Manage Attendants</a>
+    <a href="User-details.html" class="btn-update active">Users List</a>
+    <a href="Parking-revenue.html" class="btn-checkout">Parking Revenue</a>
+    <a href="#" class="logout">Log out</a>
+  </div>
+  <div class="main">
+    
+    <div class="search-container">
+      <label for="user-id">User Id:</label>
+      <input type="text" id="user-id" placeholder="Enter User Id">
+      <button class="button">Search</button>
+   
+    </div>
+    <div class="update-section">
+     
+      <table class="update-table">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Phone No</th>
+            <th>Gender</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2343</td>
+            <td>Manoj K</td>
+            <td>8775699765</td>
+            <td>Male</td>
+        
+           
+          </tr>
+          <tr>
+            <td>1242</td>
+            <td>Rahul</td>
+            <td>9987670966</td>
+            <td>Male</td>
+         
+          
+          </tr>
+          <tr>
+            <td>8976</td>
+            <td>Meera</td>
+            <td>9876544366</td>
+            <td>Female</td>
+         
+          
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="overlay"></div>
+
+  <!-- Edit Window -->
+  
+  </div>
+  <script>
+    
+      document.querySelector('.button').addEventListener('click', () => {
+        const userid = document.querySelector('#user-id').value.trim();
+        if (!userid) {
+          alert('Please enter an ID to search.');
+        } 
+      });
+    
+    
+
+    
+
+    
+    $(".button").click(function() {
+      const searchText = $("#user-id").val().toLowerCase().trim();
+  
+      $(".update-table tbody tr").each(function() {
+        const userid = $(this).find("td:eq(0)").text().toLowerCase();
+        if (userid.includes(searchText)) {
+          $(this).show();  // Show row if it matches the search
+        } else {
+          $(this).hide();  // Hide row if it doesn't match
+        }
+      });
+  
+      if (searchText === "") {
+        $(".update-table tbody tr").show(); // Show all rows if search box is empty
+      }
+    });
+  
+  
+  </script>
+</body>
+</html>
