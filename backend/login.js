@@ -32,32 +32,14 @@ router.post('/admin', (req, res) => {
             return res.status(401).json({ message: "Invalid Credentials" });
         }
 
-        if (userType === 'T') {
-            req.session.regenerate(err => {
-                if (err) {
-                    console.error("Session regeneration error:", err);
-                    return res.status(500).json({ message: "Session Error" });
-                }
-                
+        if (userType === 'T') {      
                 req.session.attendant_id = results[0].attendant_id;
                 req.session.branch_name = results[0].branch_name;
-                
-                console.log(`Attendant ${results[0].attendant_id} logged in successfully`);
                 return res.json({ redirectUrl: "/attendant/Attendant-Reg.html" });
-            });
         } else {
-            req.session.regenerate(err => {
-                if (err) {
-                    console.error("Session regeneration error:", err);
-                    return res.status(500).json({ message: "Session Error" });
-                }
-                
                 req.session.admin_id = results[0].admin_id;
                 req.session.branch_name = results[0].branch_name;
-                
-                console.log(`Admin ${results[0].admin_id} logged in successfully`);
                 return res.json({ redirectUrl: "/admin/admin.html" });
-            });
         }
     });
 });
