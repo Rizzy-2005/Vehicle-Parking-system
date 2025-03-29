@@ -10,8 +10,10 @@ let branch_name;
 router.get("/",(req,res) => {
   if(req.session.attendant_id && req.session.branch_name)
   {
+    console.log(req.session.attendant_id,req.session.branch_name)
     attendant_id = req.session.attendant_id;
     branch_name = req.session.branch_name;
+    return res.status(200).json({});
   }
   else{
     return res.status(401).json({redirectUrl: "/login/staff_portal.html"});
@@ -85,7 +87,6 @@ router.get("/logout",(req,res) => {
     {
       return res.status(401).json({message: "Error in logging out"});
     }
-    res.clearCookie("connect.sid");
     return res.status(200).json({message: "Successfully logged out",redirectUrl: "/login/staff_portal.html"});
   });
 });

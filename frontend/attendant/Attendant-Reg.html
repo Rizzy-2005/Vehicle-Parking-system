@@ -470,6 +470,7 @@
     </div>
 </div>
   <script>
+    loginConfirm(); 
     async function loginConfirm()
     {
       try
@@ -491,8 +492,7 @@
         console.error("Error in login confirmation: ",error);
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
-    }
-    loginConfirm();  
+    } 
     function showPopup(title, message, type,redirectUrl) {
     const popupOverlay = document.getElementById("popup-overlay");
     const popupContent = document.getElementById("popup-content");
