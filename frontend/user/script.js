@@ -26,6 +26,29 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error fetching states:", error));
     }
 
+    function confirmLogout() {
+        const confirmation = confirm("Are you sure you want to logout?");
+        if (confirmation) {
+            logout(); // Call the logout function
+        }
+    }
+    
+    function logout() {
+        fetch("http://localhost:3000/user/logout")
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.removeItem("userToken"); // Remove stored token
+                    sessionStorage.clear(); // Clear session storage
+                    window.location.replace(data.redirectUrl); // Redirect to login page
+                }
+            })
+            .catch(error => console.error("Error during logout:", error));
+    }
+    
+    // Attach to Logout Button
+    document.getElementById("logoutBtn").addEventListener("click", confirmLogout);
+    
     // Fetch cities based on selected state
     function loadCities() {
         const state = stateSelect.value;
