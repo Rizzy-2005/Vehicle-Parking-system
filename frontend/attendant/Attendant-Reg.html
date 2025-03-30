@@ -471,6 +471,7 @@
 </div>
   <script>
     loginConfirm(); 
+    //login confirmation
     async function loginConfirm()
     {
       try
@@ -493,26 +494,21 @@
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
     } 
+    //normal popup
     function showPopup(title, message, type,redirectUrl) {
     const popupOverlay = document.getElementById("popup-overlay");
     const popupContent = document.getElementById("popup-content");
     const popupTitle = document.getElementById("popup-title");
     const popupMessage = document.getElementById("popup-message");
     const popupBtn = document.getElementById("popup-close-btn");
-    
-    // Set popup content
+
     popupTitle.textContent = title;
     popupMessage.textContent = message;
-    
-    // Reset classes and add appropriate type class
     popupContent.className = "popup-content";
     if (type === "error") {
         popupContent.classList.add("popup-error");
     }
-    
-    // Show popup
     popupOverlay.classList.add("active");
-    
     popupBtn.onclick = () => {
         if(redirectUrl)
         {
@@ -520,14 +516,13 @@
         }
         popupOverlay.classList.remove("active");
     };
-    
-    // Also close popup when clicking outside
     popupOverlay.onclick = (e) => {
         if (e.target === popupOverlay) {
             popupOverlay.classList.remove("active");
         }
     };
 }
+    //register slot popup
     const modal = document.getElementById("slots-modal");
     const openModalBtn = document.getElementById("slots-button");
     const closeModalBtn = document.getElementById("close-modal");
@@ -535,9 +530,7 @@
     const carSlotGrid = document.getElementById("car-slot-grid");
     const bikeSlotGrid = document.getElementById("bike-slot-grid");
     const selectedSlotInput = document.getElementById("selected-slot");
-
     let selectedSlot = null;
-
     async function fetchSlots()
     {
       try
@@ -556,11 +549,9 @@
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
     }
-
     function generateSlots(slotsData) {
     carSlotGrid.innerHTML = "";
     bikeSlotGrid.innerHTML = "";
-
     slotsData.forEach((slot) => {
       const slotDiv = document.createElement("div");
       const slotNumber = slot.slot_id;
@@ -568,7 +559,6 @@
       slotDiv.classList.add(slot.status === "Vacant" ? "available" : "occupied");
       slotDiv.textContent = slotNumber;
       slotDiv.setAttribute("data-slot", slotNumber);
-
       if (slot.status === "Vacant") {
         slotDiv.addEventListener("click", () => {
           document.querySelectorAll(".slot").forEach(s => s.classList.remove("selected"));
@@ -576,7 +566,6 @@
           selectedSlot = slotNumber;
         });
       }
-
       if (slot.type === "Bike") {
         bikeSlotGrid.appendChild(slotDiv);
       } else {
@@ -584,22 +573,23 @@
       }
     });
   }
-
     openModalBtn.addEventListener("click", () => {
       modal.style.display = "flex";
       fetchSlots();
       modal.querySelector(".modal-content").scrollTop = 0;
     });
-
-    closeModalBtn.addEventListener("click", () => modal.style.display = "none");
-
+    closeModalBtn.addEventListener("click", () => 
+    {
+      modal.style.display = "none";
+      selectedSlot = '';
+    });
     confirmSlotBtn.addEventListener("click", () => {
       if (selectedSlot)
       modal.style.display = "none";
       else
       showPopup("Please select a slot","You have to select a slot to register","error");
     });
-
+    //clear fields
     function clear()
     {
       document.getElementById('user-id').value = '';
@@ -607,7 +597,7 @@
       document.getElementById('license-plate').value = '';
       selectedSlot = '';
     }
-
+    //register
     async function register(){
       const userId = document.getElementById('user-id').value.trim();
       const vehicleName = document.getElementById('vehicle-name').value.trim();
@@ -643,6 +633,7 @@
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
     }
+  //logout
   async function logout()
   {
     try{

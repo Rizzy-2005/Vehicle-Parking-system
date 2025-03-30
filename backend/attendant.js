@@ -56,28 +56,26 @@ router.post("/register",(req,res) => {
           console.error("Some error occured: ",err);
           return res.status(407).json({message: "Some error with the database has occured"});
         }
+        query = "UPDATE slots set status = 'Parked' WHERE slot_id = ? and branch_name = ?";
+      db.query(query,[selectedSlot, branch_name],(err) =>{
+        if(err)
+        {
+          console.error("Some error occured: ",err);
+          return res.status(407).json({message: "Some error with the database has occured"});
+        }
+        query = "INSERT INTO parking_record (user_id, vehicle_no, branch_name, attendant_in) VALUES(?, ?, ?, ?)";
+        values = [userId, licensePlate, branch_name, attendant_id];
+    
+        db.query(query,values,(err) => {
+          if(err)
+          {
+            console.error("Some error occured: ",err);
+            return res.status(407).json({message: "Some error with the database has occured"});
+          }
+          return res.status(200).json({message: "Your vehicle has been registered successfully!"});
+        });
+      });
     });
-
-    query = "UPDATE slots set status = 'Parked' WHERE slot_id = ? and branch_name = ?";
-    db.query(query,[selectedSlot, branch_name],(err) =>{
-      if(err)
-      {
-        console.error("Some error occured: ",err);
-        return res.status(407).json({message: "Some error with the database has occured"});
-      }
-    });
-
-    query = "INSERT INTO parking_record (user_id, vehicle_no, branch_name, attendant_in) VALUES(?, ?, ?, ?)";
-    values = [userId, licensePlate, branch_name, attendant_id];
-
-    db.query(query,values,(err) => {
-      if(err)
-      {
-        console.error("Some error occured: ",err);
-        return res.status(407).json({message: "Some error with the database has occured"});
-      }
-    });
-    return res.status(200).json({message: "Your vehicle has been registered successfully!"});
   });
 });
 
@@ -91,4 +89,42 @@ router.get("/logout",(req,res) => {
   });
 });
 
+router.get("/updatetable",(req,res) => {
+  let query = "SELECT slot_id, v.user_id, v.vehicle_no FROM vehicles v JOIN parking_record p ON v.id = p.id WHERE checkout_at IS NULL and branch_name = ?";
+  db.query(query,[branch_name],(err,results) => {
+    if(err){
+      console.error("Some error occured: ",err);
+      return res.status(407).json({message: "Some error with the database has occured"});
+    }
+    return res.status(200).json(results);
+  });
+});
+
+router.post("/update",(req,res) => {
+  const {no, old_slot,selectedSlot} = req.body;
+  let query = "UPDATE slots SET status = 'Vacant' WHERE branch_name = ? and slot_id = ?";
+  db.query(query,[branch_name,old_slot],(err) => {
+    if(err)
+    {
+      console.error("Some error occured: ",err);
+      return res.status(407).json({message: "Some error with the database has occured"});
+    }
+    query = "UPDATE slots SET status = 'Parked' WHERE branch_name = ? and slot_id = ?"
+    db.query(query,[branch_name,selectedSlot],(err) => {
+      if(err)
+      {
+        console.error("Some error occured: ",err);
+        return res.status(407).json({message: "Some error with the database has occured"});
+      }
+      query = "UPDATE vehicles SET slot_id = ? WHERE vehicle_no = ? and slot_id = ? and checkout_at IS NULL";
+      db.query(query,[selectedSlot, no, old_slot],(err) => {
+        if(err){
+          console.error("Some error occured: ",err);
+          return res.status(407).json({message: "Some error with the database has occured"});
+        }
+        return res.status(200).json({});
+      });
+    });
+  });
+});
 module.exports = router;
