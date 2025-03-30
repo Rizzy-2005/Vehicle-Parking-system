@@ -7,6 +7,7 @@ router.use(express.json());
 let attendant_id;
 let branch_name;
 
+//for login confirmation
 router.get("/",(req,res) => {
   if(req.session.attendant_id && req.session.branch_name)
   {
@@ -20,6 +21,7 @@ router.get("/",(req,res) => {
   }
 });
 
+//for fetching the slots
 router.get("/fetchSlots",(req,res) => {
   let query = "SELECT slot_id, type, status FROM slots WHERE branch_name = ?";
   db.query(query,[branch_name],(err,result) => 
@@ -33,6 +35,7 @@ router.get("/fetchSlots",(req,res) => {
   });
 });
 
+//for registering vehicles
 router.post("/register",(req,res) => {
   const {userId, vehicleName, licensePlate, selectedSlot} = req.body;
   db.query("SELECT * FROM users WHERE user_id = ?",[userId],(err,result) =>{
@@ -79,6 +82,7 @@ router.post("/register",(req,res) => {
   });
 });
 
+//for logout
 router.get("/logout",(req,res) => {
   req.session.destroy((err) =>{
     if(err)
@@ -89,6 +93,7 @@ router.get("/logout",(req,res) => {
   });
 });
 
+//for loading table in update page
 router.get("/updatetable",(req,res) => {
   let query = "SELECT slot_id, v.user_id, v.vehicle_no FROM vehicles v JOIN parking_record p ON v.id = p.id WHERE checkout_at IS NULL and branch_name = ?";
   db.query(query,[branch_name],(err,results) => {
@@ -100,6 +105,7 @@ router.get("/updatetable",(req,res) => {
   });
 });
 
+//for updating slot of vehicles
 router.post("/update",(req,res) => {
   const {no, old_slot,selectedSlot} = req.body;
   let query = "UPDATE slots SET status = 'Vacant' WHERE branch_name = ? and slot_id = ?";
