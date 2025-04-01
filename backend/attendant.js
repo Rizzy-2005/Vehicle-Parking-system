@@ -133,4 +133,51 @@ router.post("/update",(req,res) => {
     });
   });
 });
+
+//Loading checkout table
+router.get("/checkouttable",(req,res) => {
+  let query = "SELECT v.user_id, slot_id, v.vehicle_no, vehicle_name FROM vehicles v JOIN parking_record p ON v.id = p.id WHERE checkout_at IS NULL AND branch_name = ?";
+  db.query(query,[branch_name],(err,result) => {
+    if(err)
+    {
+      console.error("Some error occured: ",err);
+      return res.status(407).json({message: "Some error with the database has occured"});  
+    }
+    return res.status(200).json(result);
+  });
+});
+//checkout details
+router.post("/checkout",(req,res) => {
+  const {userId, vehicleNo} = req.body;
+  let query = "SELECT registered_at FROM vehicles WHERE user_id = ? AND vehicle_no = ? AND checkout_at IS NULL";
+  db.query(query,[userId, vehicleNo],(err,result) => {
+    if(err)
+    {
+      console.error("Some error occured: ",err);
+      return res.status(407).json({message: "Some error with the database has occured"}); 
+    }
+    return res.status(200).json(result);
+  });
+});
+//verify
+router.post("/verify",(req,res) => {
+  const {userId, slotId, vehicleNo, vehicleName,securityKey} = req.body;
+  let query = "SELECT secret_no FROM vehicles WHERE user_id = ? AND vehicle_no = ? AND checkout_at IS NULL";
+  db.query(query,[userId, vehicleNo],(err,result) => {
+    if(err)
+    {
+      console.error("Some error occured: ",err);
+      return res.status(407).json({message: "Some error with the database has occured"}); 
+    }
+    if(securityKey != result[0].secret_no)
+    {
+      return res.status(401).json({message:"The entered key is wrong"});
+    }
+    req.session.user = userId;
+    req.session.slotId = slotId;
+    req.session.vehicleNo = vehicleNo;
+    req.session.vehicleName = vehicleName;
+    return res.status(200).json({message: "The security key verified successfully",redirectUrl: "Attendant-Bill.html"})
+  });
+});
 module.exports = router;
