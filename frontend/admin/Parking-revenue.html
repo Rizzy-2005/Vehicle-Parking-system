@@ -5,164 +5,314 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <title>Parking Revenue</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=edit" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-    }
 
-    .sidebar {
-      background-color: #63807a;
-      width: 240px;
-      padding: 20px;
-      text-align: center;
-      height: 100vh;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    }
+
+.material-symbols-outlined {
+  cursor: pointer;
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+}
+
+.alert {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .alert.success { background-color: #d4edda; color: #155724; }
+        .alert.error { background-color: #f8d7da; color: #721c24; }
+        
+        /* Popup Styles */
+        .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Activate Popup */
+.popup-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Popup Box */
+.popup-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+}
+
+/* Smooth popup animation */
+.popup-overlay.active .popup-content {
+    transform: scale(1);
+}
+
+/* Headings */
+#popup-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+}
+
+#popup-subtitle {
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 5px;
+    color: #555;
+}
+
+#popup-message {
+    margin: 15px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Input Container */
+.popup-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 5px 10px;
+    margin-top: 10px;
+    background: #f9f9f9;
+}
+
+.currency-symbol {
+    font-size: 18px;
+    color: #333;
+    margin-right: 8px;
+}
+
+.popup-input-field {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 8px;
+    width: 100%;
+    background: transparent;
+}
+
+/* Confirm Button */
+.popup-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.popup-btn:hover {
+    background-color: #388E3C;
+}
+
+.sidebar {
+  background-color: #63807a;
+  width: 240px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  color: #f8f9fa;
+  margin-bottom: 30px;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.sidebar a {
+  display: block;
+  margin: 15px 0;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #ced4da;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+  background-color: beige;
+  color: #343a40;
+  font-weight: 600;
+}
+
+.main {
+  flex-grow: 1;
+  padding: 40px;
+  background-color: #f7f9fc;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #495057;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  padding: 20px;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  background-color: #4CAF50;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.summary div {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #6c5d4f;
+  color: white;
+}
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  margin-top: 40px;
+}
+
+.filters input, .filters select {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #604637;
+  border-radius: 10px;
+  background-color: #f8f7f5;
+}
+#rate-per-hour {
+  width: 80px;
+  padding: 8px;
+  font-size: 1rem;
+  border: 2px solid #2c3e50;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #ecf0f1;
+  font-weight: 600;
+  color: #34495e;
+  transition: all 0.3s ease-in-out;
+}
+
+#rate-per-hour:focus {
+  border-color: #2980b9;
+  background-color: #ffffff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+}
+
+    .clear-button {               
+  border-color: #000000;            
+  padding: 10px 20px;        
+  font-size: 1rem;          
+  border-radius: 5px;         
+  cursor: pointer;            
+  transition: background-color 0.3s ease;
+}
+
+
+.clear-button:hover {
+  background-color: #2f37d3;
+  color: white;
+  border-color: white;
+}
     
-    .sidebar h2 {
-      color: #f8f9fa;
-      margin-bottom: 30px;
-      font-weight: 600;
-      font-size: 1.5rem;
-    }
-
-    .sidebar a {
-      display: block;
-      margin: 15px 0;
-      padding: 12px 15px;
-      text-decoration: none;
-      color: #ced4da;
-      font-size: 1rem;
-      font-weight: 500;
-      border-radius: 5px;
-      transition: all 0.3s;
-    }
-
-    .sidebar a.active,
-    .sidebar a:hover {
-      background-color: beige;
-      color: #343a40;
-      font-weight: 600;
-    }
-
-    .main {
-      flex-grow: 1;
-      padding: 40px;
-      background-color: #f7f9fc;
-    }
-
-    h1 {
-      font-size: 2rem;
-      color: #495057;
-      margin-bottom: 30px;
-      font-weight: 600;
-    }
-
-    .container {
-      width: 90%;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .summary {
-      display: flex;
-      justify-content: space-between;
-      background-color: #4CAF50;
-      color: white;
-      padding: 20px;
-      border-radius: 8px;
-    }
-
-    .summary div {
-      text-align: center;
-      font-size: 1.2rem;
-    }
-
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-      background: white;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #6c5d4f;
-      color: white;
-    }
-    .filters {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      margin-top: 40px;
-    }
-
-    .filters input, .filters select {
-      padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #604637;
-      border-radius: 10px;
-      background-color: #f8f7f5;
-    }
-    #rate-per-hour {
-      width: 80px;
-      padding: 8px;
-      font-size: 1rem;
-      border: 2px solid #2c3e50;
-      border-radius: 8px;
-      text-align: center;
-      background-color: #ecf0f1;
-      font-weight: 600;
-      color: #34495e;
-      transition: all 0.3s ease-in-out;
-    }
-    
-    #rate-per-hour:focus {
-      border-color: #2980b9;
-      background-color: #ffffff;
-      outline: none;
-      box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
-    }
     
   </style>
 </head>
 <body>
   <div class="sidebar">
+    
     <h2>Welcome<br> Admin</h2>
     <a href="Manage-attendant.html">Manage Attendants</a>
     <a href="User-details.html">Users List</a>
     <a href="Parking-revenue.html" class="active">Parking Revenue</a>
     <a href="#">Log out</a>
+    
   </div>
 
   <div class="main">
     <div class="container">
-      <h1>Revenue & Registrations</h1>
+      <h1>Financial Overview & Usage</h1>
       <div class="summary">
         <div>
           <h3>Total Revenue</h3>
-          <p id="total-revenue">$0</p>
+          <p id="total-revenue"></p>
         </div>
-        <div>
-          <h3>Active Users</h3>
-          <p id="active-users">0</p>
-        </div>
+        
         <div>
           <h3>Registered Vehicles</h3>
-          <p id="registered-vehicles">0</p>
+          <p id="registered-vehicles"></p>
         </div>
         <div>
-          <h3>Rate per Hour: <span id="rate-display">$5</span></h3>
-          <input type="number" id="rate-per-hour" value="5" min="1" step="0.5">
+          <h3>Rate per Hour<span id="rate-display"></span></h3>
+          <div style="display: flex; align-items: center;padding-left: 50px;">
+            <p style="margin: 0;" id = 'rate'>₹5</p>
+            <span class="material-symbols-outlined" id = 'edit-icon' style="padding-left: 10px;">
+              edit
+            </span>
+          </div>
         </div>
       </div>
     
@@ -179,6 +329,7 @@
         <input type="date" id="day-filter" style="display: none;">
         <input type="week" id="week-filter" style="display: none;">
         <select id="month-filter" style="display: none;">
+          <option value ="00">Select</option>
           <option value="01">January</option>
           <option value="02">February</option>
           <option value="03">March</option>
@@ -192,6 +343,7 @@
           <option value="11">November</option>
           <option value="12">December</option>
         </select>
+        <button id="clear-filters" class = 'clear-button'>Clear Filter</button>
       </div>
 
       <table id="revenue-table">
@@ -203,43 +355,183 @@
             <th>Attendant checked-out</th>
             <th>Check-in Time</th>
             <th>Check-out Time</th>
-            <th>Revenue ($)</th>
+            <th>Revenue (₹)</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1564</td>
-            <td>KL60 L 4259</td>
-            <td>Sunil</td>
-            <td>Aswin</td>
-            <td>2025-03-24 08:00 AM</td>
-            <td>2025-03-24 12:00 PM</td>
-            <td class="revenue"></td>
-          </tr>
-          <tr>
-            <td>8765</td>
-            <td>KL60 L 9999</td>
-            <td>Lijo</td>
-            <td>David</td>
-            <td>2025-02-24 08:00 AM</td>
-            <td>2025-02-24 09:00 AM</td>
-            <td class="revenue"></td>
-          </tr>
-          <tr>
-            <td>5567</td>
-            <td>KL60 C 5578</td>
-            <td>Amal</td>
-            <td></td>
-            <td>2025-08-24 07:00 AM</td>
-            <td></td>
-            <td class="revenue"></td>
-          </tr>
+        <tbody id = 'revenue-body'>
         </tbody>
       </table>
     </div>
   </div>
 
+
+
+  <div id="popup-overlay" class="popup-overlay">
+    <div id="popup-content" class="popup-content">
+      <h1 id="popup-title">Updation</h1>
+      <h2 id="popup-subtitle">Rate Per Hour</h2>
+      <h4 id="popup-message">Set The Rate</h4>
+      
+      <div class="popup-input-container">
+        <label for="popup-input" class="currency-symbol">₹</label>
+        <input type="text" id="popup-input" class="popup-input-field" placeholder="Enter rate">
+      </div>
+      
+      <button id="popup-confirm-btn" class="popup-btn">Confirm</button>
+    </div>
+  </div>
+
   <script>
+  
+  //To update rate-per-hour
+  /*
+  1.)Store in session which admin is using when loging in.
+  2.)Also store the current rate per hour also
+  3.)Put the rate per hour as simple text in input box.
+  4.) Get the value when confirming.
+  5.) Make a POST request to update the rate-per-hour.
+  */
+  function showEdit(){
+    const popupOverlay = document.getElementById("popup-overlay");
+    const confirmBtn = document.getElementById("popup-confirm-btn");
+    const rate = document.getElementById('rate');
+    document.getElementById('popup-input').value = rate.textContent.slice(1);
+
+    //popupInput.innerHTML = `${ratePerHour}`; //sets current rate per hour
+    popupOverlay.classList.add('active');
+
+    if (confirmBtn){
+      confirmBtn.addEventListener("click",function(){
+        const popupInput = document.getElementById('popup-input').value.trim();
+
+        if (popupInput !== '' && /^\d+(\.\d+)?$/.test(popupInput)){
+          rate.innerHTML = `₹${popupInput}`;
+        }
+       
+      })
+
+    }
+
+  /*if (confirmBtn){
+      confirmBtn.addEventListener("click",function(){
+        try{
+          const response =  fetch("http://localhost:3000/update",{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(session.ratePerHour)
+          });
+        const result = response.json();
+        if (!response.ok){
+          throw new Error(result.message||"Error");
+        }
+        popupOverlay.classList.remove("active");
+        }
+        catch(error){
+          console.error("Error: ",error);
+        }
+      })
+    }
+*/
+    confirmBtn.onclick= () =>{
+      popupOverlay.classList.remove('active');
+    }
+
+    popupOverlay.onclick  = (e) =>{
+      if (e.target === popupOverlay){
+        popupOverlay.classList.remove('active');
+      }
+    }
+  }
+
+  const edit = document.getElementById('edit-icon');
+  if (edit){
+    edit.addEventListener("click",showEdit);
+  }
+
+    //receiveing Data from db
+    
+    async function fetchData() {
+      try {
+        
+        const response = await fetch('http://localhost:3000/',{
+          method: 'POST',
+          headers: {'Content-Type':'application/json'}
+        });
+
+        const datas = await response.json();
+        console.log(response.status)
+      
+      
+    
+
+    //Loading the fetched data into page
+    let revenueBody =  document.getElementById('revenue-body');
+    revenueBody.innerHTML = '';
+    let count = sum = 0;
+
+    datas.forEach(branch =>{
+      let row = document.createElement('tr');
+      let checkout_attendant,checkout_at,profit;
+
+      if (branch.checkout_attendant === null) checkout_attendant = '';
+      else checkout_attendant = branch.checkout_attendant;
+
+      if (branch.checkout_at === null) checkout_at = '';
+      else checkout_at = branch.checkout_at;
+
+      if (branch.profit === null) profit = '';
+      else{
+         profit = branch.profit;
+          sum  += parseFloat(profit);
+        }
+      row.innerHTML = `
+            <td>${branch.user_id}</td>
+            <td>${branch.vehicle_no}</td>
+            <td>${branch.checkin_attendant}</td>
+            <td>${checkout_attendant}</td>
+            <td>${branch.registered_at}</td>
+            <td>${checkout_at}</td>
+            <td class="revenue">${profit}</td>
+      `;
+      revenueBody.appendChild(row);
+      count ++;
+    });
+
+    //calculating revenue and total vehicle
+    const totalRevenue = document.getElementById("total-revenue");
+    const totalVehicle = document.getElementById("registered-vehicles");
+
+    totalRevenue.innerHTML = `₹${sum}`;
+    totalVehicle.innerHTML = `${count}`;
+
+  }
+    catch(error){
+        console.error(error);
+      }
+  }
+  fetchData();
+  document.getElementById("clear-filters").addEventListener("click", function() {
+  // Reset the time filter and hide other filter controls
+  const timeFilter = document.getElementById("time-filter");
+  timeFilter.value = "";
+  
+  document.getElementById("day-filter").value = "";
+  document.getElementById("day-filter").style.display = "none";
+  
+  document.getElementById("week-filter").value = "";
+  document.getElementById("week-filter").style.display = "none";
+  
+  document.getElementById("month-filter").selectedIndex = 0;
+  document.getElementById("month-filter").style.display = "none";
+
+  // Show all table rows
+  document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
+    row.style.display = "table-row";  // or simply ""
+  });
+
+  calculateMetrics();
+});
+
     document.getElementById("time-filter").addEventListener("change", function() {
       document.getElementById("day-filter").style.display = this.value === "day" ? "block" : "none";
       document.getElementById("week-filter").style.display = this.value === "week" ? "block" : "none";
@@ -261,12 +553,16 @@
       document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
         row.style.display = row.cells[4].textContent.includes(selectedDate) ? "table-row" : "none";
       });
+
+      calculateMetrics();
     }
 
     function filterTableByMonth(selectedMonth) {
       document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
         row.style.display = row.cells[4].textContent.includes(`-${selectedMonth}-`) ? "table-row" : "none";
       });
+
+      calculateMetrics();
     }
     
     document.getElementById("rate-per-hour").addEventListener("input", function() {
@@ -300,46 +596,70 @@
               row.style.display = "none";
           }
       });
+
+      calculateMetrics();
   }
-  
 
-    function getHoursBetween(start, end) {
-      let startTime = new Date(start);
-      let endTime = new Date(end);
-      return (endTime - startTime) / (1000 * 60 * 60); // Convert milliseconds to hours
-  }
-  
+  document.getElementById('edit-icon').addEventListener("click",function(){
+          
 
-    function calculateMetrics() {
-      let totalRevenue = 0;
-      let activeUsers = 0;
-      let vehicleSet = new Set();
-      let ratePerHour = parseFloat(document.getElementById("rate-per-hour").value);
-      let rows = document.querySelectorAll("#revenue-table tbody tr");
 
-      rows.forEach(row => {
-        let checkIn = row.cells[4].textContent;
-        let checkOut = row.cells[5].textContent;
-        let vehicle = row.cells[1].textContent;
+popupContent.className = "popup-content";
+if (type === "error"){
+    popupContent.classList.add("popup-error");
+}
 
-        vehicleSet.add(vehicle);
-        let revenue = 0;
-        if (checkOut.trim() !== "") {
-          let hoursParked = getHoursBetween(checkIn, checkOut);
-          revenue = hoursParked * ratePerHour;
-        } else {
-          activeUsers++;
-        }
-        row.cells[6].textContent = `$${revenue.toFixed(2)}`;
-        totalRevenue += revenue;
-      });
 
-      document.getElementById("total-revenue").textContent = `$${totalRevenue.toFixed(2)}`;
-      document.getElementById("active-users").textContent = activeUsers;
-      document.getElementById("registered-vehicles").textContent = vehicleSet.size;
+popupOverlay.classList.add("active");
+
+
+popupBtn.onclick = () => {
+    popupOverlay.classList.remove("active");
+};
+
+
+popupOverlay.onclick = (e) => {
+    if (e.target === popupOverlay) {
+        popupOverlay.classList.remove("active");
     }
+};
+  });
 
-    window.onload = calculateMetrics;
+  async function calculateMetrics() {
+    //get the current table body
+    //get the summary ids
+    // iterate thrgh each row
+    //count the number of rows,
+    //add up the profit
+
+    //initialize the variables
+    let count=0,sum = 0;
+    let rows = document.querySelectorAll("#revenue-table tbody tr");
+    rows.forEach(row=>{
+
+      if (window.getComputedStyle(row).display !== 'none'){
+        count++
+      let cells = row.querySelectorAll("td");
+      let revenueCell = cells[6];
+      if (revenueCell && revenueCell.textContent.trim() !== '') {
+            sum += parseFloat(revenueCell.textContent.trim()) || 0;
+        }
+      }
+      
+    })
+
+    let totalRevenue = document.getElementById("total-revenue");
+    let totalVehicle = document.getElementById("registered-vehicles");
+
+    totalVehicle.innerHTML = totalRevenue.innerHTML = '';
+
+    totalRevenue.innerHTML = `₹${sum.toFixed(2)}`;
+    totalVehicle.innerHTML = count;
+
+  }
+
+
+
   </script>
 </body>
 </html>
