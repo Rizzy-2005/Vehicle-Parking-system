@@ -281,7 +281,7 @@
             document.getElementById("total").innerHTML = `₹${result[0].total}`;
         }
         catch(error){
-            console.error("Error in login confirmation: ",error);
+            console.error("Error in details: ",error);
             showPopup("Connection Error", "Could not connect to the server", "error");
         }
     }
@@ -304,7 +304,7 @@
         }
         catch(error)
         {
-            console.error("Error in login confirmation: ",error);
+            console.error("Error in confirmation: ",error);
             showPopup("Connection Error", "Could not connect to the server", "error");  
         }
     }

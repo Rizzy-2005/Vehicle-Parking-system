@@ -429,7 +429,7 @@
         loadtable(result);
       }
       catch(error){
-        console.error("Error fetching the slots details: ",error);
+        console.error("Error fetching details: ",error);
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
     }
@@ -490,7 +490,7 @@
         }
         catch(error)
         {
-          console.error("Error fetching the slots details: ",error);
+          console.error("Error fetching details: ",error);
           showPopup("Connection Error", "Could not connect to the server", "error");
         }
         $.confirm({
@@ -553,7 +553,7 @@
       }
       catch(error)
       {
-        console.error("Error fetching the slots details: ",error);
+        console.error("Error fetching details: ",error);
         showPopup("Connection Error", "Could not connect to the server", "error"); 
       }
     }
@@ -586,7 +586,7 @@
     }
     catch(error)
     {
-      console.error("Error fetching the slots details: ",error);
+      console.error("Error fetching details: ",error);
       showPopup("Connection Error", "Could not connect to the server", "error");
     }
   }
