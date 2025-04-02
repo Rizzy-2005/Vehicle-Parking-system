@@ -39,7 +39,7 @@ router.post('/admin', (req, res) => {
         } else {
                 req.session.admin_id = results[0].admin_id;
                 req.session.branch_name = results[0].branch_name;
-                return res.json({ redirectUrl: "/admin/admin.html" });
+                return res.json({ redirectUrl: "/admin/Manage-attendant.html" });
         }
     });
 });
