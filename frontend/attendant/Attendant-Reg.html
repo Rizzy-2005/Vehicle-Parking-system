@@ -485,7 +485,7 @@
         }
         if(!response.ok)
         {
-          showPopup("Branch not loaded",result.message,"error");
+          return showPopup("Branch not loaded",result.message,"error");
         }
       }
       catch(error)
@@ -539,7 +539,7 @@
         const slotsData = await response.json();
         if(!response.ok)
         {
-          showPopup("Slots not loaded",slotsData.message,"error");
+          return showPopup("Slots not loaded",slotsData.message,"error");
         }
         generateSlots(slotsData);
       }
@@ -622,10 +622,10 @@
         if(!response.ok)
         {
           clear();
-          showPopup("Something went wrong",slotsData.message,"error");
+          return showPopup("Something went wrong",slotsData.message,"error");
         }
         clear();
-        showPopup("Registration Successful", result.message, "success");
+        return showPopup("Registration Successful", result.message, "success");
       }
       catch(error)
       {
