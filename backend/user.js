@@ -121,7 +121,16 @@ WHERE p.id = (
     });
 });
 
-
+router.get("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+            return res.status(500).json({ success: false, message: "Logout failed" });
+        }
+        res.clearCookie("connect.sid"); // Clear session cookie
+        res.json({ success: true, message: "Logged out successfully", redirectUrl: "http://localhost:3000/login/login.html" });
+    });
+});
 
 
 module.exports = router;

@@ -7,6 +7,9 @@
   <!-- jQuery and jQuery Confirm -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery-confirm@3.3.4/js/jquery-confirm.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-confirm@3.3.4/css/jquery-confirm.min.css">
 
   <style>
@@ -259,6 +262,91 @@
     margin-bottom: 15px;
 }
 
+.alert {
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+    }
+  .alert.success { background-color: #d4edda; color: #155724; }
+  .alert.error { background-color: #f8d7da; color: #721c24; }
+.popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .popup-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .popup-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+    }
+    
+    .popup-overlay.active .popup-content {
+        transform: translateY(0);
+    }
+    
+    .popup-title {
+        margin-top: 0;
+        font-family: 'Arvo', serif;
+        color: #333;
+    }
+    
+    .popup-message {
+        margin: 15px 0;
+        font-family: 'Alata', sans-serif;
+    }
+    
+    .popup-btn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: 'Cousine', monospace;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+    
+    .popup-btn:hover {
+        background-color: #45a049;
+    }
+    
+    .popup-error .popup-title {
+        color: #721c24;
+    }
+    
+    .popup-error .popup-btn {
+        background-color: #dc3545;
+    }
+    
+    .popup-error .popup-btn:hover {
+        background-color: #c82333;
+    }
+
   </style>
 </head>
 <body>
@@ -267,7 +355,7 @@
     <a href="Attendant-Reg.html" class="btn-register">Register</a>
     <a href="Attendant-Update.html" class="btn-update">Update</a>
     <a href="Attendant-Checkout.html" class="btn-checkout active">Checkout</a>
-    <a href="#" class="logout">Log out</a>
+    <a href="#" onclick = "logout()" class="logout">Log out</a>
   </div>
   <div class="main">
     <h1>Checkout</h1>
@@ -275,7 +363,7 @@
       <div class="search-bar">
         <label for="user-id">User ID:</label>
         <input type="text" id="user-id" placeholder="Enter User ID">
-        <button class="search-button">Search</button>
+        <button onclick ="search()" class="search-button">Search</button>
       </div>
       <table class="checkout-table">
         <thead>
@@ -288,49 +376,154 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Nidak123</td>
-            <td>C12</td>
-            <td>KL 60 L 4259</td>
-            <td>Maruti 800</td>
-            <td><div class="checkout-button-container"><button class="checkout-button">Check Out</button></div></td>
-          </tr>
-          <tr>
-            <td>Rishak</td>
-            <td>C10</td>
-            <td>KL 59 C 3000</td>
-            <td>Audi R8</td>
-            <td><div class="checkout-button-container"><button class="checkout-button">Check Out</button></div></td>
-          </tr>
         </tbody>
       </table>
     </div>
   </div>
+  <div id="popup-overlay" class="popup-overlay">
+    <div id="popup-content" class="popup-content">
+        <h2 id="popup-title" class="popup-title">Title</h2>
+        <p id="popup-message" class="popup-message">Message</p>
+        <button id="popup-close-btn" class="popup-btn">OK</button>
+    </div>
+</div>
   <script>
-    document.querySelector('.search-button').addEventListener('click', () => {
-      const userId = document.querySelector('#user-id').value.trim();
-      if (!userId) {
-        alert('Please enter a User ID to search.');
-      } else {
-        alert(`Searching for details of User ID: ${userId}`);
+    loginConfirm();
+    fetchtable();
+    //login confirmation 
+    async function loginConfirm()
+    {
+      try
+      {
+        const response = await fetch("http://localhost:3000/attendant/");
+        const result = await response.json();
+
+        if(response.status === 401)
+        {
+          return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
+        }
+        if(!response.ok)
+        {
+          showPopup("Branch not loaded",result.message,"error");
+        }
       }
-    });
-
-
-    <!-- Checkout Button -->
-
-    $(document).ready(function() {
-    $(".checkout-button").click(function() {
-        const row = event.target.closest('tr');
+      catch(error)
+      {
+        console.error("Error in login confirmation: ",error);
+        showPopup("Connection Error", "Could not connect to the server", "error");
+      }
+    } 
+    //normal popup
+    function showPopup(title, message, type,redirectUrl) {
+    const popupOverlay = document.getElementById("popup-overlay");
+    const popupContent = document.getElementById("popup-content");
+    const popupTitle = document.getElementById("popup-title");
+    const popupMessage = document.getElementById("popup-message");
+    const popupBtn = document.getElementById("popup-close-btn");
+    
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    popupContent.className = "popup-content";
+    if (type === "error") {
+        popupContent.classList.add("popup-error");
+    }
+    popupOverlay.classList.add("active");
+    
+    popupBtn.onclick = () => {
+        if(redirectUrl)
+        {
+            window.location.href = redirectUrl;
+        }
+        popupOverlay.classList.remove("active");
+    };
+    
+    popupOverlay.onclick = (e) => {
+        if (e.target === popupOverlay) {
+            popupOverlay.classList.remove("active");
+        }
+      };
+    }
+    //fetch and load table
+    async function fetchtable()
+    {
+      try{
+        const response = await fetch("http://localhost:3000/attendant/checkouttable");
+        const result = await response.json();
+        if(!response.ok){
+          return showPopup("Table not loaded",result.message,"error");
+        }
+        loadtable(result);
+      }
+      catch(error){
+        console.error("Error fetching the slots details: ",error);
+        showPopup("Connection Error", "Could not connect to the server", "error");
+      }
+    }
+    function loadtable(vehicles)
+    {
+      const table_body = document.querySelector(".checkout-table tbody");
+      table_body.innerHTML = "";
+      if(vehicles.length === 0)
+      {
+        table_body.innerHTML = `<tr><td colspan = 4 style="text-align:center;">No vehicles in this branch.</td></tr>`;
+        return;
+      } 
+      vehicles.forEach(vehicle => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${vehicle.user_id}</td>
+                        <td>${vehicle.slot_id}</td>
+                        <td>${vehicle.vehicle_no}</td>
+                        <td>${vehicle.vehicle_name}</td>
+                        <td><div class="checkout-button-container"><button onclick="checkout(this)" class="checkout-button">Check Out</button></div></td>`;
+        table_body.appendChild(row);
+      });
+    }  
+    //search
+    function search()
+    {
+      const search_text = document.getElementById("user-id").value.toLowerCase();
+      const rows = document.querySelectorAll(".checkout-table tbody tr");
+      rows.forEach(row => {
+        if(!row.cells[0].textContent.toLowerCase().includes(search_text)){
+          row.style.display = "none";
+        }
+        else{
+          row.style.display = '';
+        }
+      });
+    } 
+  //checkout verification
+ async function checkout(button) {
+        const row = button.closest('tr');
         const userId = row.cells[0].textContent;
         const slotId = row.cells[1].textContent;
         const vehicleNo = row.cells[2].textContent;
         const vehicleName = row.cells[3].textContent;
+        const vehicle_data = {userId, vehicleNo};
+        let date = null;
+        try{
+          const response = await fetch("http://localhost:3000/attendant/checkout",{
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(vehicle_data)
+          });
+          const result = await response.json();
+          if(!response.ok)
+          {
+            return showPopup("Vehicle details error",result.message,"error");
+          }
+          date = result[0].registered_at;
+        }
+        catch(error)
+        {
+          console.error("Error fetching the slots details: ",error);
+          showPopup("Connection Error", "Could not connect to the server", "error");
+        }
         $.confirm({
             title: '<div class="popup-title">Check Out Details</div>',
             content: '' +
             `<div class="custom-popup">` +
-            `<div class="form-group"><label>Date In:</label> <span>01/01/2025</span></div>` +
+            `<div class="form-group"><label>Date In:</label> <span>${date}</span></div>` +
             `<div class="form-group"><label>User ID:</label> <span>${userId}</span></div>` +
             `<div class="form-group"><label>Slot ID:</label> <span>${slotId}</span></div>` +
             `<div class="form-group"><label>Vehicle Name:</label> <span>${vehicleName}</span></div>` +
@@ -338,7 +531,7 @@
             `<div class="form-group"><label>Enter Security Key:</label></div>` +
             `<input type="password" class="security-input" placeholder="Enter Security Key" required />` +
             `</div>`,
-            boxWidth: '500px', /* Larger popup box */
+            boxWidth: '500px',
             useBootstrap: false,
             buttons: {
                 verify: {
@@ -346,21 +539,7 @@
                     btnClass: 'btn-yellow',
                     action: function () {
                         var securityKey = this.$content.find('.security-input').val();
-                        if (!securityKey) {
-                            $.alert({
-                                title: '<div class="alert-title">⚠️ Warning</div>',
-                                content: '<div class="alert-popup">Please enter a valid security key.</div>',
-                                boxWidth: '300px',
-                                useBootstrap: false
-                            });
-                            return false;
-                        }
-                        $.alert({
-                            title: '<div class="alert-title">✅ Verified</div>',
-                            content: '<div class="alert-popup">Security Key Verified Successfully!</div>',
-                            boxWidth: '300px',
-                            useBootstrap: false
-                        });
+                        verify_no(securityKey,row);
                     }
                 },
                 cancel: function () {
@@ -368,8 +547,59 @@
                 }
             }
         });
-    });
-});
+    }
+    //verify
+    async function verify_no(securityKey,row)
+    {
+      if(!securityKey)
+      {
+        return showPopup("Field Empty Error", "Please enter the security key", "error");
+      }
+      const userId = row.cells[0].textContent;
+      const slotId = row.cells[1].textContent;
+      const vehicleNo = row.cells[2].textContent;
+      const vehicleName = row.cells[3].textContent;
+      const vehicle_data = {userId, slotId, vehicleNo, vehicleName,securityKey};
+      try{
+        const response = await fetch("http://localhost:3000/attendant/verify",{
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(vehicle_data)
+        });
+        const result = await response.json();
+        if(response.status === 401)
+        {
+          return showPopup("Invalid security key",result.message,"error");
+        }
+        if(!response.ok)
+        {
+          return showPopup("Security key error",result.message,"error");
+        }
+        return showPopup("Verified Successfully",result.message,"success",result.redirectUrl);
+      }
+      catch(error)
+      {
+        console.error("Error fetching the slots details: ",error);
+        showPopup("Connection Error", "Could not connect to the server", "error"); 
+      }
+    }
+    //logout
+    async function logout()
+  {
+    try{
+      const response = await fetch("http://localhost:3000/attendant/logout");
+      const result = await response.json();
+      if(!response.ok){
+        return showPopup("Logout failed",result.message,"error");
+      }
+      return showPopup("Logged out",result.message,"success",result.redirectUrl);
+    }
+    catch(error)
+    {
+      console.error("Error fetching the slots details: ",error);
+      showPopup("Connection Error", "Could not connect to the server", "error");
+    }
+  }
   </script>
 </body>
 </html>
