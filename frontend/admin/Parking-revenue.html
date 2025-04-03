@@ -5,26 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <title>Parking Revenue</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=edit" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
-
-
-
-.material-symbols-outlined {
-  cursor: pointer;
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
-}
 
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   display: flex;
+  padding: 0;
+  min-height: 100vh;
 }
 
 .alert {
@@ -183,6 +173,7 @@ body {
   flex-grow: 1;
   padding: 40px;
   background-color: #f7f9fc;
+  min-height: 100vh; 
 }
 
 h1 {
@@ -196,6 +187,7 @@ h1 {
   width: 90%;
   margin: auto;
   padding: 20px;
+  min-height: 100vh;
 }
 
 .summary {
@@ -609,8 +601,8 @@ th {
             <td>${branch.vehicle_no}</td>
             <td>${branch.checkin_attendant}</td>
             <td>${checkout_attendant}</td>
-            <td>${(branch.registered_at)}</td>
-            <td>${(checkout_at)}</td>
+            <td>${formatdate(branch.registered_at)}</td>
+            <td>${formatdate(checkout_at)}</td>
             <td class="revenue">${profit}</td>
       `;
       revenueBody.appendChild(row);
@@ -646,7 +638,7 @@ th {
 
   // Show all table rows
   document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
-    row.style.display = "table-row";  // or simply ""
+    row.style.display = "table-row";  
   });
 
   calculateMetrics();
@@ -671,49 +663,58 @@ th {
 
     function filterTableByDate(selectedDate) {
       document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
-        row.style.display = row.cells[4].textContent.includes(selectedDate) ? "table-row" : "none";
+        row.style.display = row.cells[4].textContent.includes(convertToDDMMYYYY(selectedDate)) ? "table-row" : "none";
       });
-
       calculateMetrics();
     }
 
     function filterTableByMonth(selectedMonth) {
-      document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
-        row.style.display = row.cells[4].textContent.includes(`-${selectedMonth}-`) ? "table-row" : "none";
-      });
-
-      calculateMetrics();
-    }
+    document.querySelectorAll("#revenue-table tbody tr").forEach(row => {
+        const dateText = row.cells[4].textContent.split(" - ")[0]; 
+        const month = dateText.split("/")[1]; 
+        
+        if (month === selectedMonth) {
+            row.style.display = "table-row";
+        } else {
+            row.style.display = "none";
+        }
+    });
+    calculateMetrics();
+}
     
     function filterTableByWeek(selectedWeek) {
-      if (!selectedWeek) return;
-      
-      // Extract year and week number
-      let year = parseInt(selectedWeek.split("-W")[0]);
-      let week = parseInt(selectedWeek.split("-W")[1]);
-  
-      // Get the first day of the selected week (Monday)
-      let weekStart = new Date(year, 0, (week - 1) * 7 + 1);
-      let dayOfWeek = weekStart.getDay();
-      let diff = weekStart.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust to Monday
-      weekStart.setDate(diff);
-      
-      // Get the last day of the week (Sunday)
-      let weekEnd = new Date(weekStart);
-      weekEnd.setDate(weekStart.getDate() + 6);
-  
-      let rows = document.querySelectorAll("#revenue-table tbody tr");
-      rows.forEach(row => {
-          let checkInDate = new Date(row.cells[4].textContent); // Check-in date in table
-  
-          if (checkInDate >= weekStart && checkInDate <= weekEnd) {
-              row.style.display = "";
-          } else {
-              row.style.display = "none";
-          }
-      });
+    if (!selectedWeek) return;
+    // Extract year and week number
+    let year = parseInt(selectedWeek.split("-W")[0]);
+    let week = parseInt(selectedWeek.split("-W")[1]);
 
-  }
+    // Get the first day of the selected week (Monday)
+    let weekStart = new Date(year, 0, 1 + (week - 1) * 7);
+    while (weekStart.getDay() !== 1) {
+        weekStart.setDate(weekStart.getDate() - 1);
+    }
+
+    // Get the last day of the week (Sunday)
+    let weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+
+    let rows = document.querySelectorAll("#revenue-table tbody tr");
+    rows.forEach(row => {
+        // Extract date from your custom format: dd/mm/yyyy - hh:mm am/pm
+        let dateTimeString = row.cells[4].textContent.split(" - ")[0]; // Extracts 'dd/mm/yyyy'
+        
+        // Convert dd/mm/yyyy to Date object
+        let [day, month, year] = dateTimeString.split("/").map(Number);
+        let checkInDate = new Date(year, month - 1, day);
+
+        if (checkInDate >= weekStart && checkInDate <= weekEnd) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+    calculateMetrics();
+}
 
   document.getElementById('edit-icon').addEventListener("click",function(){
 
@@ -772,6 +773,10 @@ popupOverlay.onclick = (e) => {
   }
   function formatdate(datetime)
     {
+        if(!datetime)
+        {
+          return "";
+        }
         const date = new Date(datetime);
         const options = { 
             timeZone: "Asia/Kolkata",
@@ -785,7 +790,10 @@ popupOverlay.onclick = (e) => {
         const formattedDate = date.toLocaleString("en-IN", options).replace(", ", " - ");
         return formattedDate;
   }
-
+  function convertToDDMMYYYY(isoDate) {
+    const [year, month, day] = isoDate.split("-");
+    return `${day}/${month}/${year}`;
+}
 
   </script>
 </body>
