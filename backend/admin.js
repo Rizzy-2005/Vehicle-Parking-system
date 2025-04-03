@@ -19,6 +19,16 @@ router.post('/',(req,res)=>{
     })
 })
 
+router.get("/",(req,res) => {
+    if(req.session.admin_id && req.session.branch_name)
+    {
+      return res.status(200).json({});
+    }
+    else{
+      return res.status(401).json({redirectUrl: "/login/staff_portal.html"});
+    }
+  });
+  
 router.get("/rate",(req,res) => {
     db.query("SELECT rate_per_hour FROM admin WHERE admin_id = ?",[req.session.admin_id],(err,result) => {
         if(err)
@@ -41,5 +51,15 @@ router.post("/updaterate",(req,res) => {
         return res.status(200).json({message: "Successfully updated the rate/hour"});
     });
 });
+
+router.get("/logout",(req,res) => {
+    req.session.destroy((err) =>{
+      if(err)
+      {
+        return res.status(401).json({message: "Error in logging out"});
+      }
+      return res.status(200).json({message: "Successfully logged out",redirectUrl: "/login/staff_portal.html"});
+    });
+  });
 
 module.exports = router;

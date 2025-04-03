@@ -324,6 +324,81 @@
       background: rgba(0, 0, 0, 0.5);
       z-index: 999;
     }
+    .unique-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.unique-popup-overlay.active-popup {
+    opacity: 1;
+    visibility: visible;
+}
+
+.unique-popup-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+}
+
+.unique-popup-overlay.active-popup .unique-popup-box {
+    transform: translateY(0);
+}
+
+.unique-popup-heading {
+    margin-top: 0;
+    font-family: 'Arvo', serif;
+    color: #333;
+}
+
+.unique-popup-text {
+    margin: 15px 0;
+    font-family: 'Alata', sans-serif;
+}
+
+.unique-popup-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Cousine', monospace;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.unique-popup-button:hover {
+    background-color: #45a049;
+}
+
+.unique-popup-error .unique-popup-heading {
+    color: #721c24;
+}
+
+.unique-popup-error .unique-popup-button {
+    background-color: #dc3545;
+}
+
+.unique-popup-error .unique-popup-button:hover {
+    background-color: #c82333;
+}
 
   </style>
 </head>
@@ -334,7 +409,7 @@
     <a href="Manage-attendant.html" class="btn-register">Manage Attendants</a>
     <a href="User-details.html" class="btn-update active">Users List</a>
     <a href="Parking-revenue.html" class="btn-checkout">Parking Revenue</a>
-    <a href="#" class="logout">Log out</a>
+    <a  href="#" onclick="logout()" class="logout">Log out</a>
   </div>
   <div class="main">
     
@@ -389,7 +464,70 @@
   <!-- Edit Window -->
   
   </div>
+  <div id="unique-popup-overlay" class="unique-popup-overlay">
+    <div id="unique-popup-box" class="unique-popup-box">
+        <h2 id="unique-popup-heading" class="unique-popup-heading">Title</h2>
+        <p id="unique-popup-text" class="unique-popup-text">Message</p>
+        <button id="unique-popup-button" class="unique-popup-button">OK</button>
+    </div>
+</div>
   <script>
+
+loginConfirm(); 
+    //login confirmation
+    async function loginConfirm()
+    {
+      try
+      {
+        const response = await fetch("http://localhost:3000/admin/");
+        const result = await response.json();
+
+        if(response.status === 401)
+        {
+          return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
+        }
+        if(!response.ok)
+        {
+          return showPopup("Branch not loaded",result.message,"error");
+        }
+      }
+      catch(error)
+      {
+        console.error("Error in login confirmation: ",error);
+        showPopup("Connection Error", "Could not connect to the server", "error");
+      }
+    } 
+    function showPopup(title, message, type, redirectUrl) {
+    const popupOverlay = document.getElementById("unique-popup-overlay");
+    const popupBox = document.getElementById("unique-popup-box");
+    const popupTitle = document.getElementById("unique-popup-heading");
+    const popupMessage = document.getElementById("unique-popup-text");
+    const popupButton = document.getElementById("unique-popup-button");
+    
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    popupBox.className = "unique-popup-box";
+    
+    if (type === "error") {
+        popupBox.classList.add("unique-popup-error");
+    }
+    
+    popupOverlay.classList.add("active-popup");
+    
+    popupButton.onclick = () => {
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+        popupOverlay.classList.remove("active-popup");
+    };
+    
+    popupOverlay.onclick = (e) => {
+        if (e.target === popupOverlay) {
+            popupOverlay.classList.remove("active-popup");
+        }
+    };
+}
+
     
       document.querySelector('.button').addEventListener('click', () => {
         const userid = document.querySelector('#user-id').value.trim();
@@ -420,7 +558,22 @@
       }
     });
   
-  
+    async function logout()
+  {
+    try{
+      const response = await fetch("http://localhost:3000/admin/logout");
+      const result = await response.json();
+      if(!response.ok){
+        return showPopup("Logout failed",result.message,"error");
+      }
+      return showPopup("Logged out",result.message,"success",result.redirectUrl);
+    }
+    catch(error)
+    {
+      console.error("Error fetching details: ",error);
+      showPopup("Connection Error", "Could not connect to the server", "error");
+    }
+  }
   </script>
 </body>
 </html>
