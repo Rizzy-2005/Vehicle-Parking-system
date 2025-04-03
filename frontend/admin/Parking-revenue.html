@@ -357,7 +357,7 @@ th {
     <a href="Manage-attendant.html">Manage Attendants</a>
     <a href="User-details.html">Users List</a>
     <a href="Parking-revenue.html" class="active">Parking Revenue</a>
-    <a href="#">Log out</a>
+    <a href="#" onclick="logout()">Log out</a>
     
   </div>
 
@@ -459,6 +459,30 @@ th {
 </div>
 
   <script>
+        loginConfirm(); 
+    //login confirmation
+    async function loginConfirm()
+    {
+      try
+      {
+        const response = await fetch("http://localhost:3000/admin/");
+        const result = await response.json();
+
+        if(response.status === 401)
+        {
+          return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
+        }
+        if(!response.ok)
+        {
+          return showPopup("Branch not loaded",result.message,"error");
+        }
+      }
+      catch(error)
+      {
+        console.error("Error in login confirmation: ",error);
+        showPopup("Connection Error", "Could not connect to the server", "error");
+      }
+    } 
   rate();
   async function rate()
   {
@@ -794,6 +818,22 @@ popupOverlay.onclick = (e) => {
     const [year, month, day] = isoDate.split("-");
     return `${day}/${month}/${year}`;
 }
+async function logout()
+  {
+    try{
+      const response = await fetch("http://localhost:3000/admin/logout");
+      const result = await response.json();
+      if(!response.ok){
+        return showPopup("Logout failed",result.message,"error");
+      }
+      return showPopup("Logged out",result.message,"success",result.redirectUrl);
+    }
+    catch(error)
+    {
+      console.error("Error fetching details: ",error);
+      showPopup("Connection Error", "Could not connect to the server", "error");
+    }
+  }
 
   </script>
 </body>
