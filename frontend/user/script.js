@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Fetch states and populate dropdown
     function loadStates() {
+
+        loginConfirm();
+
+
         fetch("http://localhost:3000/user/get_states")
             .then(response => response.json())
             .then(states => {
@@ -71,8 +75,63 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error during logout:", error));
     }
     
+
     // Attach to Logout Button
-    document.getElementById("logoutBtn").addEventListener("click", confirmLogout);
+   
+    loginConfirm(); 
+    //login confirmation
+    async function loginConfirm()
+    {
+      try
+      {
+        const response = await fetch("http://localhost:3000/user/");
+        const result = await response.json();
+
+        if(response.status === 401)
+        {
+          return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
+        }
+        if(!response.ok)
+        {
+          return showPopup("Branch not loaded",result.message,"error");
+        }
+      }
+      catch(error)
+      {
+        console.error("Error in login confirmation: ",error);
+        showPopup("Connection Error", "Could not connect to the server", "error");
+      }
+    } 
+    function showPopup(title, message, type, redirectUrl) {
+    const popupOverlay = document.getElementById("unique-popup-overlay");
+    const popupBox = document.getElementById("unique-popup-box");
+    const popupTitle = document.getElementById("unique-popup-heading");
+    const popupMessage = document.getElementById("unique-popup-text");
+    const popupButton = document.getElementById("unique-popup-button");
+    
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    popupBox.className = "unique-popup-box";
+    
+    if (type === "error") {
+        popupBox.classList.add("unique-popup-error");
+    }
+    
+    popupOverlay.classList.add("active-popup");
+    
+    popupButton.onclick = () => {
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+        popupOverlay.classList.remove("active-popup");
+    };
+    
+    popupOverlay.onclick = (e) => {
+        if (e.target === popupOverlay) {
+            popupOverlay.classList.remove("active-popup");
+        }
+    };
+}
     
     // Fetch cities based on selected state
     function loadCities() {
