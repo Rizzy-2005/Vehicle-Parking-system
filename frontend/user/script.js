@@ -26,13 +26,38 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error fetching states:", error));
     }
 
-    function confirmLogout() {
-        const confirmation = confirm("Are you sure you want to logout?");
-        if (confirmation) {
-            logout(); // Call the logout function
-        }
-    }
     
+    const logoutModal = document.getElementById("logoutModal");
+    const closeLogoutModal = document.getElementById("closeLogoutModal");
+    const confirmLogoutBtn = document.getElementById("confirmLogout");
+    const cancelLogoutBtn = document.getElementById("cancelLogout");
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+    logoutModal.style.display = "flex"; // Show modal
+    });
+
+    closeLogoutModal.addEventListener("click", () => {
+    logoutModal.style.display = "none";
+    });
+
+    cancelLogoutBtn.addEventListener("click", () => {
+    logoutModal.style.display = "none";
+    });
+
+    confirmLogoutBtn.addEventListener("click", () => {
+    logoutModal.style.display = "none";
+    logout(); // Proceed with logout
+    });
+
+    // Optional: Close modal when clicking outside it
+    window.addEventListener("click", (event) => {
+    if (event.target === logoutModal) {
+        logoutModal.style.display = "none";
+    }
+    });
+
+
+
     function logout() {
         fetch("http://localhost:3000/user/logout")
             .then(response => response.json())
