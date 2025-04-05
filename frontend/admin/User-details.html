@@ -523,6 +523,10 @@ loginConfirm();
     
     popupOverlay.onclick = (e) => {
         if (e.target === popupOverlay) {
+          if(redirectUrl)
+          {
+              window.location.href = redirectUrl;
+          }
             popupOverlay.classList.remove("active-popup");
         }
     };
