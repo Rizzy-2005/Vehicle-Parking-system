@@ -91,10 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
-        if(!response.ok)
-        {
-          return showPopup("Branch not loaded",result.message,"error");
-        }
       }
       catch(error)
       {
@@ -128,6 +124,10 @@ document.addEventListener("DOMContentLoaded", function () {
     
     popupOverlay.onclick = (e) => {
         if (e.target === popupOverlay) {
+            if(redirectUrl)
+                {
+                    window.location.href = redirectUrl;
+                }
             popupOverlay.classList.remove("active-popup");
         }
     };

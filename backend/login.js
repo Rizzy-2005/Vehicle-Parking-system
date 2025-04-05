@@ -85,7 +85,7 @@ router.post('/signup', (req, res) => {
             }
             console.log(`User Registered: ${name}, Phone: ${phone}, UserId: ${userId}`);
             
-            res.status(201).json({ message: 'Signup successful!' });
+            res.status(200).json({ message: 'Signup successful!',redirectUrl: "login.html"});
         });
     });
 });

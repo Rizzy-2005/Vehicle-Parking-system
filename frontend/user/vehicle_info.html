@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vehicles Parked</title>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
@@ -421,10 +424,6 @@
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
-        if(!response.ok)
-        {
-          return showPopup("Branch not loaded",result.message,"error");
-        }
       }
       catch(error)
       {
@@ -459,6 +458,10 @@
       
       popupOverlay.onclick = (e) => {
           if (e.target === popupOverlay) {
+            if(redirectUrl)
+          {
+              window.location.href = redirectUrl;
+          }
               popupOverlay.classList.remove("active-popup");
           }
       };
