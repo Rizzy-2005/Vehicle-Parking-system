@@ -81,6 +81,15 @@ router.get('/search_branches', (req, res) => {
     });
 });
 
+router.get("/",(req,res) => {
+    if(req.session.userid)
+    {
+      return res.status(200).json({});
+    }
+    else{
+      return res.status(401).json({redirectUrl: "/login/login.html"});
+    }
+});
 
 router.get('/vehicle_details', (req, res) => {
     if (!req.session.userid) {

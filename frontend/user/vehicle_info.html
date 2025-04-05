@@ -52,21 +52,25 @@
     }
 
     .logout-btn {
-      margin-top: auto;
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
       padding: 10px;
       font-size: 0.9rem;
       font-weight: 600;
       border: none;
       border-radius: 10px;
       background-color: transparent;
-      color: black;
+      color: white;
       cursor: pointer;
       transition: 0.3s;
     }
 
     .logout-btn:hover {
       background-color: #f44336;
-      color: white;
+      color: black;
     }
 
     .main {
@@ -130,6 +134,199 @@
       background-color: #f44336;
     }
 
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5); /* darker backdrop */
+      backdrop-filter: blur(4px); /* nice frosted effect */
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      color: #333;
+      width: 90%;
+      max-width: 420px;
+      padding: 30px 25px 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s ease-in-out;
+      font-family: 'Poppins', sans-serif;
+      border: 2px solid #2d2f3b;
+    }
+    
+    .modal-content h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2d2f3b;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #2d2f3b;
+      display: inline-block;
+    }
+    
+    .modal-content p {
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 25px;
+      color: #444;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 20px;
+      background-color: #2d2f3b;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .close-btn:hover {
+      background-color: #f44336;
+      color: white;
+    }
+    
+    /* Modal Button Styling */
+    #confirmLogout,
+    #cancelLogout {
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: 0.3s ease-in-out;
+    }
+    
+    #confirmLogout {
+      background-color: #f44336;
+      color: white;
+      margin-right: 10px;
+    }
+    
+    #confirmLogout:hover {
+      background-color: #d32f2f;
+    }
+    
+    #cancelLogout {
+      background-color: #e0e0e0;
+      color: #2d2f3b;
+    }
+    
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    .unique-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+.unique-popup-overlay.active-popup {
+    opacity: 1;
+    visibility: visible;
+}
+
+.unique-popup-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+}
+
+.unique-popup-overlay.active-popup .unique-popup-box {
+    transform: translateY(0);
+}
+
+.unique-popup-heading {
+    margin-top: 0;
+    font-family: 'Arvo', serif;
+    color: #333;
+}
+
+.unique-popup-text {
+    margin: 15px 0;
+    font-family: 'Alata', sans-serif;
+}
+
+.unique-popup-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Cousine', monospace;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.unique-popup-button:hover {
+    background-color: #45a049;
+}
+
+.unique-popup-error .unique-popup-heading {
+    color: #721c24;
+}
+
+.unique-popup-error .unique-popup-button {
+    background-color: #dc3545;
+}
+
+.unique-popup-error .unique-popup-button:hover {
+    background-color: #c82333;
+}
+
+
+    #cancelLogout:hover {
+      background-color: #bdbdbd;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
     @media (max-width: 768px) {
       .sidebar {
         display: none;
@@ -146,7 +343,7 @@
     <h2>Welcome User</h2>
     <a href="available_branches.html">Available Branches</a>
     <a href="vehicle_details.html" class="active">Vehicle Details</a>
-    <button class="logout-btn">Log out</button>
+    <button class="logout-btn" id="logoutBtn">Log out</button>
   </div>
 
   <div class="main">
@@ -190,7 +387,83 @@
     </div>
   </div>
 
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeLogoutModal">&times;</span>
+      <h2>Confirm Logout</h2>
+      <p>Are you sure you want to log out?</p>
+      <button id="confirmLogout" style="margin-right: 10px; padding: 8px 16px;border-radius: 8px;">Yes</button>
+      <button id="cancelLogout" style="padding: 8px 16px;border-radius: 8px;">Cancel</button>
+    </div>
+  </div>
+
+  <div id="unique-popup-overlay" class="unique-popup-overlay">
+    <div id="unique-popup-box" class="unique-popup-box">
+        <h2 id="unique-popup-heading" class="unique-popup-heading">Title</h2>
+        <p id="unique-popup-text" class="unique-popup-text">Message</p>
+        <button id="unique-popup-button" class="unique-popup-button">OK</button>
+    </div>
+</div>
+
+
   <script>
+
+    loginConfirm(); 
+    //login confirmation
+    async function loginConfirm()
+    {
+      try
+      {
+        const response = await fetch("http://localhost:3000/user/");
+        const result = await response.json();
+
+        if(response.status === 401)
+        {
+          return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
+        }
+        if(!response.ok)
+        {
+          return showPopup("Branch not loaded",result.message,"error");
+        }
+      }
+      catch(error)
+      {
+        console.error("Error in login confirmation: ",error);
+        showPopup("Connection Error", "Could not connect to the server", "error");
+      }
+    } 
+
+    function showPopup(title, message, type, redirectUrl) {
+      const popupOverlay = document.getElementById("unique-popup-overlay");
+      const popupBox = document.getElementById("unique-popup-box");
+      const popupTitle = document.getElementById("unique-popup-heading");
+      const popupMessage = document.getElementById("unique-popup-text");
+      const popupButton = document.getElementById("unique-popup-button");
+      
+      popupTitle.textContent = title;
+      popupMessage.textContent = message;
+      popupBox.className = "unique-popup-box";
+      
+      if (type === "error") {
+          popupBox.classList.add("unique-popup-error");
+      }
+      
+      popupOverlay.classList.add("active-popup");
+      
+      popupButton.onclick = () => {
+          if (redirectUrl) {
+              window.location.href = redirectUrl;
+          }
+          popupOverlay.classList.remove("active-popup");
+      };
+      
+      popupOverlay.onclick = (e) => {
+          if (e.target === popupOverlay) {
+              popupOverlay.classList.remove("active-popup");
+          }
+      };
+  }
+
     document.addEventListener("DOMContentLoaded", function () {
         const vehicle = JSON.parse(localStorage.getItem("selectedVehicle"));
         
@@ -214,6 +487,7 @@
         document.getElementById("showEntryTime").textContent = formatdate(vehicle.registered_at) || "N/A";
         document.getElementById("showExitTime").textContent = formatdate(vehicle.checkout_at) || "N/A";
     });
+
     function formatdate(datetime)
     {
         if(!datetime)
@@ -233,6 +507,49 @@
         const formattedDate = date.toLocaleString("en-IN", options).replace(", ", " - ");
         return formattedDate;
   }
+
+
+    const logoutModal = document.getElementById("logoutModal");
+    const closeLogoutModal = document.getElementById("closeLogoutModal");
+    const confirmLogoutBtn = document.getElementById("confirmLogout");
+    const cancelLogoutBtn = document.getElementById("cancelLogout");
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+    logoutModal.style.display = "flex"; // Show modal
+    });
+
+    closeLogoutModal.addEventListener("click", () => {
+    logoutModal.style.display = "none";
+    });
+
+    cancelLogoutBtn.addEventListener("click", () => {
+    logoutModal.style.display = "none";
+    });
+
+    confirmLogoutBtn.addEventListener("click", () => {
+    logoutModal.style.display = "none";
+    logout(); // Proceed with logout
+    });
+
+    // Optional: Close modal when clicking outside it
+    window.addEventListener("click", (event) => {
+    if (event.target === logoutModal) {
+        logoutModal.style.display = "none";
+    }
+    });
+
+    function logout() {
+        fetch("http://localhost:3000/user/logout")
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.removeItem("userToken"); // Remove stored token
+                    sessionStorage.clear(); // Clear session storage
+                    window.location.replace(data.redirectUrl); // Redirect to login page
+                }
+            })
+            .catch(error => console.error("Error during logout:", error));
+    }
     </script>
     
 </body>
