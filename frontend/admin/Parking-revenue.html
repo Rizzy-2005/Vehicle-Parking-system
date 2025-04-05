@@ -459,7 +459,7 @@ th {
 </div>
 
   <script>
-        loginConfirm(); 
+    loginConfirm(); 
     //login confirmation
     async function loginConfirm()
     {
@@ -472,10 +472,8 @@ th {
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
-        if(!response.ok)
-        {
-          return showPopup("Branch not loaded",result.message,"error");
-        }
+        fetchData();
+        rate();
       }
       catch(error)
       {
@@ -483,23 +481,6 @@ th {
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
     } 
-  rate();
-  async function rate()
-  {
-      try{
-        const response = await fetch("http://localhost:3000/admin/rate");
-        const result = await response.json();
-        if(!response.ok)
-        {
-          return showPopup("Rate not loaded",result.message,"error");
-        }
-        document.getElementById("rate").innerHTML = result[0].rate_per_hour;
-      }
-      catch(error){
-        console.error("Backend call error",error);
-        showPopup("Connection Error", "Could not connect to the server", "error");
-      }
-  }
   function showPopup(title, message, type, redirectUrl) {
     const popupOverlay = document.getElementById("unique-popup-overlay");
     const popupBox = document.getElementById("unique-popup-box");
@@ -597,7 +578,7 @@ th {
     async function fetchData() {
       try {
         
-        const response = await fetch('http://localhost:3000/admin/',{
+        const response = await fetch('http://localhost:3000/admin/data',{
           method: 'POST',
           headers: {'Content-Type':'application/json'}
         });
@@ -649,7 +630,22 @@ th {
         console.error(error);
       }
   }
-  fetchData();
+  async function rate()
+  {
+      try{
+        const response = await fetch("http://localhost:3000/admin/rate");
+        const result = await response.json();
+        if(!response.ok)
+        {
+          return showPopup("Rate not loaded",result.message,"error");
+        }
+        document.getElementById("rate").innerHTML = result[0].rate_per_hour;
+      }
+      catch(error){
+        console.error("Backend call error",error);
+        showPopup("Connection Error1", "Could not connect to the server", "error");
+      }
+  }
   document.getElementById("clear-filters").addEventListener("click", function() {
   // Reset the time filter and hide other filter controls
   const timeFilter = document.getElementById("time-filter");

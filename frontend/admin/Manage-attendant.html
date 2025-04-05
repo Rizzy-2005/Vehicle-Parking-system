@@ -492,10 +492,6 @@
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
-        if(!response.ok)
-        {
-          return showPopup("Branch not loaded",result.message,"error");
-        }
       }
       catch(error)
       {

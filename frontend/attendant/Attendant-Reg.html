@@ -470,7 +470,7 @@
     </div>
 </div>
   <script>
-    loginConfirm(); 
+    loginConfirm();
     //login confirmation
     async function loginConfirm()
     {
@@ -483,10 +483,6 @@
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
-        if(!response.ok)
-        {
-          return showPopup("Branch not loaded",result.message,"error");
-        }
       }
       catch(error)
       {
@@ -494,11 +490,7 @@
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
     } 
-    window.addEventListener('pageshow', function (event) {
-        if (event.persisted) {
-            window.location.reload();
-        }
-    });
+    
     //normal popup
     function showPopup(title, message, type,redirectUrl) {
     const popupOverlay = document.getElementById("popup-overlay");

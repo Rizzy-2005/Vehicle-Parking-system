@@ -22,10 +22,17 @@ const user = require("./user");
 const attendant = require("./attendant");
 const admin = require("./admin");
 
-app.use("/login",login);
-app.use("/user",user);
-app.use("/attendant",attendant);
-app.use("/admin",admin);
+const preventCaching = (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
+};
+
+app.use("/login", preventCaching, login);
+app.use("/user", preventCaching, user);
+app.use("/attendant", preventCaching, attendant);
+app.use("/admin", preventCaching, admin);
 
 app.use(express.static(path.join(__dirname,"../frontend")));
 

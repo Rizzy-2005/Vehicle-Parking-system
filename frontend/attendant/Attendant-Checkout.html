@@ -329,7 +329,7 @@
     <a href="Attendant-Reg.html" class="btn-register">Register</a>
     <a href="Attendant-Update.html" class="btn-update">Update</a>
     <a href="Attendant-Checkout.html" class="btn-checkout active">Checkout</a>
-    <a href="#" onclick = "logout()" class="logout">Log out</a>
+    <a onclick = "logout()" class="logout">Log out</a>
   </div>
   <div class="main">
     <h1>Checkout</h1>
@@ -363,7 +363,6 @@
 </div>
   <script>
     loginConfirm();
-    fetchtable();
     //login confirmation 
     async function loginConfirm()
     {
@@ -376,10 +375,7 @@
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
-        if(!response.ok)
-        {
-          return showPopup("Branch not loaded",result.message,"error");
-        }
+        fetchtable();
       }
       catch(error)
       {

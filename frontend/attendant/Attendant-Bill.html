@@ -230,7 +230,6 @@
     let now = null;
     let total = null;
     loginConfirm();
-    loadbill();
     //login confirmation 
     async function loginConfirm()
     {
@@ -243,10 +242,7 @@
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
-        if(!response.ok)
-        {
-          return showPopup("Branch not loaded",result.message,"error");
-        }
+        loadbill();
       }
       catch(error)
       {

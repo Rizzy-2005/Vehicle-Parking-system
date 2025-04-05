@@ -19,7 +19,7 @@ function showPopup(title, message, type,redirectUrl) {
     popupOverlay.classList.add("active");
     
     popupBtn.onclick = () => {
-        if(redirectUrl || title == "Sign Up Successful")
+        if(redirectUrl)
         {
             window.location.href = redirectUrl;
         }
@@ -29,6 +29,10 @@ function showPopup(title, message, type,redirectUrl) {
     // Also close popup when clicking outside
     popupOverlay.onclick = (e) => {
         if (e.target === popupOverlay) {
+            if(redirectUrl)
+                {
+                    window.location.href = redirectUrl;
+                }
             popupOverlay.classList.remove("active");
         }
     };
@@ -233,7 +237,7 @@ function initSignupPage() {
             }
     
             clearSignupForm();
-            showPopup("Sign Up Successful", "Your account has been created successfully!", "success","login.html");
+            showPopup("Sign Up Successful", "Your account has been created successfully!", "success",result.redirectUrl);
         } catch (error) {
             console.error("Error:", error);
             showPopup("Sign Up Failed", "An error occurred. Please try again.", "error");
