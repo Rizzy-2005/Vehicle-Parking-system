@@ -406,7 +406,7 @@
     <a href="Attendant-Reg.html" class="btn-register active">Register</a>
     <a href="Attendant-Update.html" class="btn-update">Update</a>
     <a href="Attendant-Checkout.html" class="btn-checkout">Checkout</a>
-    <a href="#" class="logout" onclick="logout()">Log out</a>
+    <a class="logout" onclick="logout()">Log out</a>
   </div>
   <div class="main">
     <h1>New Vehicle Registration</h1>
@@ -494,6 +494,11 @@
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
     } 
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
     //normal popup
     function showPopup(title, message, type,redirectUrl) {
     const popupOverlay = document.getElementById("popup-overlay");
@@ -518,7 +523,11 @@
     };
     popupOverlay.onclick = (e) => {
         if (e.target === popupOverlay) {
-            popupOverlay.classList.remove("active");
+          if(redirectUrl)
+          {
+              window.location.href = redirectUrl;
+          }
+          popupOverlay.classList.remove("active");
         }
     };
 }

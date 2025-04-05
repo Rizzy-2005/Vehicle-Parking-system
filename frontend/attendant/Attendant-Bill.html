@@ -334,7 +334,11 @@
     
     popupOverlay.onclick = (e) => {
         if (e.target === popupOverlay) {
-            popupOverlay.classList.remove("active");
+            if(redirectUrl)
+          {
+              window.location.href = redirectUrl;
+          }
+        popupOverlay.classList.remove("active");
         }
       };
     }
