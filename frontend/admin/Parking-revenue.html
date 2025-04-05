@@ -589,7 +589,11 @@ th {
     let revenueBody =  document.getElementById('revenue-body');
     revenueBody.innerHTML = '';
     let count = sum = 0;
-
+    if(datas.length === 0)
+      {
+        revenueBody.innerHTML = `<tr><td colspan = 4 style="text-align:center;">No vehicles in this branch.</td></tr>`;
+        return;
+      } 
     datas.forEach(branch =>{
       let row = document.createElement('tr');
       let checkout_attendant,checkout_at,profit;
