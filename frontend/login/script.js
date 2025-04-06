@@ -243,7 +243,7 @@ function initSignupPage() {
             }
     
             clearSignupForm();
-            showPopup("Sign Up Successful", "Your account has been created successfully!", "success");
+            showPopup("Sign Up Successful", "Your account has been created successfully!", "success",result.redirectUrl);
         } catch (error) {
             console.error("Error:", error.message);
             showPopup("Sign Up Failed", "An error occurred. Please try again.", "error");
