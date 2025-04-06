@@ -1,3 +1,10 @@
+function clearSignupForm() {
+    document.getElementById('Name').value = '';
+    document.getElementById('Phone').value = '';
+    document.getElementById('UserId').value = '';
+    document.getElementById('pass').value = '';
+    document.getElementById('cpass').value = '';
+}
 function showPopup(title, message, type,redirectUrl) {
     const popupOverlay = document.getElementById("popup-overlay");
     const popupContent = document.getElementById("popup-content");
@@ -133,36 +140,36 @@ function initSignupPage() {
         });
     }
 
-    const count = document.getElementById('count');
-    const lower = document.getElementById('lowercase');
-    const upper = document.getElementById('uppercase');
-    const digit = document.getElementById('digits');
-    let isValid = false;
-    passwordInput.addEventListener('input',function(){
-        const password = passwordInput.value;
-        const hasCount = password.length>=8
-        count.classList.toggle("valid",hasCount);
-        count.classList.toggle('invalid',!hasCount);
-        count.innerHTML = hasCount ? '✅ 8+ Characters':'❌ 8+ Characters'
+        const count = document.getElementById('count');
+        const lower = document.getElementById('lowercase');
+        const upper = document.getElementById('uppercase');
+        const digit = document.getElementById('digits');
+        let isValid = false;
+        passwordInput.addEventListener('input',function(){
+            const password = passwordInput.value;
+            const hasCount = password.length>=8
+            count.classList.toggle("valid",hasCount);
+            count.classList.toggle('invalid',!hasCount);
+            count.innerHTML = hasCount ? '✅ 8+ Characters':'❌ 8+ Characters'
 
-        const hasLower = /[a-z]/.test(password);
-        lower.classList.toggle("valid",hasLower);
-        lower.classList.toggle('invalid',!hasLower);
-        lower.innerHTML = hasLower?'✅ lowercase':'❌ lowercase';
+            const hasLower = /[a-z]/.test(password);
+            lower.classList.toggle("valid",hasLower);
+            lower.classList.toggle('invalid',!hasLower);
+            lower.innerHTML = hasLower?'✅ lowercase':'❌ lowercase';
 
-        const hasGreater = /[A-Z]/.test(password);
-        upper.classList.toggle('valid',hasGreater);
-        upper.classList.toggle('invalid',!hasGreater);
-        upper.innerHTML = hasGreater?'✅ uppercase':'❌ uppercase';
+            const hasGreater = /[A-Z]/.test(password);
+            upper.classList.toggle('valid',hasGreater);
+            upper.classList.toggle('invalid',!hasGreater);
+            upper.innerHTML = hasGreater?'✅ uppercase':'❌ uppercase';
 
-        const hasDigit = /\d/.test(password);
-        digit.classList.toggle('valid',hasDigit);
-        digit.classList.toggle('invalid',!hasDigit);
-        digit.innerHTML = hasDigit?'✅ digits':'❌ digits';
-        isValid = hasCount && hasLower && hasGreater && hasDigit;
-    });
+            const hasDigit = /\d/.test(password);
+            digit.classList.toggle('valid',hasDigit);
+            digit.classList.toggle('invalid',!hasDigit);
+            digit.innerHTML = hasDigit?'✅ digits':'❌ digits';
+            isValid = hasCount && hasLower && hasGreater && hasDigit;
+        });
 
-    const confirmPasswordInput = document.getElementById('cpass');
+        const confirmPasswordInput = document.getElementById('cpass');
     const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
     
     if (toggleConfirmPassword) {
@@ -183,27 +190,26 @@ function initSignupPage() {
     
     if (loginBtn) {
         loginBtn.addEventListener('click', () => {
-            window.location.href = 'login.html';
+            window.location.href = '/login/login.html';
         });
     }
 
-    function clearSignupForm() {
-        document.getElementById('Name').value = '';
-        document.getElementById('Gender').value = '';
-        document.getElementById('Phone').value = '';
-        document.getElementById('UserId').value = '';
-        document.getElementById('pass').value = '';
-        document.getElementById('cpass').value = '';
-    }
-
+    // Handle signup form submission
     async function handleSignup(event) {
+        event.preventDefault();
         const name = document.getElementById('Name').value.trim();
-        const gender = document.getElementById('Gender').value.trim();
+        const female = document.getElementById('female-btn');
+        const male = document.getElementById('male-btn')
+        const gender = female.checked?female.value:male.value;
         const phone = document.getElementById('Phone').value.trim();
         const userId = document.getElementById('UserId').value.trim();
         const password = document.getElementById('pass').value.trim();
         const confirmPassword = document.getElementById('cpass').value.trim();
         
+        
+
+
+
         if (!name ||!gender || !phone || !userId || !password || !confirmPassword) {
             return showPopup("Missing Information", "All fields are required!", "error");
         }
@@ -237,13 +243,18 @@ function initSignupPage() {
             }
     
             clearSignupForm();
-            showPopup("Sign Up Successful", "Your account has been created successfully!", "success",result.redirectUrl);
+            showPopup("Sign Up Successful", "Your account has been created successfully!", "success");
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error:", error.message);
             showPopup("Sign Up Failed", "An error occurred. Please try again.", "error");
         }
     }
 }
+
+
+
+
+
 function initAdminPage(){
     const signInBtn = document.getElementById('signIn');
     if (signInBtn){

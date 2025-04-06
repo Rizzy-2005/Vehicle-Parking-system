@@ -2,40 +2,71 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background: url("../assets/back.png") no-repeat center center/cover;
+  background-color: #F2F4F7;
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
 .top-image {
-  width: 300px;
-  margin: 0 auto 0px;
+  width: 500px;
   display: block;
   transform: translateY(-45px);
 }
 
 /* Main container styling */
 .login-container {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: #fff;
   padding: 0px 10px 60px;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
   text-align: center;
-  width: 90%;
-  max-width: 300px;
+  width: 100%;
+  max-width: 430px;
   position: relative;
   transform: translateY(-70px);
   margin-top: 25px;
+  margin-left: 150px;
+}
+
+.gender-container {
+  display: flex;
+  gap: 10px;
+  font-family: Arial, sans-serif;
+  width: fit-content;
+}
+
+.gender-option {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0% 20px;
+  line-height: 1;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  margin-top: 5px;
+  width: fit-content;
+  gap: 89px;
+}
+
+.gender-option input[type="radio"] {
+  accent-color: #006eff; 
+  cursor: pointer;
+}
+
+.gender-option:hover {
+  background-color: #f0f2f5;
 }
 
 /* Heading styling */
 .login-container h1 {
   padding-top: 9px;
   font-size: 28px;
-  color: #f9fccb;
+  color: #000000;
   margin-bottom: 3px;
   font-family: "Alata", sans-serif;
   font-weight: 40;
@@ -45,10 +76,9 @@ body {
 /* Input fields */
 .login-container input {
   width: 80%;
-  padding: 10px;
   margin: 20px 0;
   border: 1px solid #ccc;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 16px;
   height: 19px;
   padding-bottom: 10px;
@@ -57,65 +87,38 @@ body {
 .login-container input::placeholder {
   font-family: "Arvo", serif;
   color: #c1c1c1;
-  padding-left: 7px;
+  
 }
 
 /* Footer button container */
-.button-container {
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-/* Button styling */
-.login-container button {
-  width: 48%;
-  padding: 10px;
+.signup-btn{
+  background-color: #00A400;
+  color: #fff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Helvetica, sans-serif;
+  align-self: center;
+  width: 40%;
+  height: 40px;
   font-size: 16px;
-  border: none;
-  flex: 1;
+  font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  border-width: 0;
+  margin-bottom: 0px;
 }
 
-.login-container button.login-btn {
-  background-color: #dfcb95;
-  color: #333;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 15px;
-  height: 43px;
-  font-family: "Cousine", monospace;
-  border-right: 2px solid #050303;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.login-container button.signup-btn {
-  background-color: #c0babaec;
-  color: #333;
-  border: 1px solid #ccc;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 15px;
-  font-family: "Cousine", monospace;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* Button hover effect */
-.login-container button:hover {
-  opacity: 0.4;
+.login-btn{
+  background-color: transparent;
+  border: 0;
+  font-size: 16px;
+  color: #006eff;
+  margin-left: 115px;
+  width: fit-content;
+  cursor: pointer;
 }
 
 .inputbox {
-  width: 100%;
-  padding-right: 40px; /* Space for the icon */
-  height: 40px;
+  width: 100%;/* Space for the icon */
+  height: 50px;
   font-size: 16px;
 }
 
@@ -138,7 +141,7 @@ body {
 .login-container input,
 .password-container input,
 .cpassword-container input {
-  width: 90%; /* Ensure this matches all other input fields */
+  width: 98%; /* Ensure this matches all other input fields */
   padding: 10px;
   margin: 20px 0;
   border: 1px solid #ccc;
