@@ -96,23 +96,38 @@
         .popup-error .popup-btn:hover {
             background-color: #c82333;
         }
+
+        .popup-success .popup-title {
+    color: #155724;
+}
+
+.popup-success .popup-btn {
+    background-color: #4CAF50;
+}
+
+.popup-success .popup-btn:hover {
+    background-color: #45a049;
+}
+
     </style>
 
 
 </head>
 <body>
-    <img src="../assets/White_logo.png" alt="Top Logo" class="top-image">
+    <img src="../assets/logo.png" alt="Top Logo" class="top-image"><!--Logo-->
     <div class="login-container">
-        <h1>Login</h1>
-        <input type="text" id="Id" class="inputbox" placeholder="UserId" required>
+        <input style="height: 50px;width: 95%;margin-bottom: 4px;" type="text" id="Id" class="inputbox" placeholder="UserId" required>
         <div class="password-container">
-            <input type="password" id="pass" class="inputbox" placeholder="Password" required>
+            <input style="height: 50px;width: 95%;" type="password" id="pass" class="inputbox" placeholder="Password" required>
             <span id="togglePassword" class="material-symbols-outlined">visibility_off</span>
         </div>
-
-        <div class="button-container">
-            <button id="login-btn" class="login-btn">LOGIN</button>
-            <button onclick="window.location.href='signup.html'">Sign Up</button>
+        <div style="padding-bottom: 10px;">
+            <button id="login-btn" class="login-btn">Log In</button>
+        </div>
+        <hr style="width: 94%;height:1;border-radius: 1px;">
+        <div style="padding-top: 1px;"> 
+            <p style="color: rgb(197, 192, 192);">Don't have an account?</p>
+            <button class = "signup-btn" onclick="window.location.href='/login/signup.html'">Create New Account</button>
         </div>
     </div>
     
