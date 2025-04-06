@@ -16,18 +16,24 @@ body {
   transform: translateY(-45px);
 }
 
+.parent-container {
+  display: flex;
+  justify-content: center;  /* Center horizontally */
+  align-items: center;      /* Center vertically */
+  height: 100vh;            /* Take full viewport height */
+}
+
 /* Main container styling */
 .login-container {
   background-color: #fff;
   padding: 0px 10px 60px;
+  padding-bottom: 22px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
   text-align: center;
   width: 100%;
   max-width: 430px;
   position: relative;
-  transform: translateY(-70px);
-  margin-top: 25px;
   margin-left: 150px;
 }
 
