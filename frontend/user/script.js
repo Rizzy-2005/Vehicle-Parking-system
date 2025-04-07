@@ -87,6 +87,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const response = await fetch("http://localhost:3000/user/");
         const result = await response.json();
 
+
+        if (result.name) {
+            document.getElementById("username").textContent = result.name;
+        }
+
+        console.log(result.name);
+      
+
         if(response.status === 401)
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
@@ -275,8 +283,17 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
     // Load states and all branches on page load
-   
-
     loadStates();
     fetchBranches();
+    if (document.getElementById("vehicleTableBody")) {
+        getVehicleDetails();
+    }
+    
+    // Refresh branch and vehicle data every 10 seconds
+    setInterval(() => {
+        console.log("Interval triggered at", new Date().toLocaleTimeString());
+        fetchBranches();
+        getVehicleDetails();
+        
+    }, 10000);
 });
