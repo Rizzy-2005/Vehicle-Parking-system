@@ -403,7 +403,7 @@
 </head>
 <body>
   <div class="sidebar">
-    <h2>Welcome Attendant</h2>
+    <h2 style="padding-bottom: 25px;">Welcome <p style="margin: 1%;" id="attendant_name">Attendant</p></h2>
     <a href="Attendant-Reg.html" class="btn-register">Register</a>
     <a href="Attendant-Update.html" class="btn-update active">Update</a>
     <a href="Attendant-Checkout.html" class="btn-checkout">Checkout</a>
@@ -484,6 +484,11 @@
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
+        if(!response.ok)
+        {
+          return showPopup("Attendant not loaded",result.message,"error");
+        }
+        document.getElementById("attendant_name").textContent = result[0].attendant_name;
         fetchtable();
       }
       catch(error)
