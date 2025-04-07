@@ -221,7 +221,7 @@ router.post("/loadbill",(req,res) => {
       results[0].vehicle_name = req.session.vehicleName;
       results[0].vehicle_no = req.session.vehicleNo;
       results[0].slot_id = req.session.slotId;
-      results[0].total = (results[0].duration)*(results[0].rate_per_hour);
+      results[0].total = Math.trunc((results[0].duration * results[0].rate_per_hour) * 100) / 100;
       return res.status(200).json(results);
     });
   });
