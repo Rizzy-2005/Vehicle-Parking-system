@@ -14,7 +14,14 @@ router.get("/",(req,res) => {
     console.log(req.session.attendant_id,req.session.branch_name)
     attendant_id = req.session.attendant_id;
     branch_name = req.session.branch_name;
-    return res.status(200).json({});
+    db.query("SELECT attendant_name FROM attendant WHERE attendant_id = ?",[attendant_id],(err,result) => {
+      if(err)
+      {
+        console.error("Some error occured: ",err);
+        return res.status(407).json({message: "Some error with the database has occured"});
+      }
+      return res.status(200).json(result);
+    });
   }
   else{
     return res.status(401).json({redirectUrl: "/login/staff_portal.html"});
