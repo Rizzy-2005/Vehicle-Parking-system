@@ -81,13 +81,24 @@ router.get('/search_branches', (req, res) => {
     });
 });
 
-router.get("/",(req,res) => {
-    if(req.session.userid)
-    {
-      return res.status(200).json({});
-    }
-    else{
-      return res.status(401).json({redirectUrl: "/login/login.html"});
+router.get("/", (req, res) => {
+    if (req.session.userid) {
+        const sql = "SELECT user_name FROM users WHERE user_id = ?";
+        db.query(sql, [req.session.userid], (err, results) => {
+            if (err) {
+                console.error("Error fetching user info:", err);
+                return res.status(500).json({ error: "Database error" });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            const user = results[0];
+            return res.status(200).json({name: user.user_name});
+        });
+    } else {
+        return res.status(401).json({ redirectUrl: "/login/login.html" });
     }
 });
 
