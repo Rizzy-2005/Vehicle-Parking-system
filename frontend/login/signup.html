@@ -22,6 +22,13 @@
         .alert.success { background-color: #d4edda; color: #155724; }
         .alert.error { background-color: #f8d7da; color: #721c24; }
         
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.55); /* mostly white with subtle transparency */
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* soft shadow for elevation */
+            font-family: 'Cousine', monospace;
+        }
+
         /* Popup Styles */
         .popup-overlay {
             position: fixed;
@@ -111,8 +118,8 @@
 }
         span{
             color: black;
-            font-family: Verdana, Geneva, Tahoma, sans-serif ;
-            font-size: small;
+            font-family:Arial, Helvetica, sans-serif;
+            font-size: medium;
             padding-left: 30px;
             text-align: left;
         }
@@ -138,12 +145,12 @@
     </style>
 </head>
 
-<body>
+<body background="../assets/back.png" style="background-size: cover; background-repeat: no-repeat; background-attachment: fixed;"> 
     <div class="parent-container">
-    <img src="../assets/logo.png" alt="Top Logo" class="top-image">
+    <img src="../assets/White_logo.png" alt="Top Logo" class="top-image">
     <div id='login-container' class="login-container" style="transform: translateY(0px);">
         <h1 style="margin-bottom: 0;">Create a new account</h1>
-        <p style="transform: translateX(05px);color: grey;margin-top: 4px;">It's quick and easy</p>
+        <p style="transform: translateX(05px);color: rgb(75, 71, 71);margin-top: 4px;">It's quick and easy</p>
         <form>
         <div style="display: flex;flex-direction: row;">
             <input id= 'Name' type="text" class="inputbox" placeholder="Name" required style="width: 50%;margin-right: 10px;border-radius: 5px;">
