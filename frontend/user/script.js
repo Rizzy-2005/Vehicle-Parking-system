@@ -4,17 +4,105 @@ document.addEventListener("DOMContentLoaded", function () {
     const citySelect = document.getElementById("city");
     const tableBody = document.getElementById("branchesTableBody");
 
-    if (document.getElementById("vehicleTableBody")) {
-        getVehicleDetails();
+    // Common functions that run on all pages
+    loginConfirm();
+    setupLogoutModal();
+
+    // Check which page we're on and run appropriate functions
+    if (document.getElementById("branchesTableBody")) {
+        loadStates();
+        fetchBranches();
+        
+        // Set up event listeners for the branches page
+        if (stateSelect) stateSelect.addEventListener("change", loadCities);
+        if (searchBtn) searchBtn.addEventListener("click", fetchBranches);
+        
+        // Refresh branch data every 5 seconds
+        setInterval(() => {
+            console.log("Branch refresh triggered at", new Date().toLocaleTimeString());
+            fetchBranches();
+        }, 5000);
     }
 
+    if (document.getElementById("vehicleTableBody")) {
+        getVehicleDetails();
+        
+        // Refresh vehicle data every 5 seconds
+        setInterval(() => {
+            console.log("Vehicle refresh triggered at", new Date().toLocaleTimeString());
+            getVehicleDetails();
+        }, 5000);
+    }
     
+    // Check if we're on the update user details page
+    if (document.getElementById("userDetailsForm")) {
+        console.log("User details form detected");
+        user_details();
+        
+        const userForm = document.getElementById("userDetailsForm");
+        userForm.addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+            updateUserDetails();
+        });
+    }
+
+    // Function to set up logout modal
+    function setupLogoutModal() {
+        const logoutModal = document.getElementById("logoutModal");
+        const closeLogoutModal = document.getElementById("closeLogoutModal");
+        const confirmLogoutBtn = document.getElementById("confirmLogout");
+        const cancelLogoutBtn = document.getElementById("cancelLogout");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", () => {
+                logoutModal.style.display = "flex"; // Show modal
+            });
+        }
+
+        if (closeLogoutModal) {
+            closeLogoutModal.addEventListener("click", () => {
+                logoutModal.style.display = "none";
+            });
+        }
+
+        if (cancelLogoutBtn) {
+            cancelLogoutBtn.addEventListener("click", () => {
+                logoutModal.style.display = "none";
+            });
+        }
+
+        if (confirmLogoutBtn) {
+            confirmLogoutBtn.addEventListener("click", () => {
+                logoutModal.style.display = "none";
+                logout(); // Proceed with logout
+            });
+        }
+
+        // Optional: Close modal when clicking outside it
+        window.addEventListener("click", (event) => {
+            if (event.target === logoutModal) {
+                logoutModal.style.display = "none";
+            }
+        });
+    }
+
+    function logout() {
+        fetch("http://localhost:3000/user/logout")
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.removeItem("userToken"); // Remove stored token
+                    sessionStorage.clear(); // Clear session storage
+                    window.location.replace(data.redirectUrl); // Redirect to login page
+                }
+            })
+            .catch(error => console.error("Error during logout:", error));
+    }
 
     // Fetch states and populate dropdown
     function loadStates() {
-
         loginConfirm();
-
 
         fetch("http://localhost:3000/user/get_states")
             .then(response => response.json())
@@ -30,116 +118,63 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error fetching states:", error));
     }
 
-    
-    const logoutModal = document.getElementById("logoutModal");
-    const closeLogoutModal = document.getElementById("closeLogoutModal");
-    const confirmLogoutBtn = document.getElementById("confirmLogout");
-    const cancelLogoutBtn = document.getElementById("cancelLogout");
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-    logoutModal.style.display = "flex"; // Show modal
-    });
-
-    closeLogoutModal.addEventListener("click", () => {
-    logoutModal.style.display = "none";
-    });
-
-    cancelLogoutBtn.addEventListener("click", () => {
-    logoutModal.style.display = "none";
-    });
-
-    confirmLogoutBtn.addEventListener("click", () => {
-    logoutModal.style.display = "none";
-    logout(); // Proceed with logout
-    });
-
-    // Optional: Close modal when clicking outside it
-    window.addEventListener("click", (event) => {
-    if (event.target === logoutModal) {
-        logoutModal.style.display = "none";
-    }
-    });
-
-
-
-    function logout() {
-        fetch("http://localhost:3000/user/logout")
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    localStorage.removeItem("userToken"); // Remove stored token
-                    sessionStorage.clear(); // Clear session storage
-                    window.location.replace(data.redirectUrl); // Redirect to login page
-                }
-            })
-            .catch(error => console.error("Error during logout:", error));
-    }
-    
-
-    // Attach to Logout Button
-   
-    loginConfirm(); 
     //login confirmation
-    async function loginConfirm()
-    {
-      try
-      {
-        const response = await fetch("http://localhost:3000/user/");
-        const result = await response.json();
+    async function loginConfirm() {
+        try {
+            const response = await fetch("http://localhost:3000/user/");
+            const result = await response.json();
 
+            if (result.name) {
+                const usernameEl = document.getElementById("username");
+                if (usernameEl) {
+                    usernameEl.textContent = result.name;
+                }
+                console.log(result.name);
+            }
 
-        if (result.name) {
-            document.getElementById("username").textContent = result.name;
+            if (response.status === 401) {
+                return showPopup("Not proper Login", "Try to login again", "error", result.redirectUrl);
+            }
         }
-
-        console.log(result.name);
-      
-
-        if(response.status === 401)
-        {
-          return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
+        catch (error) {
+            console.error("Error in login confirmation: ", error);
+            showPopup("Connection Error", "Could not connect to the server", "error");
         }
-      }
-      catch(error)
-      {
-        console.error("Error in login confirmation: ",error);
-        showPopup("Connection Error", "Could not connect to the server", "error");
-      }
-    } 
-    function showPopup(title, message, type, redirectUrl) {
-    const popupOverlay = document.getElementById("unique-popup-overlay");
-    const popupBox = document.getElementById("unique-popup-box");
-    const popupTitle = document.getElementById("unique-popup-heading");
-    const popupMessage = document.getElementById("unique-popup-text");
-    const popupButton = document.getElementById("unique-popup-button");
-    
-    popupTitle.textContent = title;
-    popupMessage.textContent = message;
-    popupBox.className = "unique-popup-box";
-    
-    if (type === "error") {
-        popupBox.classList.add("unique-popup-error");
     }
-    
-    popupOverlay.classList.add("active-popup");
-    
-    popupButton.onclick = () => {
-        if (redirectUrl) {
-            window.location.href = redirectUrl;
+
+    function showPopup(title, message, type, redirectUrl) {
+        const popupOverlay = document.getElementById("unique-popup-overlay");
+        const popupBox = document.getElementById("unique-popup-box");
+        const popupTitle = document.getElementById("unique-popup-heading");
+        const popupMessage = document.getElementById("unique-popup-text");
+        const popupButton = document.getElementById("unique-popup-button");
+        
+        popupTitle.textContent = title;
+        popupMessage.textContent = message;
+        popupBox.className = "unique-popup-box";
+        
+        if (type === "error") {
+            popupBox.classList.add("unique-popup-error");
         }
-        popupOverlay.classList.remove("active-popup");
-    };
-    
-    popupOverlay.onclick = (e) => {
-        if (e.target === popupOverlay) {
-            if(redirectUrl)
-                {
+        
+        popupOverlay.classList.add("active-popup");
+        
+        popupButton.onclick = () => {
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
+            popupOverlay.classList.remove("active-popup");
+        };
+        
+        popupOverlay.onclick = (e) => {
+            if (e.target === popupOverlay) {
+                if (redirectUrl) {
                     window.location.href = redirectUrl;
                 }
-            popupOverlay.classList.remove("active-popup");
-        }
-    };
-}
+                popupOverlay.classList.remove("active-popup");
+            }
+        };
+    }
     
     // Fetch cities based on selected state
     function loadCities() {
@@ -186,6 +221,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(data => {
+                if (!tableBody) {
+                    console.error("Table body element not found");
+                    return;
+                }
+                
                 tableBody.innerHTML = ""; // Clear previous results
     
                 if (!data.length) {
@@ -213,22 +253,21 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
     
-
     // Display messages inside the table
     function displayMessage(message, type) {
+        if (!tableBody) return;
         tableBody.innerHTML = `<tr><td colspan="4" class="${type}">${message}</td></tr>`;
     }
 
-    // Event Listeners
-    stateSelect.addEventListener("change", loadCities);
-    searchBtn.addEventListener("click", fetchBranches);
-
+    // Event Listeners for keyboard shortcuts
     document.addEventListener("keypress", function (event) {
         const activeElement = document.activeElement;
 
         // Prevent "Enter" from triggering search when selecting a dropdown option
         if (event.key === "Enter" && activeElement.tagName !== "SELECT") {
-            fetchBranches();
+            if (document.getElementById("branchesTableBody")) {
+                fetchBranches();
+            }
         }
     });
 
@@ -266,33 +305,28 @@ document.addEventListener("DOMContentLoaded", function () {
                     vehicleBody.appendChild(row);
                 });
             })
-
-            
-
-
             .catch(error => console.error("Error fetching vehicles:", error));
     }
-    
     
     function showDetails(vehicle) {
         // Store vehicle details in localStorage
         localStorage.setItem("selectedVehicle", JSON.stringify(vehicle));
         // Redirect to the details page
-        window.location.href = "vehicle_info.html"; // Change to actual details page
+        window.location.href = "vehicle_info.html"; 
     }
-    
-
-
 
     function user_details() {
+        console.log("Fetching user details...");
         fetch("http://localhost:3000/user/get_user_details")
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("Failed to fetch user details");
+                    throw new Error(`Failed to fetch user details: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
+                console.log("User details received:", data);
+                
                 if (data.error) {
                     console.error("Error fetching user details:", data.error);
                     return;
@@ -301,26 +335,54 @@ document.addEventListener("DOMContentLoaded", function () {
                 const userIdField = document.getElementById("useridField");
                 const userNameField = document.getElementById("usernameField");
                 const phoneField = document.getElementById("phoneField");
+                
+                console.log("Form fields:", {
+                    userIdField: userIdField ? "Found" : "Not found",
+                    userNameField: userNameField ? "Found" : "Not found",
+                    phoneField: phoneField ? "Found" : "Not found"
+                });
 
                 if (userIdField) userIdField.value = data.user_id || "N/A";
                 if (userNameField) userNameField.value = data.user_name || "N/A";
                 if (phoneField) phoneField.value = data.phone_no || "N/A";
             })
-            .catch(error => console.error("Error fetching user details:", error));
+            .catch(error => {
+                console.error("Error fetching user details:", error);
+            });
     }
 
-
-    user_details();
-    // Load states and all branches on page load
-    loadStates();
-    fetchBranches();
-    if (document.getElementById("vehicleTableBody")) {
-        getVehicleDetails();
+    function updateUserDetails() {
+        const username = document.getElementById("usernameField").value;
+        const phone = document.getElementById("phoneField").value;
+        
+        if (!username || !phone) {
+            showPopup("Error", "Username and phone number are required", "error");
+            return;
+        }
+        
+        console.log("Updating user details...", { username, phone });
+        
+        fetch("http://localhost:3000/user/update_user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user_name: username,
+                phone_no: phone
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showPopup("Success", "User details updated successfully", "success");
+            } else {
+                showPopup("Error", data.error || "Failed to update user details", "error");
+            }
+        })
+        .catch(error => {
+            console.error("Error updating user details:", error);
+            showPopup("Error", "Failed to connect to server", "error");
+        });
     }
-    
-    // Refresh branch and vehicle data every 10 seconds
-    setInterval(() => {
-        console.log("Interval triggered at", new Date().toLocaleTimeString());
-        fetchBranches();
-    },5000);
 });
