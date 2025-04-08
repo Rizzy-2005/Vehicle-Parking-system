@@ -129,7 +129,7 @@ router.post("/update_user", (req, res) => {
         return res.status(401).json({ error: "Unauthorized. Please log in." });
     }
 
-    const { user_name, phone_no } = req.body;
+    const { user_name, phone_no ,userId} = req.body;
 
     // Basic validation
     if (!user_name || !phone_no) {
@@ -142,15 +142,40 @@ router.post("/update_user", (req, res) => {
         return res.status(400).json({ error: "Phone number must be exactly 10 digits" });
     }
 
-    const sql = "UPDATE users SET user_name = ?, phone_no = ? WHERE user_id = ?";
-    db.query(sql, [user_name, phone_no, req.session.userid], (err, result) => {
-        if (err) {
-            console.error("Error updating user details:", err);
-            return res.status(500).json({ error: "Database error" });
-        }
+    if(userId == req.session.userid){
+        const sql = "UPDATE users SET user_name = ?, phone_no = ? WHERE user_id = ?";
+        db.query(sql, [user_name, phone_no, req.session.userid], (err, result) => {
+            if (err) {
+                console.error("Error updating user details:", err);
+                return res.status(500).json({ error: "Database error" });
+            }
 
-        res.json({ success: true, message: "User details updated successfully" });
-    });
+            res.json({ success: true, message: "User details updated successfully" });
+        });
+    }else{
+        db.query("SELECT * FROM users WHERE user_id = ?", [userId], (err, results) => {
+            if (err) {
+                console.error("Error checking user ID:", err);
+                return res.status(500).json({ error: "Database error" });
+            }
+        
+            if (results.length > 0) {
+                return res.status(400).json({ error: "User ID already exists" });
+            }
+        
+            // Safe to update now
+            const sql = "UPDATE users SET user_id = ?, user_name = ?, phone_no = ? WHERE user_id = ?";
+            db.query(sql, [userId, user_name, phone_no, req.session.userid], (err, result) => {
+                if (err) {
+                    console.error("Error updating user details:", err);
+                    return res.status(500).json({ error: "Database error" });
+                }
+        
+                req.session.userid = userId;
+                res.json({ success: true, message: "User details updated successfully" });
+            });
+        });
+    }
 });
 
 
