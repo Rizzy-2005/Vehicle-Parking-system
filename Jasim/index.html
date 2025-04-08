@@ -1,0 +1,12 @@
+window.onload = () => {
+    fetch("http://localhost:3000/admin/data", {
+      method: "POST",
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data); // view in dev tools
+        // update DOM with table data
+      });
+  };
+  
