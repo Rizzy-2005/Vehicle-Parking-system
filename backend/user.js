@@ -120,6 +120,7 @@ router.get("/get_user_details", (req, res) => {
         }
 
         res.json(results[0]);
+        
     });
 });
 
