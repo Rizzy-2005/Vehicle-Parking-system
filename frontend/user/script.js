@@ -281,7 +281,36 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "vehicle_info.html"; // Change to actual details page
     }
     
-    
+
+
+
+    function user_details() {
+        fetch("http://localhost:3000/user/get_user_details")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch user details");
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    console.error("Error fetching user details:", data.error);
+                    return;
+                }
+
+                const userIdField = document.getElementById("useridField");
+                const userNameField = document.getElementById("usernameField");
+                const phoneField = document.getElementById("phoneField");
+
+                if (userIdField) userIdField.value = data.user_id || "N/A";
+                if (userNameField) userNameField.value = data.user_name || "N/A";
+                if (phoneField) phoneField.value = data.phone_no || "N/A";
+            })
+            .catch(error => console.error("Error fetching user details:", error));
+    }
+
+
+    user_details();
     // Load states and all branches on page load
     loadStates();
     fetchBranches();
@@ -293,5 +322,5 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(() => {
         console.log("Interval triggered at", new Date().toLocaleTimeString());
         fetchBranches();
-    },1000);
+    },5000);
 });

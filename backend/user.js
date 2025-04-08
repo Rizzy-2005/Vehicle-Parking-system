@@ -102,6 +102,28 @@ router.get("/", (req, res) => {
     }
 });
 
+
+router.get("/get_user_details", (req, res) => {
+    if (!req.session.userid) {
+        return res.status(401).json({ error: "Unauthorized. Please log in." });
+    }
+
+    const sql = "SELECT user_name, phone_no, user_id FROM users WHERE user_id = ?";
+    db.query(sql, [req.session.userid], (err, results) => {
+        if (err) {
+            console.error("Error fetching user details:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json(results[0]);
+    });
+});
+
+
 router.get('/vehicle_details', (req, res) => {
     if (!req.session.userid) {
         return res.status(401).json({ error: "Unauthorized. Please log in." });

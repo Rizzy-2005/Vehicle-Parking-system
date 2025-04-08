@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Update User Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background-color: #f4f7fc;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      background-color: #dfcb95;
+      width: 280px;
+      padding: 20px;
+      text-align: center;
+      height: 100vh;
+      color: black;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .sidebar h2 {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 15px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 10px 0;
+      text-decoration: none;
+      color: black;
+      border-radius: 5px;
+      transition: 0.3s;
+      background-color: transparent;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #2d2f3b;
+      color: white;
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      padding: 10px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .main {
+      flex-grow: 1;
+      padding: 12px 15px;
+    }
+
+    .title {
+      background-color: #1f2937;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .form-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2d2f3b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .form-container button:hover {
+      background-color: #388e3c;
+    }
+
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* darker backdrop */
+        backdrop-filter: blur(4px); /* nice frosted effect */
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .modal-content {
+        background-color: #fefefe;
+        color: #333;
+        width: 90%;
+        max-width: 420px;
+        padding: 30px 25px 25px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        position: relative;
+        animation: fadeIn 0.3s ease-in-out;
+        font-family: 'Poppins', sans-serif;
+        border: 2px solid #2d2f3b;
+      }
+      
+      .modal-content h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #2d2f3b;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #2d2f3b;
+        display: inline-block;
+      }
+      
+      .modal-content p {
+        font-size: 1rem;
+        font-weight: 400;
+        margin-bottom: 25px;
+        color: #444;
+      }
+      
+      .close-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        font-size: 20px;
+        background-color: #2d2f3b;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .close-btn:hover {
+        background-color: #f44336;
+        color: white;
+      }
+      
+      /* Modal Button Styling */
+      #confirmLogout,
+      #cancelLogout {
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: 0.3s ease-in-out;
+      }
+      
+      #confirmLogout {
+        background-color: #f44336;
+        color: white;
+        margin-right: 10px;
+      }
+      
+      #confirmLogout:hover {
+        background-color: #d32f2f;
+      }
+      
+      #cancelLogout {
+        background-color: #e0e0e0;
+        color: #2d2f3b;
+      }
+      
+      #cancelLogout:hover {
+        background-color: #bdbdbd;
+      }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        padding: 20px;
+      }
+    }
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Welcome<br><span id="username">User</span></h2>
+    <a href="available_branches.html">Available Branches</a>
+    <a href="vehicle_details.html">Vehicle Details</a>
+    <a href="#" class="active">Update User</a>
+    <button class="logout-btn" id = "logoutBtn">Log Out</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <h1 class="title">Update User Details</h1>
+    <div class="form-container">
+      <label for="useridField">User ID</label>
+      <input type="text" id="useridField" placeholder="Enter User ID" />
+  
+      <label for="usernameField">Username</label>
+      <input type="text" id="usernameField" placeholder="Enter Username" />
+  
+      <label for="phoneField">Phone Number</label>
+      <input type="tel" id="phoneField" placeholder="Enter Phone Number" />
+  
+      <button id="saveChangesBtn">Save Changes</button>
+    </div>
+  </div>
+
+
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeLogoutModal">&times;</span>
+      <h2>Confirm Logout</h2>
+      <p>Are you sure you want to log out?</p>
+      <button id="confirmLogout" style="margin-right: 10px; padding: 8px 16px;border-radius: 8px;">Yes</button>
+      <button id="cancelLogout" style="padding: 8px 16px;border-radius: 8px;">Cancel</button>
+    </div>
+</div>
+
+
+
+<script src="script.js"></script>
+
+
+</body>
+</html>
