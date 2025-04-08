@@ -117,8 +117,9 @@ body {
 .login-btn{
   background-color: transparent;
   border: 0;
+  font-weight: 600;
   font-size: 16px;
-  color: #006eff;
+  color: #096bec;
   margin-left: 115px;
   width: fit-content;
   cursor: pointer;
