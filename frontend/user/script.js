@@ -352,15 +352,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateUserDetails() {
-        const username = document.getElementById("usernameField").value;
-        const phone = document.getElementById("phoneField").value;
+        const username = document.getElementById("usernameField").value.trim();
+        const phone = document.getElementById("phoneField").value.trim();
+        const userId = document.getElementById("useridField").value.trim();
         
         if (!username || !phone) {
             showPopup("Error", "Username and phone number are required", "error");
             return;
         }
         
-        console.log("Updating user details...", { username, phone });
+        console.log("Updating user details...", { username, phone,userId});
         
         fetch("http://localhost:3000/user/update_user", {
             method: "POST",
@@ -369,7 +370,8 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify({
                 user_name: username,
-                phone_no: phone
+                phone_no: phone,
+                userId
             })
         })
         .then(response => response.json())
