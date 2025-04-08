@@ -375,9 +375,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showPopup("Success", "User details updated successfully", "success");
+                showPopup("Updation successfull", "User details updated successfully", "success");
             } else {
-                showPopup("Error", data.error || "Failed to update user details", "error");
+                showPopup("Updation failed", data.error || "Failed to update user details", "error");
             }
         })
         .catch(error => {
