@@ -293,7 +293,5 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(() => {
         console.log("Interval triggered at", new Date().toLocaleTimeString());
         fetchBranches();
-        getVehicleDetails();
-        
-    }, 10000);
+    },1000);
 });
