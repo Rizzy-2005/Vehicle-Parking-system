@@ -124,6 +124,36 @@ router.get("/get_user_details", (req, res) => {
     });
 });
 
+router.post("/update_user", (req, res) => {
+    if (!req.session.userid) {
+        return res.status(401).json({ error: "Unauthorized. Please log in." });
+    }
+
+    const { user_name, phone_no } = req.body;
+
+    // Basic validation
+    if (!user_name || !phone_no) {
+        return res.status(400).json({ error: "Username and phone number are required" });
+    }
+
+    // Validate phone number (must be exactly 10 digits)
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone_no)) {
+        return res.status(400).json({ error: "Phone number must be exactly 10 digits" });
+    }
+
+    const sql = "UPDATE users SET user_name = ?, phone_no = ? WHERE user_id = ?";
+    db.query(sql, [user_name, phone_no, req.session.userid], (err, result) => {
+        if (err) {
+            console.error("Error updating user details:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
+
+        res.json({ success: true, message: "User details updated successfully" });
+    });
+});
+
+
 
 router.get('/vehicle_details', (req, res) => {
     if (!req.session.userid) {
