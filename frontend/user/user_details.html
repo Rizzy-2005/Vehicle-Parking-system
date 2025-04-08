@@ -240,6 +240,114 @@
         background-color: #bdbdbd;
       }
 
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+      .unique-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+  }
+  
+  .unique-popup-overlay.active-popup {
+      opacity: 1;
+      visibility: visible;
+  }
+  
+  .unique-popup-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+  }
+  
+  .unique-popup-overlay.active-popup .unique-popup-box {
+      transform: translateY(0);
+  }
+  
+  .unique-popup-heading {
+      margin-top: 0;
+      font-family: 'Arvo', serif;
+      color: #333;
+  }
+  
+  .unique-popup-text {
+      margin: 15px 0;
+      font-family: 'Alata', sans-serif;
+  }
+  
+  .unique-popup-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Cousine', monospace;
+      font-weight: bold;
+      transition: background-color 0.3s;
+  }
+  
+  .unique-popup-button:hover {
+      background-color: #45a049;
+  }
+  
+  .unique-popup-error .unique-popup-heading {
+      color: #721c24;
+  }
+  
+  .unique-popup-error .unique-popup-button {
+      background-color: #dc3545;
+  }
+  
+  .unique-popup-error .unique-popup-button:hover {
+      background-color: #c82333;
+  }
+      
+      /* Modal Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+  
+      .nav-button, .search-btn, .logout-btn {
+        transition: transform 0.2s ease-in-out;
+      }
+  
+      .nav-button:hover, .search-btn:hover {
+        transform: scale(1.05);
+      }  
+
+    
+
     @media (max-width: 768px) {
       .sidebar {
         display: none;
@@ -269,20 +377,25 @@
   <!-- Main Content -->
   <div class="main">
     <h1 class="title">Update User Details</h1>
-    <div class="form-container">
-      <label for="useridField">User ID</label>
-      <input type="text" id="useridField" placeholder="Enter User ID" />
+    <form id="userDetailsForm" class="form-container">
+      <div class="form-group">
+        <label for="useridField">User ID</label>
+        <input type="text" id="useridField" placeholder="User ID" readonly />
+      </div>
   
-      <label for="usernameField">Username</label>
-      <input type="text" id="usernameField" placeholder="Enter Username" />
+      <div class="form-group">
+        <label for="usernameField">Username</label>
+        <input type="text" id="usernameField" placeholder="Enter Username" required />
+      </div>
   
-      <label for="phoneField">Phone Number</label>
-      <input type="tel" id="phoneField" placeholder="Enter Phone Number" />
+      <div class="form-group">
+        <label for="phoneField">Phone Number</label>
+        <input type="tel" id="phoneField" placeholder="Enter Phone Number" required />
+      </div>
   
-      <button id="saveChangesBtn">Save Changes</button>
-    </div>
+      <button type="submit" id="saveChangesBtn">Save Changes</button>
+    </form>
   </div>
-
 
   <div id="logoutModal" class="modal">
     <div class="modal-content">
@@ -294,7 +407,13 @@
     </div>
 </div>
 
-
+<div id="unique-popup-overlay" class="unique-popup-overlay">
+  <div id="unique-popup-box" class="unique-popup-box">
+      <h2 id="unique-popup-heading" class="unique-popup-heading">Title</h2>
+      <p id="unique-popup-text" class="unique-popup-text">Message</p>
+      <button id="unique-popup-button" class="unique-popup-button">OK</button>
+  </div>
+</div>
 
 <script src="script.js"></script>
 
