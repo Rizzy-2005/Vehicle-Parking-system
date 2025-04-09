@@ -22,7 +22,14 @@ router.post('/data',(req,res)=>{
 router.get("/",(req,res) => {
     if(req.session.admin_id && req.session.branch_name)
     {
-      return res.status(200).json({});
+      db.query("SELECT admin_name FROM admin WHERE admin_id = ?",[req.session.admin_id],(err,result) => {
+        if(err)
+        {
+          console.error("Some error occured: ",err);
+          return res.status(407).json({message: "Some error with the database has occured"});
+        }
+        return res.status(200).json(result);
+      });
     }
     else{
       return res.status(401).json({redirectUrl: "/login/staff_portal.html"});
@@ -61,29 +68,9 @@ router.get("/logout",(req,res) => {
       return res.status(200).json({message: "Successfully logged out",redirectUrl: "/login/staff_portal.html"});
     });
   });
-  // ✅ Add a New Attendant
-router.post("/attendant", (req, res) => {
-  const { id, name, phone, gender, password, shift } = req.body;
 
-  if (!id || !name || !phone || !gender || !password || !shift) {
-      return res.status(400).json({ message: "All fields are required" });
-  }
-
-  const query = `
-      INSERT INTO attendant (attendant_id, attendant_name, phone_no, gender, attendant_password, shift, branch_name) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-  db.query(query, [id, name, phone, gender, password, shift, req.session.branch_name], (err, result) => {
-      if (err) {
-          console.error("Error adding attendant:", err);
-          return res.status(500).json({ message: "Database error while adding attendant" });
-      }
-
-      return res.status(201).json({ message: "Attendant added successfully" });
-  });
-});
 // ✅ NEW: Get All Attendants
-router.get("/attendant", (req, res) => {
+router.get("/load_attendants", (req, res) => {
   const query = `
       SELECT attendant_id, attendant_name, phone_no, branch_name, gender, shift 
       FROM attendant 
@@ -98,23 +85,69 @@ router.get("/attendant", (req, res) => {
       return res.status(200).json(results);
   });
 });
+
+  // ✅ Add a New Attendant
+router.post("/add-attendant", (req, res) => {
+  const { id, name, phone, gender, password, shift } = req.body;
+
+  const query = `
+      INSERT INTO attendant (attendant_id, attendant_name, phone_no, gender, attendant_password, shift, branch_name) 
+      VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  db.query("SELECT * FROM attendant WHERE attendant_id = ?",[id],(err,result) => {
+    if(err)
+    {
+      console.error("Error fetching attendants:", err);
+      return res.status(500).json({ message: "Database error while fetching attendants" });
+    }
+    if(result.length !== 0)
+    {
+      return res.status(401).json({ message: "Attendant with the ID exist" });
+    }
+    db.query(query, [id, name, phone, gender, password, shift, req.session.branch_name], (er) => {
+      if (er) {
+          console.error("Error adding attendant:", er);
+          return res.status(500).json({ message: "Database error while adding attendant" });
+      }
+      return res.status(200).json({ message: "Attendant added successfully" });
+  });
+  });
+});
+
+//update
+router.post("/edit",(req,res) => {
+  const {memberId, updatedId, updatedName, updatedPhone, shift} = req.body;
+  const query = "UPDATE attendant SET attendant_id = ?, attendant_name = ?, phone_no = ?, shift = ? WHERE attendant_id = ?";
+  db.query("SELECT * FROM attendant WHERE attendant_id = ?",[updatedId],(err,result) => {
+    if(err)
+    {
+      console.error("Error fetching attendants:", err);
+      return res.status(500).json({ message: "Database error while fetching attendants" });
+    }
+    if(result.length !== 0 && (memberId !== updatedId))
+    {
+      return res.status(401).json({ message: "Attendant with the ID exist" });
+    }
+    db.query(query,[updatedId, updatedName, updatedPhone, shift, memberId],(er) => {
+      if(er)
+      {
+        console.error("Error adding attendant:", er);
+        return res.status(500).json({ message: "Database error while adding attendant" });
+      }
+      return res.status(200).json({});
+    });
+  });
+});
+
 // ✅ Delete an Attendant by ID
-router.delete("/attendants/:id", (req, res) => {
+router.delete("/delete/:id", (req, res) => {
   const id = req.params.id;
-
   const query = "DELETE FROM attendant WHERE attendant_id = ?";
-
-  db.query(query, [id], (err, result) => {
+  db.query(query, [id], (err) => {
     if (err) {
       console.error("Error deleting attendant:", err);
       return res.status(500).json({ success: false, message: "Database error while deleting attendant" });
     }
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ success: false, message: "Attendant not found" });
-    }
-
-    return res.status(200).json({ success: true, message: "Attendant deleted successfully" });
+    return res.status(200).json({});
   });
 });
 
