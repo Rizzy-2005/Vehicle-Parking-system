@@ -335,16 +335,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 const userIdField = document.getElementById("useridField");
                 const userNameField = document.getElementById("usernameField");
                 const phoneField = document.getElementById("phoneField");
+                const pass = document.getElementById("pass");
+                const cpass = document.getElementById("cpass");
                 
                 console.log("Form fields:", {
                     userIdField: userIdField ? "Found" : "Not found",
                     userNameField: userNameField ? "Found" : "Not found",
-                    phoneField: phoneField ? "Found" : "Not found"
+                    phoneField: phoneField ? "Found" : "Not found",
+                    pass: pass ? "Found" : "Not found",
+                    cpass: cpass ? "Found" : "Not found"
                 });
 
                 if (userIdField) userIdField.value = data.user_id || "N/A";
                 if (userNameField) userNameField.value = data.user_name || "N/A";
                 if (phoneField) phoneField.value = data.phone_no || "N/A";
+                if(pass) pass.value = data.user_password || "N/A";
+                if(cpass) cpass.value = data.user_password || "N/A";
             })
             .catch(error => {
                 console.error("Error fetching user details:", error);
@@ -387,4 +393,181 @@ document.addEventListener("DOMContentLoaded", function () {
             showPopup("Error", "Failed to connect to server", "error");
         });
     }
+
+    const passwordField = document.getElementById("pass");
+    const confirmPasswordField = document.getElementById("cpass");
+    const togglePassword = document.getElementById("togglePassword");
+    const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+    
+    // Password validation requirements elements
+    const countElement = document.getElementById("count");
+    const lowercaseElement = document.getElementById("lowercase");
+    const uppercaseElement = document.getElementById("uppercase");
+    const digitsElement = document.getElementById("digits");
+    
+    // Toggle password visibility
+    if (togglePassword) {
+        togglePassword.addEventListener("click", function() {
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
+            togglePassword.textContent = type === "password" ? "visibility_off" : "visibility";
+        });
+    }
+    
+    if (toggleConfirmPassword) {
+        toggleConfirmPassword.addEventListener("click", function() {
+            const type = confirmPasswordField.getAttribute("type") === "password" ? "text" : "password";
+            confirmPasswordField.setAttribute("type", type);
+            toggleConfirmPassword.textContent = type === "password" ? "visibility_off" : "visibility";
+        });
+    }
+    
+    // Password validation
+    if (passwordField) {
+        passwordField.addEventListener("input", validatePassword);
+    }
+    
+    function validatePassword() {
+        const password = passwordField.value;
+        
+        // Validate password length
+        if (password.length >= 8) {
+            countElement.classList.remove("invalid");
+            countElement.classList.add("valid");
+            countElement.innerHTML = "✅ 8+ Characters";
+        } else {
+            countElement.classList.remove("valid");
+            countElement.classList.add("invalid");
+            countElement.innerHTML = "❌ 8+ Characters";
+        }
+        
+        // Validate lowercase letters
+        if (password.match(/[a-z]/)) {
+            lowercaseElement.classList.remove("invalid");
+            lowercaseElement.classList.add("valid");
+            lowercaseElement.innerHTML = "✅ lowercase";
+        } else {
+            lowercaseElement.classList.remove("valid");
+            lowercaseElement.classList.add("invalid");
+            lowercaseElement.innerHTML = "❌ lowercase";
+        }
+        
+        // Validate uppercase letters
+        if (password.match(/[A-Z]/)) {
+            uppercaseElement.classList.remove("invalid");
+            uppercaseElement.classList.add("valid");
+            uppercaseElement.innerHTML = "✅ uppercase";
+        } else {
+            uppercaseElement.classList.remove("valid");
+            uppercaseElement.classList.add("invalid");
+            uppercaseElement.innerHTML = "❌ uppercase";
+        }
+        
+        // Validate digits
+        if (password.match(/\d/)) {
+            digitsElement.classList.remove("invalid");
+            digitsElement.classList.add("valid");
+            digitsElement.innerHTML = "✅ digits";
+        } else {
+            digitsElement.classList.remove("valid");
+            digitsElement.classList.add("invalid");
+            digitsElement.innerHTML = "❌ digits";
+        }
+    }
+    
+    // Modify the updateUserDetails function to include password update
+    function updateUserDetails() {
+        const username = document.getElementById("usernameField").value.trim();
+        const phone = document.getElementById("phoneField").value.trim();
+        const userId = document.getElementById("useridField").value.trim();
+        const password = document.getElementById("pass").value;
+        const confirmPassword = document.getElementById("cpass").value;
+        
+        // Basic validation
+        if (!username || !phone) {
+            showPopup("Error", "Username and phone number are required", "error");
+            return;
+        }
+        
+        // Phone validation
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone)) {
+            showPopup("Error", "Phone number must be exactly 10 digits", "error");
+            return;
+        }
+        
+        // Check if password was changed
+        let userData = {
+            user_name: username,
+            phone_no: phone,
+            userId: userId
+        };
+        
+        // Only include password if it was changed and passes validation
+        if (password && password !== "N/A") {
+            // Validate password if changed
+            if (password.length < 8 || !password.match(/[a-z]/) || !password.match(/[A-Z]/) || !password.match(/\d/)) {
+                showPopup("Error", "Password does not meet requirements", "error");
+                return;
+            }
+            
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                showPopup("Error", "Passwords do not match", "error");
+                return;
+            }
+            
+            // Add password to userData
+            userData.user_password = password;
+        }
+        
+        console.log("Updating user details...", userData);
+        
+        fetch("http://localhost:3000/user/update_user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showPopup("Success", "User details updated successfully", "success");
+            } else {
+                showPopup("Error", data.error || "Failed to update user details", "error");
+            }
+        })
+        .catch(error => {
+            console.error("Error updating user details:", error);
+            showPopup("Error", "Failed to connect to server", "error");
+        });
+    }
+    
+    // Add CSS for valid password criteria
+    const style = document.createElement('style');
+    style.textContent = `
+        .valid {
+            color: green;
+        }
+        .invalid {
+            color: red;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Update the existing function if it exists
+    if (window.updateUserDetails) {
+        window.updateUserDetails = updateUserDetails;
+    } else {
+        // If we're adding a new function, ensure it's attached to form submit events
+        const userForm = document.getElementById("userDetailsForm");
+        if (userForm) {
+            userForm.addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent default form submission
+                updateUserDetails();
+            });
+        }
+    }
+
 });
