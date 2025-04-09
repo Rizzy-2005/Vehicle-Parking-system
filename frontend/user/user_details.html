@@ -8,6 +8,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Alata&family=Arvo&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
   <style>
 
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
@@ -346,6 +352,32 @@
         transform: scale(1.05);
       }  
 
+      span{
+        color: black;
+        font-family:Arial, Helvetica, sans-serif;
+        font-size: medium;
+        padding-left: 30px;
+        text-align: left;
+    }
+      .Password-Rules {
+        display: grid;
+        padding-bottom: 5px;
+        grid-template-columns: 1fr 1fr;
+    }
+    .valid{
+        color: black;
+        font-family: Verdana, Geneva, Tahoma, sans-serif ;
+        font-size: small;
+        padding-left: 30px;
+        text-align: left;
+    }
+    .invald{
+        color: black;
+        font-family: Verdana, Geneva, Tahoma, sans-serif ;
+        font-size: small;
+        padding-left: 30px;
+        text-align: left;
+    }
     
 
     @media (max-width: 768px) {
@@ -358,7 +390,47 @@
       }
     }
 
-
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      position: absolute;
+      right: 40px; /* Adjust this value to move the icon more to the left */
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: gray;
+      z-index: 10;
+      margin-top:15px; /* Ensure the icon appears above the input */
+    }
+    .login-container input,
+    .password-container input,
+    .cpassword-container input {
+      width: 98%; /* Ensure this matches all other input fields */
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      font-size: 16px;
+      height: 40px; /* Make sure height matches */
+      padding-right: 45px; /* Leave space for visibility icon */
+      box-sizing: border-box; /* Ensures padding doesn't affect width */
+    }
+    
+    /* Ensure password container takes full width */
+    .password-container,
+    .cpassword-container {
+      width: 100%; /* Ensure it matches the width of other input fields */
+      position: relative;
+    }
+    
+    /* Adjust the visibility icon's positioning */
+    .password-container .material-symbols-outlined,
+    .cpassword-container .material-symbols-outlined {
+      position: absolute;
+      right: 25px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
 
 
   </style>
@@ -388,6 +460,35 @@
         <label for="usernameField">Username</label>
         <input type="text" id="usernameField" placeholder="Enter Username" required />
       </div>
+
+      <div class="password-container">
+        <label for="usernameField">Password</label>
+        <input id="pass" type="password" autocomplete="new-password" class="inputbox" placeholder="Password" required style="border-radius: 5px;">
+        <span id="togglePassword" class="material-symbols-outlined">visibility_off</span>
+    </div>
+    <div class = 'Password-Rules'>
+        <span id = 'count' class = 'invalid' >
+            ❌ 8+ Characters
+        </span>
+        <span id = 'lowercase' class = 'invalid'>
+            ❌ lowercase
+        </span>
+        </div>
+        <div class = 'Password-Rules'>
+        <span id = 'uppercase' class = 'invalid'>
+            ❌ uppercase
+        </span>
+        <span id = 'digits' class = 'invalid'>
+            ❌ digits
+        </span>
+        <span >
+    </div>
+
+    <div class="cpassword-container"><br>
+      <label for="usernameField">Confirm Password</label>
+        <input id= 'cpass' type="password" autocomplete="new-password" class="inputbox" placeholder="Confirm Password" required style="border-radius: 5px;">
+        <span id="toggleConfirmPassword" class="material-symbols-outlined" style="margin-top:28px">visibility_off</span>
+    </div>
   
       <div class="form-group">
         <label for="phoneField">Phone Number</label>
