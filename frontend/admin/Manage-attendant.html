@@ -403,6 +403,68 @@
 .unique-popup-error .unique-popup-button:hover {
     background-color: #c82333;
 }
+
+#add-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  z-index: 1001;
+  display: none;
+  width: 350px;
+}
+
+#add-window .input-group {
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#add-window label {
+  margin-bottom: 5px;
+}
+
+#add-window input[type="text"],
+#add-window input[type="password"] {
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+#add-window input[type="radio"] {
+  margin-right: 5px;
+}
+
+#add-window .btns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+#add-window .btns button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Confirm button (green) */
+#add-window .btns button.confirm-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Cancel button (red) */
+#add-window .btns button.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+
   </style>
 </head>
 <body>
@@ -437,14 +499,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1276</td>
-            <td>Nidak123</td>
-            <td>9876543456</td>
-            <td>Morning</td>
-            <td><button class="update-button">Update</button></td>
-            <td><button class="delete-button">Delete</button></td>
-          </tr>
+         
         </tbody>
       </table>
     </div>
@@ -478,6 +533,44 @@
         <button id="unique-popup-button" class="unique-popup-button">OK</button>
     </div>
 </div>
+<!-- Add Attendant Modal -->
+<div class="overlay" id="add-overlay"></div>
+<div class="add-window" id="add-window">
+  <h2 style="text-align: center;">Add New Attendant</h2>
+
+  <div class="input-group">
+    <label for="add-id">Attendant ID:</label>
+    <input type="text" id="add-id">
+  </div>
+  <div class="input-group">
+    <label for="add-name">Attendant Name:</label>
+    <input type="text" id="add-name">
+  </div>
+  <div class="input-group">
+    <label for="add-phone">Phone Number:</label>
+    <input type="text" id="add-phone">
+  </div>
+  <div class="input-group">
+    <label>Gender:</label>
+    <label><input type="radio" name="add-gender" value="Male"> Male</label>
+    <label><input type="radio" name="add-gender" value="Female"> Female</label>
+   
+  </div>
+  <div class="input-group">
+    <label for="add-password">Attendant Password:</label>
+    <input type="password" id="add-password">
+  </div>
+  <div class="input-group">
+    <label for="add-shift">Shift:</label>
+    <input type="text" id="add-shift">
+  </div>
+  <div class="btns">
+    <button class="cancel-btn">Cancel</button>
+    <button class="confirm-btn">Confirm</button>
+  </div>
+  
+</div>
+
   <script>
         loginConfirm(); 
     //login confirmation
@@ -533,6 +626,92 @@
         }
     };
 }
+// Show Add Modal
+$(".add-button").click(function () {
+  $("#add-id").val("");
+  $("#add-name").val("");
+  $("#add-phone").val("");
+  $("input[name='add-gender']").prop("checked", false);
+  $("#add-password").val("");
+  $("#add-shift").val("");
+  $("#add-window").show();
+  $("#add-overlay").show();
+});
+
+// Hide Add Modal
+$(".cancel-btn").click(function () {
+  $("#add-window").hide();
+  $("#add-overlay").hide();
+});
+$(".confirm-btn").click(async function () {
+  const id = $("#add-id").val().trim();
+  const name = $("#add-name").val().trim();
+  const phone = $("#add-phone").val().trim();
+  const gender = $("input[name='add-gender']:checked").val();
+  const password = $("#add-password").val().trim();
+  const shift = $("#add-shift").val().trim();
+
+  if (!id || !name || !phone || !gender || !password || !shift) {
+    return showPopup("Validation Error", "Please fill in all fields.", "error");
+  }
+
+  try {
+    const response = await fetch("http://localhost:3000/admin/add-attendant", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id, name, phone, gender, password, shift })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      showPopup("Success", "Attendant added successfully.", "success");
+      $("#add-window").hide();
+      $("#add-overlay").hide();
+      // Optionally reload or update the table
+    } else {
+      showPopup("Error", result.message || "Failed to add attendant.", "error");
+    }
+  } catch (err) {
+    console.error("Error adding attendant:", err);
+    showPopup("Network Error", "Unable to reach the server.", "error");
+  }
+});
+$(".update-save").click(async function () {
+  const id = $("#edit-id").val();
+  const name = $("#edit-name").val();
+  const phone = $("#edit-phone").val();
+  const shift = $("#edit-shift").val();
+
+  try {
+    const response = await fetch(`http://localhost:3000/attendant/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        phone,
+        shift,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      showPopup("Success", "Attendant updated successfully", "success");
+      // optionally refresh table data here
+    } else {
+      showPopup("Error", result.message || "Update failed", "error");
+    }
+  } catch (error) {
+    console.error("Update error:", error);
+    showPopup("Server Error", "Could not reach server", "error");
+  }
+});
+
 
     
       document.querySelector('.button').addEventListener('click', () => {
@@ -624,7 +803,76 @@
       showPopup("Connection Error", "Could not connect to the server", "error");
     }
   }
-  
+  async function loginConfirm() {
+  try {
+    const response = await fetch("http://localhost:3000/admin/");
+    const result = await response.json();
+
+    if(response.status === 401) {
+      return showPopup("Not proper Login", "Try to login again", "error", result.redirectUrl); 
+    }
+  }
+  catch(error) {
+    console.error("Error in login confirmation: ", error);
+    showPopup("Connection Error", "Could not connect to the server", "error");
+  }
+}
+
+// DELETE BUTTON EVENT HANDLER
+$(document).on("click", ".delete-button", function () {
+  const row = $(this).closest("tr");
+  const memberId = row.find("td:first").text();
+
+  if (confirm("Are you sure you want to delete this attendant?")) {
+    fetch(`http://localhost:3000/attendants/${memberId}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          showPopup("Deleted", "Attendant deleted successfully", "success");
+          row.remove(); // remove from table
+        } else {
+          showPopup("Error", data.message || "Failed to delete", "error");
+        }
+      })
+      .catch((err) => {
+        console.error("Delete Error:", err);
+        showPopup("Server Error", "Could not connect to server", "error");
+      });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("http://localhost:3000/attendant")
+    .then((res) => res.json())
+    .then((data) => {
+      const tbody = document.getElementById("attendants-body");
+      tbody.innerHTML = ""; // Clear dummy rows
+
+      data.forEach((attendant) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${attendant.attendant_id}</td>
+          <td>${attendant.attendant_name}</td>
+          <td>${attendant.phone_no}</td>
+          <td>${attendant.shift}</td>
+          <td><button class="update-button">Update</button></td>
+          <td><button class="delete-button">Delete</button></td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    })
+    .catch((err) => {
+      console.error("Fetch error:", err);
+      const tbody = document.getElementById("attendants-body");
+      tbody.innerHTML = "<tr><td colspan='6'>Failed to load attendants</td></tr>";
+    });
+});
+
+
   </script>
 </body>
 </html>
