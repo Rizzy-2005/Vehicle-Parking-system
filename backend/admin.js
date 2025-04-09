@@ -151,4 +151,23 @@ router.delete("/delete/:id", (req, res) => {
   });
 });
 
+router.get('/user', (req, res) => {
+  const query = `
+    SELECT user_id, user_name, phone_no, gender
+    FROM users
+    WHERE user_id IN (
+      SELECT DISTINCT user_id
+      FROM parking_record
+      WHERE branch_name = ?
+    )
+  `;
+  db.query(query, [req.session.branch_name], (err, results) => {
+    if (err) {
+      console.error("Error fetching users:", err);
+      res.status(500).send("DB error");
+    }
+    return res.status(200).json(results);
+  });
+});
+
 module.exports = router;
