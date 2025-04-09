@@ -108,7 +108,7 @@ router.get("/get_user_details", (req, res) => {
         return res.status(401).json({ error: "Unauthorized. Please log in." });
     }
 
-    const sql = "SELECT user_name, phone_no, user_id FROM users WHERE user_id = ?";
+    const sql = "SELECT user_name, phone_no, user_id , user_password FROM users WHERE user_id = ?";
     db.query(sql, [req.session.userid], (err, results) => {
         if (err) {
             console.error("Error fetching user details:", err);
@@ -129,7 +129,7 @@ router.post("/update_user", (req, res) => {
         return res.status(401).json({ error: "Unauthorized. Please log in." });
     }
 
-    const { user_name, phone_no ,userId} = req.body;
+    const { user_name, phone_no, userId, user_password } = req.body;
 
     // Basic validation
     if (!user_name || !phone_no) {
@@ -142,9 +142,29 @@ router.post("/update_user", (req, res) => {
         return res.status(400).json({ error: "Phone number must be exactly 10 digits" });
     }
 
-    if(userId == req.session.userid){
-        const sql = "UPDATE users SET user_name = ?, phone_no = ? WHERE user_id = ?";
-        db.query(sql, [user_name, phone_no, req.session.userid], (err, result) => {
+    // Password validation if provided
+    if (user_password) {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        if (!passwordRegex.test(user_password)) {
+            return res.status(400).json({ error: "Password must be at least 8 characters and include lowercase, uppercase, and digits" });
+        }
+    }
+
+    if (userId == req.session.userid) {
+        // User is not changing their ID
+        let sql, params;
+        
+        if (user_password) {
+            // Update with password
+            sql = "UPDATE users SET user_name = ?, phone_no = ?, user_password = ? WHERE user_id = ?";
+            params = [user_name, phone_no, user_password, req.session.userid];
+        } else {
+            // Update without password
+            sql = "UPDATE users SET user_name = ?, phone_no = ? WHERE user_id = ?";
+            params = [user_name, phone_no, req.session.userid];
+        }
+        
+        db.query(sql, params, (err, result) => {
             if (err) {
                 console.error("Error updating user details:", err);
                 return res.status(500).json({ error: "Database error" });
@@ -152,7 +172,8 @@ router.post("/update_user", (req, res) => {
 
             res.json({ success: true, message: "User details updated successfully" });
         });
-    }else{
+    } else {
+        // User is changing their ID
         db.query("SELECT * FROM users WHERE user_id = ?", [userId], (err, results) => {
             if (err) {
                 console.error("Error checking user ID:", err);
@@ -164,8 +185,19 @@ router.post("/update_user", (req, res) => {
             }
         
             // Safe to update now
-            const sql = "UPDATE users SET user_id = ?, user_name = ?, phone_no = ? WHERE user_id = ?";
-            db.query(sql, [userId, user_name, phone_no, req.session.userid], (err, result) => {
+            let sql, params;
+            
+            if (user_password) {
+                // Update with password
+                sql = "UPDATE users SET user_id = ?, user_name = ?, phone_no = ?, user_password = ? WHERE user_id = ?";
+                params = [userId, user_name, phone_no, user_password, req.session.userid];
+            } else {
+                // Update without password
+                sql = "UPDATE users SET user_id = ?, user_name = ?, phone_no = ? WHERE user_id = ?";
+                params = [userId, user_name, phone_no, req.session.userid];
+            }
+            
+            db.query(sql, params, (err, result) => {
                 if (err) {
                     console.error("Error updating user details:", err);
                     return res.status(500).json({ error: "Database error" });
@@ -177,8 +209,6 @@ router.post("/update_user", (req, res) => {
         });
     }
 });
-
-
 
 router.get('/vehicle_details', (req, res) => {
     if (!req.session.userid) {
