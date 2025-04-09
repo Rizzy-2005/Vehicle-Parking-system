@@ -478,6 +478,101 @@
   color: gray;
   z-index: 10; 
 }
+.modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* darker backdrop */
+        backdrop-filter: blur(4px); /* nice frosted effect */
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .modal-content {
+        background-color: #fefefe;
+        color: #333;
+        width: 90%;
+        max-width: 420px;
+        padding: 30px 25px 25px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        position: relative;
+        animation: fadeIn 0.3s ease-in-out;
+        font-family: 'Poppins', sans-serif;
+        border: 2px solid #2d2f3b;
+      }
+      
+      .modal-content h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #2d2f3b;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #2d2f3b;
+        display: inline-block;
+      }
+      
+      .modal-content p {
+        font-size: 1rem;
+        font-weight: 400;
+        margin-bottom: 25px;
+        color: #444;
+      }
+      
+      .close-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        font-size: 20px;
+        background-color: #2d2f3b;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .close-btn:hover {
+        background-color: #f44336;
+        color: white;
+      }
+      
+      /* Modal Button Styling */
+      #confirmLogout,
+      #cancelLogout {
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: 0.3s ease-in-out;
+      }
+      
+      #confirmLogout {
+        background-color: #f44336;
+        color: white;
+        margin-right: 10px;
+      }
+      
+      #confirmLogout:hover {
+        background-color: #d32f2f;
+      }
+      
+      #cancelLogout {
+        background-color: #e0e0e0;
+        color: #2d2f3b;
+      }
+      
+      #cancelLogout:hover {
+        background-color: #bdbdbd;
+      }
   </style>
 </head>
 <body>
@@ -586,6 +681,15 @@
       <h2 id="unique-popup-heading" class="unique-popup-heading">Title</h2>
       <p id="unique-popup-text" class="unique-popup-text">Message</p>
       <button id="unique-popup-button" class="unique-popup-button">OK</button>
+  </div>
+</div>
+<div id="logoutModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeLogoutModal">&times;</span>
+    <h2>Confirm Delete</h2>
+    <p>Are you sure you want to delete the attendant?</p>
+    <button id="confirmLogout" style="margin-right: 10px; padding: 8px 16px;border-radius: 8px;">Yes</button>
+    <button id="cancelLogout" style="padding: 8px 16px;border-radius: 8px;">Cancel</button>
   </div>
 </div>
   <script>
@@ -738,7 +842,7 @@
               <td>${gender}</td>
               <td>${shift}</td>
               <td><button onclick="edit_popup(this)" class="update-button">Update</button></td>
-              <td><button class="delete-button">Delete</button></td>
+              <td><button onclick="confirm_delete(this)" class="delete-button">Delete</button></td>
             `;
           const tbody = document.querySelector(".update-table tbody");
           tbody.appendChild(row);
@@ -787,12 +891,12 @@
       }
       if(!(shifts.includes(shift)))
       {
-        document.getElementById("add-shift").value = '';
+        document.getElementById("edit-shift").value = '';
         return showPopup("Incorrect Shift ", `Shift should be any of ${shifts}`, "error");
       }
       if(updatedId.slice(0, 2) !== "AT")
       {
-        document.getElementById("edit-shift").value = '';
+        document.getElementById("edit-id").value = '';
         return showPopup("Incorrect ID ", `ID should start with "AT"`, "error");
       }
       const data = {memberId, updatedId, updatedName, updatedPhone, shift};
@@ -877,12 +981,46 @@
   }
 }
 
-// DELETE BUTTON EVENT HANDLER
-$(document).on("click", ".delete-button", async function () {
-  const row = $(this).closest("tr");
-  const memberId = row.find("td:first").text();
+  function confirm_delete(button){
+  const logoutModal = document.getElementById("logoutModal");
+  const closeLogoutModal = document.getElementById("closeLogoutModal");
+  const confirmLogoutBtn = document.getElementById("confirmLogout");
+  const cancelLogoutBtn = document.getElementById("cancelLogout");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-  if (confirm("Are you sure you want to delete this attendant?")) {
+  logoutModal.style.display = "flex";
+
+
+  if (closeLogoutModal) {
+      closeLogoutModal.addEventListener("click", () => {
+          logoutModal.style.display = "none";
+      });
+  }
+
+  if (cancelLogoutBtn) {
+      cancelLogoutBtn.addEventListener("click", () => {
+          logoutModal.style.display = "none";
+      });
+  }
+
+  if (confirmLogoutBtn) {
+      confirmLogoutBtn.addEventListener("click", () => {
+          logoutModal.style.display = "none";
+          delete_attendant(button); 
+      });
+  }
+
+  window.addEventListener("click", (event) => {
+      if (event.target === logoutModal) {
+          logoutModal.style.display = "none";
+      }
+  });
+  }
+
+// DELETE BUTTON EVENT HANDLER
+  async function delete_attendant(button){
+  const row = button.closest("tr");
+  const memberId = row.cells[0].textContent;
     try {
     const response = await fetch(`http://localhost:3000/admin/delete/${memberId}`,{
       method: 'DELETE'
@@ -895,8 +1033,7 @@ $(document).on("click", ".delete-button", async function () {
     console.error("Delete Error:", err);
     showPopup("Error","Failed to delete", "error");
   }
-}
-});
+};
 
 //loading the table
 document.addEventListener("DOMContentLoaded", function () {
@@ -920,7 +1057,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <td>${attendant.gender}</td>
           <td>${attendant.shift}</td>
           <td><button onclick="edit_popup(this)" class="update-button">Update</button></td>
-          <td><button class="delete-button">Delete</button></td>
+          <td><button onclick="confirm_delete(this)" class="delete-button">Delete</button></td>
         `;
 
         tbody.appendChild(row);
