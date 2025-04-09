@@ -405,7 +405,7 @@
 <body>
   <div class="top-bar">User Details</div>
   <div class="sidebar">
-    <h2>Welcome<br> Admin</h2>
+    <h2>Welcome<p style="margin: 1%;" id="admin_name">Admin</p></h2>
     <a href="Manage-attendant.html" class="btn-register">Manage Attendants</a>
     <a href="User-details.html" class="btn-update active">Users List</a>
     <a href="Parking-revenue.html" class="btn-checkout">Parking Revenue</a>
@@ -486,6 +486,11 @@ loginConfirm();
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
+        if(!response.ok)
+        {
+          return showPopup("Admin not loaded",result.message,"error");
+        }
+        document.getElementById("admin_name").textContent = result[0].admin_name;
       }
       catch(error)
       {

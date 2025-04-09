@@ -5,6 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <title>Manage attendants</title>
   <style>
     /* Google Font */
@@ -75,6 +79,7 @@
       flex-grow: 1;
       padding: 40px;
       background-color: #f7f9fc;
+      margin-top: 20px;
     }
 
     h1 {
@@ -90,7 +95,7 @@
       padding: 30px;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      margin-top: 100px;
+      margin-top: 50px;
     }
 
     /* Search Bar Styling */
@@ -338,7 +343,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1002;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -463,36 +468,44 @@
   background-color: #dc3545;
   color: white;
 }
-
-
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  position: absolute;
+  right: 31px; 
+  top: 62.8%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: gray;
+  z-index: 10; 
+}
   </style>
 </head>
 <body>
   <div class="top-bar">Attendants List</div>
   <div class="sidebar">
-    <h2>Welcome<br> Admin</h2>
+    <h2>Welcome<p style="margin: 1%;" id="admin_name">Admin</p></h2>
     <a href="Manage-attendant.html" class="btn-register active">Manage Attendants</a>
     <a href="User-details.html" class="btn-update ">Users List</a>
     <a href="Parking-revenue.html" class="btn-checkout">Parking Revenue</a>
     <a href="#" onclick="logout()" class="logout">Log out</a>
   </div>
+
   <div class="main">
     <div class="search-container">
-      <label for="attendant-name">Name:</label>
-      <input type="text" id="attendant-name" placeholder="Enter Name">
-      <button class="button">Search</button>
+      <label for="attendant-name">Attendant ID:</label>
+      <input type="text" id="attendant-name" placeholder="Enter Attendant Id">
+      <button onclick="search()" class="button">Search</button>
       <button class="add-button">Add Attendant</button>
-      
     </div>
     
     <div class="update-section">
-     
       <table class="update-table">
         <thead>
           <tr>
             <th>Member ID</th>
             <th>Attendant</th>
             <th>Phone</th>
+            <th>Gender</th>
             <th>Shift</th>
             <th></th>
             <th></th>
@@ -510,7 +523,7 @@
   <div class="edit-window">
     <h2>Edit Attendant</h2>
     <label for="edit-id">Member ID:</label>
-    <input type="text" id="edit-id" disabled>
+    <input type="text" id="edit-id">
     
     <label for="edit-name">Attendant:</label>
     <input type="text" id="edit-name">
@@ -526,13 +539,6 @@
       <button class="cancel-button">Cancel</button>
     </div>
   </div>
-  <div id="unique-popup-overlay" class="unique-popup-overlay">
-    <div id="unique-popup-box" class="unique-popup-box">
-        <h2 id="unique-popup-heading" class="unique-popup-heading">Title</h2>
-        <p id="unique-popup-text" class="unique-popup-text">Message</p>
-        <button id="unique-popup-button" class="unique-popup-button">OK</button>
-    </div>
-</div>
 <!-- Add Attendant Modal -->
 <div class="overlay" id="add-overlay"></div>
 <div class="add-window" id="add-window">
@@ -554,11 +560,16 @@
     <label>Gender:</label>
     <label><input type="radio" name="add-gender" value="Male"> Male</label>
     <label><input type="radio" name="add-gender" value="Female"> Female</label>
-   
   </div>
   <div class="input-group">
     <label for="add-password">Attendant Password:</label>
     <input type="password" id="add-password">
+    <span style="margin-top: 18px;" id="togglePassword" class="material-symbols-outlined">visibility_off</span>
+  </div>
+  <div class="input-group">
+    <label for="add-password">Confirm Password:</label>
+    <input type="password" id="confirm-password">
+    <span style="margin-top: 93px;" id="confirmtogglePassword" class="material-symbols-outlined">visibility_off</span>
   </div>
   <div class="input-group">
     <label for="add-shift">Shift:</label>
@@ -570,9 +581,15 @@
   </div>
   
 </div>
-
+<div id="unique-popup-overlay" class="unique-popup-overlay">
+  <div id="unique-popup-box" class="unique-popup-box">
+      <h2 id="unique-popup-heading" class="unique-popup-heading">Title</h2>
+      <p id="unique-popup-text" class="unique-popup-text">Message</p>
+      <button id="unique-popup-button" class="unique-popup-button">OK</button>
+  </div>
+</div>
   <script>
-        loginConfirm(); 
+    loginConfirm(); 
     //login confirmation
     async function loginConfirm()
     {
@@ -592,6 +609,7 @@
         showPopup("Connection Error", "Could not connect to the server", "error");
       }
     } 
+    //normal popup
     function showPopup(title, message, type, redirectUrl) {
     const popupOverlay = document.getElementById("unique-popup-overlay");
     const popupBox = document.getElementById("unique-popup-box");
@@ -626,167 +644,201 @@
         }
     };
 }
-// Show Add Modal
-$(".add-button").click(function () {
-  $("#add-id").val("");
-  $("#add-name").val("");
-  $("#add-phone").val("");
-  $("input[name='add-gender']").prop("checked", false);
-  $("#add-password").val("");
-  $("#add-shift").val("");
-  $("#add-window").show();
-  $("#add-overlay").show();
-});
 
-// Hide Add Modal
-$(".cancel-btn").click(function () {
-  $("#add-window").hide();
-  $("#add-overlay").hide();
-});
-$(".confirm-btn").click(async function () {
-  const id = $("#add-id").val().trim();
-  const name = $("#add-name").val().trim();
-  const phone = $("#add-phone").val().trim();
-  const gender = $("input[name='add-gender']:checked").val();
-  const password = $("#add-password").val().trim();
-  const shift = $("#add-shift").val().trim();
-
-  if (!id || !name || !phone || !gender || !password || !shift) {
-    return showPopup("Validation Error", "Please fill in all fields.", "error");
-  }
-
-  try {
-    const response = await fetch("http://localhost:3000/admin/add-attendant", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ id, name, phone, gender, password, shift })
+    //add attendant
+    const password = document.getElementById("add-password");
+    const confirm_password = document.getElementById("confirm-password");
+    const togglePassword = document.getElementById('togglePassword');
+        if (togglePassword) {
+            togglePassword.addEventListener('click', function () {
+                if (password.type === 'password') {
+                    password.type = 'text';
+                    togglePassword.textContent = 'visibility'
+                } else {
+                    password.type = 'password';
+                    togglePassword.textContent = 'visibility_off'
+                }
+            });
+        }
+        const confirmtogglePassword = document.getElementById('confirmtogglePassword');
+        if (confirmtogglePassword) {
+          confirmtogglePassword.addEventListener('click', function () {
+                if (confirm_password.type === 'password') {
+                    confirm_password.type = 'text';
+                    confirmtogglePassword.textContent = 'visibility'
+                } else {
+                    confirm_password.type = 'password';
+                    confirmtogglePassword.textContent = 'visibility_off'
+                }
+            });
+        }
+    $(".add-button").click(function () {
+      $("#add-id").val("");
+      $("#add-name").val("");
+      $("#add-phone").val("");
+      $("input[name='add-gender']").prop("checked", false);
+      $("#add-password").val("");
+      $("#add-shift").val("");
+      $("#add-window").show();
+      $("#add-overlay").show();
     });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      showPopup("Success", "Attendant added successfully.", "success");
+    $(".cancel-btn").click(function () {
       $("#add-window").hide();
       $("#add-overlay").hide();
-      // Optionally reload or update the table
-    } else {
-      showPopup("Error", result.message || "Failed to add attendant.", "error");
-    }
-  } catch (err) {
-    console.error("Error adding attendant:", err);
-    showPopup("Network Error", "Unable to reach the server.", "error");
-  }
-});
-$(".update-save").click(async function () {
-  const id = $("#edit-id").val();
-  const name = $("#edit-name").val();
-  const phone = $("#edit-phone").val();
-  const shift = $("#edit-shift").val();
-
-  try {
-    const response = await fetch(`http://localhost:3000/attendant/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        phone,
-        shift,
-      }),
     });
+    $(".confirm-btn").click(async function () {
+      const id = $("#add-id").val().trim();
+      const name = $("#add-name").val().trim();
+      const phone = $("#add-phone").val().trim();
+      const gender = $("input[name='add-gender']:checked").val();
+      const password = $("#add-password").val().trim();
+      const confirm_password = $("#confirm-password").val().trim();
+      const time = $("#add-shift").val().trim();
+      const shift =  time.charAt(0).toUpperCase() + time.slice(1).toLowerCase();
+      const shifts = ["Morning","Afternoon","Evening","Night"];
 
-    const result = await response.json();
+      if (!id || !name || !phone || !gender || !password || !shift || !confirm_password) {
+        return showPopup("Validation Error", "Please fill in all fields.", "error");
+      }
+      if (password !== confirm_password) {
+        document.getElementById("add-password").value = '';
+        document.getElementById("confirm-password").value = '';
+        return showPopup("Password Error", "Passwords do not match!", "error");
+      }
+      if(!(shifts.includes(shift)))
+      {
+        document.getElementById("add-shift").value = '';
+        return showPopup("Incorrect Shift ", `Shift should be any of ${shifts}`, "error");
+      }
+      if(id.slice(0, 2) !== "AT")
+      {
+        document.getElementById("add-id").value = '';
+        return showPopup("Incorrect ID ", `ID should start with "AT"`, "error");
+      }
+      try {
+        const response = await fetch("http://localhost:3000/admin/add-attendant", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ id, name, phone, gender, password, shift })
+        });
 
-    if (response.ok) {
-      showPopup("Success", "Attendant updated successfully", "success");
-      // optionally refresh table data here
-    } else {
-      showPopup("Error", result.message || "Update failed", "error");
-    }
-  } catch (error) {
-    console.error("Update error:", error);
-    showPopup("Server Error", "Could not reach server", "error");
-  }
-});
+        const result = await response.json();
 
-
+        if (response.ok) {
+          showPopup("Success", "Attendant added successfully", "success");
+          $("#add-window").hide();
+          $("#add-overlay").hide();
+          const row = document.createElement("tr");
+          row.innerHTML = `
+              <td>${id}</td>
+              <td>${name}</td>
+              <td>${phone}</td>
+              <td>${gender}</td>
+              <td>${shift}</td>
+              <td><button onclick="edit_popup(this)" class="update-button">Update</button></td>
+              <td><button class="delete-button">Delete</button></td>
+            `;
+          const tbody = document.querySelector(".update-table tbody");
+          tbody.appendChild(row);
+        } else if(response.status === 401) {
+          document.getElementById("add-id").value = '';
+          return showPopup("ID exist", result.message, "error");
+        }
+        else{
+          return showPopup("Error", result.message, "error");
+        }
+      } catch (err) {
+        console.error("Error adding attendant:", err);
+        showPopup("Network Error", "Unable to reach the server.", "error");
+      }
+    });
     
-      document.querySelector('.button').addEventListener('click', () => {
-        const attendantName = document.querySelector('#attendant-name').value.trim();
-        if (!attendantName) {
-          alert('Please enter a Name to search.');
-        } 
-      });
-    
-    $(document).ready(function() {
-      
-      // Show Edit Window with Data
-      $(".update-button").click(function() {
-        const row = $(this).closest("tr");
+    //update
+    let row = null;
+    function edit_popup(button) {
+        $(".overlay, .edit-window").fadeIn();
+        row = $(button).closest("tr");
         const memberId = row.find("td:eq(0)").text();
         const attendant = row.find("td:eq(1)").text();
         const phone = row.find("td:eq(2)").text();
-        const shift = row.find("td:eq(3)").text();
+        const shift = row.find("td:eq(4)").text();
 
         $("#edit-id").val(memberId);
         $("#edit-name").val(attendant);
         $("#edit-phone").val(phone);
         $("#edit-shift").val(shift);
-
-
-        $(".overlay, .edit-window").fadeIn();
-      });
-
-      // Hide Edit Window on Cancel
-      $(".cancel-button, .overlay").click(function() {
-        $(".edit-window, .overlay").fadeOut();
-      });
-
-      // Handle Update Button Inside Edit Window
-      $(".update-save").click(function() {
-        const updatedId = $("#edit-id").val();
-        const updatedName = $("#edit-name").val();
-        const updatedPhone = $("#edit-phone").val();
-        const updatedShift = $("#edit-shift").val();
-
-        if (updatedName.trim() === "" || updatedPhone.trim() === ""|| updatedShift.trim() === "") {
-          alert("Please fill out all fields before updating.");
-          return;
-        }
-
-        // Find the corresponding row in the table
-        $(".update-table tbody tr").each(function() {
-          if ($(this).find("td:eq(0)").text() === updatedId) {
-            $(this).find("td:eq(1)").text(updatedName);
-            $(this).find("td:eq(2)").text(updatedPhone);
-            $(this).find("td:eq(3)").text(updatedShift);
-          }
-        });
-
-        alert("Attendant details updated successfully!");
-        $(".edit-window, .overlay").fadeOut();
-      });
-
+      }
+    $(".cancel-button, .overlay").click(function() {
+      row = null;
+      $(".edit-window, .overlay").fadeOut();
     });
-    $(".button").click(function() {
-      const searchText = $("#attendant-name").val().toLowerCase().trim();
-  
-      $(".update-table tbody tr").each(function() {
-        const attendantName = $(this).find("td:eq(1)").text().toLowerCase();
-        if (attendantName.includes(searchText)) {
-          $(this).show();  // Show row if it matches the search
-        } else {
-          $(this).hide();  // Hide row if it doesn't match
+    $(".update-save").click(async function() {
+      const memberId = row.find("td:eq(0)").text();
+      const updatedId = $("#edit-id").val();
+      const updatedName = $("#edit-name").val();
+      const updatedPhone = $("#edit-phone").val();
+      const updatedShift = $("#edit-shift").val();
+      const shift =  updatedShift.charAt(0).toUpperCase() + updatedShift.slice(1).toLowerCase();
+      const shifts = ["Morning","Afternoon","Evening","Night"];
+      if (updatedName.trim() === "" || updatedPhone.trim() === ""|| updatedShift.trim() === "" || !updatedId.trim()) {
+        return showPopup("Fill all details","Give all details to update","error"); 
+      }
+      if(!(shifts.includes(shift)))
+      {
+        document.getElementById("add-shift").value = '';
+        return showPopup("Incorrect Shift ", `Shift should be any of ${shifts}`, "error");
+      }
+      if(updatedId.slice(0, 2) !== "AT")
+      {
+        document.getElementById("edit-shift").value = '';
+        return showPopup("Incorrect ID ", `ID should start with "AT"`, "error");
+      }
+      const data = {memberId, updatedId, updatedName, updatedPhone, shift};
+      try{
+        const response = await fetch("http://localhost:3000/admin/edit",{
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+
+        if(response.status === 401) {
+          document.getElementById("edit-id").value = '';
+          return showPopup("ID exist", result.message, "error");
         }
-      });
-  
-      if (searchText === "") {
-        $(".update-table tbody tr").show(); // Show all rows if search box is empty
+        row.find("td:eq(0)").text(updatedId);
+        row.find("td:eq(1)").text(updatedName);
+        row.find("td:eq(2)").text(updatedPhone);
+        row.find("td:eq(4)").text(shift);
+        row = null;
+        $(".edit-window, .overlay").fadeOut();
+        return showPopup("Success", "Attendant updated successfully", "success");
+      }
+      catch(error)
+      {
+        console.log("Something with database failed"+error);
+        return showPopup("Error","Failed to update attendant.", "error");
       }
     });
+
+    //search
+    function search()
+    {
+      const search_text = document.getElementById("attendant-name").value.toLowerCase();
+      const rows = document.querySelectorAll(".update-table tbody tr");
+      rows.forEach(row => {
+        if(!row.cells[0].textContent.toLowerCase().includes(search_text)){
+          row.style.display = "none";
+        }
+        else{
+          row.style.display = '';
+        }
+      });
+    }
+
+    //logout
     async function logout()
   {
     try{
@@ -803,6 +855,8 @@ $(".update-save").click(async function () {
       showPopup("Connection Error", "Could not connect to the server", "error");
     }
   }
+
+  //loginconfirmation
   async function loginConfirm() {
   try {
     const response = await fetch("http://localhost:3000/admin/");
@@ -811,6 +865,11 @@ $(".update-save").click(async function () {
     if(response.status === 401) {
       return showPopup("Not proper Login", "Try to login again", "error", result.redirectUrl); 
     }
+    if(!response.ok)
+    {
+      return showPopup("Admin not loaded",result.message,"error");
+    }
+    document.getElementById("admin_name").textContent = result[0].admin_name;
   }
   catch(error) {
     console.error("Error in login confirmation: ", error);
@@ -819,37 +878,38 @@ $(".update-save").click(async function () {
 }
 
 // DELETE BUTTON EVENT HANDLER
-$(document).on("click", ".delete-button", function () {
+$(document).on("click", ".delete-button", async function () {
   const row = $(this).closest("tr");
   const memberId = row.find("td:first").text();
 
   if (confirm("Are you sure you want to delete this attendant?")) {
-    fetch(`http://localhost:3000/attendants/${memberId}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          showPopup("Deleted", "Attendant deleted successfully", "success");
-          row.remove(); // remove from table
-        } else {
-          showPopup("Error", data.message || "Failed to delete", "error");
-        }
-      })
-      .catch((err) => {
-        console.error("Delete Error:", err);
-        showPopup("Server Error", "Could not connect to server", "error");
-      });
+    try {
+    const response = await fetch(`http://localhost:3000/admin/delete/${memberId}`,{
+      method: 'DELETE'
+    });
+    const result = await response.json();
+    showPopup("Deleted", "Attendant deleted successfully", "success");
+    row.remove();
   }
+  catch(error) {
+    console.error("Delete Error:", err);
+    showPopup("Error","Failed to delete", "error");
+  }
+}
 });
 
+//loading the table
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://localhost:3000/attendant")
+  fetch("http://localhost:3000/admin/load_attendants")
     .then((res) => res.json())
     .then((data) => {
-      const tbody = document.getElementById("attendants-body");
-      tbody.innerHTML = ""; // Clear dummy rows
+      const tbody = document.querySelector(".update-table tbody");
 
+      if(data.length === 0)
+      {
+        tbody.innerHTML = `<tr><td colspan = '6' style="text-align:center;">No Attendants in this branch.</td></tr>`;
+        return;
+      } 
       data.forEach((attendant) => {
         const row = document.createElement("tr");
 
@@ -857,8 +917,9 @@ document.addEventListener("DOMContentLoaded", function () {
           <td>${attendant.attendant_id}</td>
           <td>${attendant.attendant_name}</td>
           <td>${attendant.phone_no}</td>
+          <td>${attendant.gender}</td>
           <td>${attendant.shift}</td>
-          <td><button class="update-button">Update</button></td>
+          <td><button onclick="edit_popup(this)" class="update-button">Update</button></td>
           <td><button class="delete-button">Delete</button></td>
         `;
 
@@ -871,8 +932,6 @@ document.addEventListener("DOMContentLoaded", function () {
       tbody.innerHTML = "<tr><td colspan='6'>Failed to load attendants</td></tr>";
     });
 });
-
-
   </script>
 </body>
 </html>

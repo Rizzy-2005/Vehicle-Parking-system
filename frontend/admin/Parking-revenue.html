@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <title>Parking Revenue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
@@ -353,7 +356,7 @@ th {
 <body>
   <div class="sidebar">
     
-    <h2>Welcome<br> Admin</h2>
+    <h2>Welcome<p style="margin: 1%;" id="admin_name">Admin</p></h2>
     <a href="Manage-attendant.html">Manage Attendants</a>
     <a href="User-details.html">Users List</a>
     <a href="Parking-revenue.html" class="active">Parking Revenue</a>
@@ -472,6 +475,11 @@ th {
         {
           return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
         }
+        if(!response.ok)
+        {
+          return showPopup("Admin not loaded",result.message,"error");
+        }
+        document.getElementById("admin_name").textContent = result[0].admin_name;
         fetchData();
         rate();
       }
