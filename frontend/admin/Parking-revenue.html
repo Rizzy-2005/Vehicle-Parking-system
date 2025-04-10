@@ -635,7 +635,7 @@ th {
     const totalRevenue = document.getElementById("total-revenue");
     const totalVehicle = document.getElementById("registered-vehicles");
 
-    totalRevenue.innerHTML = `₹${sum}`;
+    totalRevenue.innerHTML = `₹${Math.trunc((sum) * 100) / 100}`;
     totalVehicle.innerHTML = `${count}`;
 
   }
