@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Vehicle Registration</title>
+  <title>Vehicle Registration</title>
+  <link rel="icon" href="../assets/logo-fevicon.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Alata&family=Arvo&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
@@ -423,9 +424,15 @@
         <label for="license-plate">License Plate:</label>
         <input type="text" id="license-plate" placeholder="Enter License Plate">
       </div>
-      <div class="button-container">
-        <button class="slots-button" id="slots-button">Slots</button>
-        <button class="register-button" id="register-button" onclick="register()">Register</button>
+      <div class="form-group" style="display: flex; align-items: flex-end; gap: 15px;">
+        <div style="flex: 1;">
+          <label for="selected-slot">Selected Slot:</label>
+          <input type="text" id="selected-slot" placeholder="No slot selected" readonly>
+        </div>
+        <button class="slots-button" id="slots-button" style="margin-right:550px; width: 130px; padding: 10px;">Slots</button>
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 20px;">
+        <button class="register-button" id="register-button" onclick="register()" style="width: 200px; padding: 10px;">Register</button>
       </div>
     </div>
   </div>
@@ -588,10 +595,14 @@
     {
       modal.style.display = "none";
       selectedSlot = '';
+      document.getElementById('selected-slot').value = '';
     });
     confirmSlotBtn.addEventListener("click", () => {
       if (selectedSlot)
+      {
+      document.getElementById('selected-slot').value = selectedSlot;
       modal.style.display = "none";
+      }
       else
       showPopup("Please select a slot","You have to select a slot to register","error");
     });
@@ -602,6 +613,7 @@
       document.getElementById('vehicle-name').value = '';
       document.getElementById('license-plate').value = '';
       selectedSlot = '';
+      document.getElementById('selected-slot').value = '';
     }
     //register
     async function register(){
@@ -622,7 +634,7 @@
         const result = await response.json();
         if(response.status === 401)
         {
-          clear();
+          document.getElementById('user-id').value = '';
           return showPopup("User not found",result.message,"error");
         }
         if(!response.ok)
