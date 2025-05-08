@@ -478,7 +478,7 @@
     {
       try
       {
-        const response = await fetch("http://localhost:3000/attendant/");
+        const response = await fetch("/attendant/");
         const result = await response.json();
 
         if(response.status === 401)
@@ -550,7 +550,7 @@
     async function fetchtable()
     {
       try{
-        const response = await fetch("http://localhost:3000/attendant/updatetable");
+        const response = await fetch("/attendant/updatetable");
         const result = await response.json();
         if(!response.ok){
           return showPopup("Table not loaded",result.message,"error");
@@ -595,7 +595,7 @@
     {
       try
       {
-        const response = await fetch("http://localhost:3000/attendant/fetchSlots");
+        const response = await fetch("/attendant/fetchSlots");
         const slotsData = await response.json();
         if(!response.ok)
         {
@@ -666,7 +666,7 @@
     {
       const update_data = {no, old_slot, selectedSlot};
       try{
-        const response = await fetch("http://localhost:3000/attendant/update",{
+        const response = await fetch("/attendant/update",{
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(update_data)
@@ -688,7 +688,7 @@
     async function logout()
   {
     try{
-      const response = await fetch("http://localhost:3000/attendant/logout");
+      const response = await fetch("/attendant/logout");
       const result = await response.json();
       if(!response.ok){
         return showPopup("Logout failed",result.message,"error");

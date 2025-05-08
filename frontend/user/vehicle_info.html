@@ -419,7 +419,7 @@
     {
       try
       {
-        const response = await fetch("http://localhost:3000/user/");
+        const response = await fetch("/user/");
         const result = await response.json();
 
         if(response.status === 401)
@@ -544,7 +544,7 @@
     });
 
     function logout() {
-        fetch("http://localhost:3000/user/logout")
+        fetch("/user/logout")
             .then(response => response.json())
             .then(data => {
                 if (data.success) {

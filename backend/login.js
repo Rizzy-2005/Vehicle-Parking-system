@@ -13,10 +13,8 @@ router.post('/admin', (req, res) => {
     let checkSql = '';
     
     if (userType === 'T') {
-        console.log("Attendant login attempt");
         checkSql = 'SELECT * FROM attendant WHERE attendant_id = ? AND attendant_password = ?';
     } else if (userType === 'D') {
-        console.log("Admin login attempt");
         checkSql = 'SELECT * FROM admin WHERE admin_id = ? AND admin_password = ?';
     } else {
         return res.status(401).json({ message: "Invalid Credentials" });
@@ -57,7 +55,6 @@ router.post('/login', (req, res) => {
             return res.status(409).json({ message: "User ID doesn't exist" });
         }
 
-        console.log('Login successful');
         req.session.userid = results[0].user_id;
         res.json({ success: true, message: "Logged in successfully", redirectUrl: "/user/available_branches.html" });        
     });
@@ -83,7 +80,6 @@ router.post('/signup', (req, res) => {
                 console.error('Error inserting data:', err);
                 return res.status(500).json({ message: 'Server error' });
             }
-            console.log(`User Registered: ${name}, Phone: ${phone}, UserId: ${userId}`);
             
             res.status(200).json({ message: 'Signup successful!',redirectUrl: "login.html"});
         });

@@ -700,7 +700,7 @@
     {
       try
       {
-        const response = await fetch("http://localhost:3000/admin/");
+        const response = await fetch("/admin/");
         const result = await response.json();
 
         if(response.status === 401)
@@ -821,7 +821,7 @@
         return showPopup("Incorrect ID ", `ID should start with "AT"`, "error");
       }
       try {
-        const response = await fetch("http://localhost:3000/admin/add-attendant", {
+        const response = await fetch("/admin/add-attendant", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -902,7 +902,7 @@
       }
       const data = {memberId, updatedId, updatedName, updatedPhone, shift};
       try{
-        const response = await fetch("http://localhost:3000/admin/edit",{
+        const response = await fetch("/admin/edit",{
           method: 'POST',
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify(data)
@@ -947,7 +947,7 @@
     async function logout()
   {
     try{
-      const response = await fetch("http://localhost:3000/admin/logout");
+      const response = await fetch("/admin/logout");
       const result = await response.json();
       if(!response.ok){
         return showPopup("Logout failed",result.message,"error");
@@ -964,7 +964,7 @@
   //loginconfirmation
   async function loginConfirm() {
   try {
-    const response = await fetch("http://localhost:3000/admin/");
+    const response = await fetch("/admin/");
     const result = await response.json();
 
     if(response.status === 401) {
@@ -1023,7 +1023,7 @@
   const row = button.closest("tr");
   const memberId = row.cells[0].textContent;
     try {
-    const response = await fetch(`http://localhost:3000/admin/delete/${memberId}`,{
+    const response = await fetch(`/admin/delete/${memberId}`,{
       method: 'DELETE'
     });
     const result = await response.json();
@@ -1038,7 +1038,7 @@
 
 //loading the table
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://localhost:3000/admin/load_attendants")
+  fetch("/admin/load_attendants")
     .then((res) => res.json())
     .then((data) => {
       const tbody = document.querySelector(".update-table tbody");

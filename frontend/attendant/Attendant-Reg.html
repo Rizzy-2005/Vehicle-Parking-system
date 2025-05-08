@@ -483,7 +483,7 @@
     {
       try
       {
-        const response = await fetch("http://localhost:3000/attendant/");
+        const response = await fetch("/attendant/");
         const result = await response.json();
 
         if(response.status === 401)
@@ -548,7 +548,7 @@
     {
       try
       {
-        const response = await fetch("http://localhost:3000/attendant/fetchSlots");
+        const response = await fetch("/attendant/fetchSlots");
         const slotsData = await response.json();
         if(!response.ok)
         {
@@ -626,7 +626,7 @@
       }
       const register_data = {userId, vehicleName, licensePlate, selectedSlot};
       try{
-        const response = await fetch("http://localhost:3000/attendant/register",{
+        const response = await fetch("/attendant/register",{
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(register_data)
@@ -655,7 +655,7 @@
   async function logout()
   {
     try{
-      const response = await fetch("http://localhost:3000/attendant/logout");
+      const response = await fetch("/attendant/logout");
       const result = await response.json();
       if(!response.ok){
         return showPopup("Logout failed",result.message,"error");
