@@ -40,7 +40,7 @@ app.get("/", (req,res) => {
   res.redirect("/login/login.html");
 });
 
-app.listen(process.env.MAIN_port,(err) => {
+app.listen(process.env.PORT,(err) => {
   if(err) throw err;
   console.log("The server has hosted on: http://localhost:3000");
 });
