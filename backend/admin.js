@@ -69,7 +69,7 @@ router.get("/logout",(req,res) => {
     });
   });
 
-// ✅ NEW: Get All Attendants
+
 router.get("/load_attendants", (req, res) => {
   const query = `
       SELECT attendant_id, attendant_name, phone_no, branch_name, gender, shift 
@@ -86,7 +86,7 @@ router.get("/load_attendants", (req, res) => {
   });
 });
 
-  // ✅ Add a New Attendant
+
 router.post("/add-attendant", (req, res) => {
   const { id, name, phone, gender, password, shift } = req.body;
 
@@ -138,7 +138,7 @@ router.post("/edit",(req,res) => {
   });
 });
 
-// ✅ Delete an Attendant by ID
+
 router.delete("/delete/:id", (req, res) => {
   const id = req.params.id;
   const query = "DELETE FROM attendant WHERE attendant_id = ?";
