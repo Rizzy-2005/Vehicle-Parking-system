@@ -11,7 +11,6 @@ let branch_name;
 router.get("/",(req,res) => {
   if(req.session.attendant_id && req.session.branch_name)
   {
-    console.log(req.session.attendant_id,req.session.branch_name)
     attendant_id = req.session.attendant_id;
     branch_name = req.session.branch_name;
     db.query("SELECT attendant_name FROM attendant WHERE attendant_id = ?",[attendant_id],(err,result) => {

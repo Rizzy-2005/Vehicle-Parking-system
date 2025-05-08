@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function logout() {
-        fetch("http://localhost:3000/user/logout")
+        fetch("/user/logout")
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadStates() {
         loginConfirm();
 
-        fetch("http://localhost:3000/user/get_states")
+        fetch("/user/get_states")
             .then(response => response.json())
             .then(states => {
                 stateSelect.innerHTML = '<option value="">Select State</option>';
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //login confirmation
     async function loginConfirm() {
         try {
-            const response = await fetch("http://localhost:3000/user/");
+            const response = await fetch("/user/");
             const result = await response.json();
 
             if (result.name) {
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch(`http://localhost:3000/user/get_cities?state=${encodeURIComponent(state)}`)
+        fetch(`/user/get_cities?state=${encodeURIComponent(state)}`)
             .then(response => response.json())
             .then(cities => {
                 citySelect.innerHTML = '<option value="">Select City</option>';
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const state = stateSelect.value.trim();
         const city = citySelect.value.trim();
     
-        let url = "http://localhost:3000/user/search_branches";
+        let url = "/user/search_branches";
         const params = new URLSearchParams();
     
         if (state) params.append("state", state);
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function getVehicleDetails() {
-        const url = "http://localhost:3000/user/vehicle_details";
+        const url = "/user/vehicle_details";
         fetch(url)
             .then(response => {
                 if (!response.ok) throw new Error("Server error: Unable to fetch vehicles.");
@@ -317,7 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function user_details() {
         console.log("Fetching user details...");
-        fetch("http://localhost:3000/user/get_user_details")
+        fetch("/user/get_user_details")
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Failed to fetch user details: ${response.status}`);
@@ -369,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         console.log("Updating user details...", { username, phone,userId});
         
-        fetch("http://localhost:3000/user/update_user", {
+        fetch("/user/update_user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -523,7 +523,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         console.log("Updating user details...", userData);
         
-        fetch("http://localhost:3000/user/update_user", {
+        fetch("/user/update_user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

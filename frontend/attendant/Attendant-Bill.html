@@ -236,7 +236,7 @@
     {
       try
       {
-        const response = await fetch("http://localhost:3000/attendant/");
+        const response = await fetch("/attendant/");
         const result = await response.json();
 
         if(response.status === 401)
@@ -257,7 +257,7 @@
         try{
             now = new Date().toISOString();
             console.log(new Date());
-            const response = await fetch("http://localhost:3000/attendant/loadbill",{
+            const response = await fetch("/attendant/loadbill",{
                 method: 'POST',
                 headers: {'Content-Type':'application/json'},
                 body: JSON.stringify({now})
@@ -287,7 +287,7 @@
     {
         const paid_data = {now, total};
         try{
-            const response = await fetch("http://localhost:3000/attendant/paid",{
+            const response = await fetch("/attendant/paid",{
                 method: 'POST',
                 headers: {'Content-Type':'application/json'},
                 body: JSON.stringify(paid_data)

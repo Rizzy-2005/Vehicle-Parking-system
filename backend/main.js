@@ -36,7 +36,11 @@ app.use("/admin", preventCaching, admin);
 
 app.use(express.static(path.join(__dirname,"../frontend")));
 
+app.get("/", (req,res) => {
+  res.redirect("/login/login.html");
+});
+
 app.listen(process.env.MAIN_port,(err) => {
   if(err) throw err;
-  console.log("The server has hosted on: http://localhost:3000/login/login.html");
+  console.log("The server has hosted on: http://localhost:3000");
 });

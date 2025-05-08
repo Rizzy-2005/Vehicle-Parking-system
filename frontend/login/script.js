@@ -96,7 +96,7 @@ function initLoginPage() {
         const logData = { userID, password };
     
         try {
-            const response = await fetch('http://localhost:3000/login/login', {
+            const response = await fetch('/login/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(logData),
@@ -226,7 +226,7 @@ function initSignupPage() {
         const userData = { name, gender, phone, userId, password };
     
         try {
-            const response = await fetch('http://localhost:3000/login/signup', {
+            const response = await fetch('/login/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),
@@ -291,7 +291,7 @@ function initAdminPage(){
         signData = { userName, password }
     
         try {
-            const response = await fetch("http://localhost:3000/login/admin", {
+            const response = await fetch("/login/admin", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(signData)
