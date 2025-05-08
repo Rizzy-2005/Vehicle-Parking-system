@@ -256,7 +256,7 @@ router.get("/logout", (req, res) => {
             return res.status(500).json({ success: false, message: "Logout failed" });
         }
         res.clearCookie("connect.sid"); // Clear session cookie
-        res.json({ success: true, message: "Logged out successfully", redirectUrl: "http://localhost:3000/login/login.html" });
+        res.json({ success: true, message: "Logged out successfully", redirectUrl: "/login/login.html" });
     });
 });
 

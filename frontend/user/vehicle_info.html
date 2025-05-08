@@ -344,7 +344,7 @@
 </head>
 <body>
   <div class="sidebar">
-    <h2>Welcome User</h2>
+    <h2>Welcome <br><span id="username">User</span></h2>
     <a href="available_branches.html">Available Branches</a>
     <a href="vehicle_details.html" class="active">Vehicle Details</a>
     <a href="user_details.html">Update User</a>
@@ -415,24 +415,28 @@
 
     loginConfirm(); 
     //login confirmation
-    async function loginConfirm()
-    {
-      try
-      {
-        const response = await fetch("/user/");
-        const result = await response.json();
+    async function loginConfirm() {
+        try {
+            const response = await fetch("/user/");
+            const result = await response.json();
 
-        if(response.status === 401)
-        {
-          return showPopup("Not proper Login", "Try to login again", "error",result.redirectUrl); 
+            if (result.name) {
+                const usernameEl = document.getElementById("username");
+                if (usernameEl) {
+                    usernameEl.textContent = result.name;
+                }
+                console.log(result.name);
+            }
+
+            if (response.status === 401) {
+                return showPopup("Not proper Login", "Try to login again", "error", result.redirectUrl);
+            }
         }
-      }
-      catch(error)
-      {
-        console.error("Error in login confirmation: ",error);
-        showPopup("Connection Error", "Could not connect to the server", "error");
-      }
-    } 
+        catch (error) {
+            console.error("Error in login confirmation: ", error);
+            showPopup("Connection Error", "Could not connect to the server", "error");
+        }
+    }
 
     function showPopup(title, message, type, redirectUrl) {
       const popupOverlay = document.getElementById("unique-popup-overlay");
