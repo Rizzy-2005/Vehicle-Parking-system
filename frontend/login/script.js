@@ -251,7 +251,9 @@ function initSignupPage() {
     }
 }
 
-
+  function goToStaffPortal() {
+    window.location.href = "/login/staff_portal.html";
+  }
 
 
 
