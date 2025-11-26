@@ -146,14 +146,42 @@
 .popup-success .popup-btn:hover {
     background-color: #45a049;
 }
+  .staff-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
 
-    </style>
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
 
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
 
+    color: white;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+  }
+
+  .staff-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35);
+    background: linear-gradient(135deg, #764ba2, #667eea);
+  }
+
+  .staff-btn:active {
+    transform: scale(0.97);
+  }
+</style>
 </head>
 <body background="../assets/back.png" style="background-size: cover; background-repeat: no-repeat; background-attachment: fixed; scale: 1;">
 
     <img src="../assets/logo.png" alt="Top Logo" class="top-image"><!--Logo-->
+    <button class="staff-btn" onclick="goToStaffPortal()">Staff Portal</button>
     <div class="login-container">
         <input style="height: 50px;width: 95%;margin-bottom: 4px;color:black;opacity:1;" type="text" id="Id" class="inputbox" placeholder="UserId" required>
         <div class="password-container">
