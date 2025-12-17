@@ -1,0 +1,390 @@
+create database ez_park;
+
+use database ez_park;
+
+
+1. CREATE TABLE users (
+    user_id VARCHAR(20) PRIMARY KEY,
+    user_name VARCHAR(100) NOT NULL,
+    phone_no VARCHAR(15) NOT NULL UNIQUE,
+    gender ENUM('Male', 'Female') NOT NULL,
+    user_password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (user_id, user_name, phone_no, gender, user_password) VALUES
+('arjun_678', 'Arjun Reddy', '7012345678', 'Male', 'arjun@2005'),
+('neha_789', 'Neha Suresh', '7123456789', 'Female', 'neha@2002'),
+('vikram_890', 'Vikram Das', '7234567890', 'Male', 'vikram@2003'),
+('anjali_901', 'Anjali Menon', '7345678901', 'Female', 'anjali@2004'),
+('rajesh_012', 'Rajesh Pillai', '7456789012', 'Male', 'rajesh@2001'),
+('divya_123', 'Divya Nair', '7567890123', 'Female', 'divya@2006'),
+('siddharth_234', 'Siddharth Mohan', '7678901234', 'Male', 'siddharth@2007'),
+('pooja_345', 'Pooja Iyer', '7789012345', 'Female', 'pooja@2008'),
+('karthik_456', 'Karthik Ramesh', '7890123456', 'Male', 'karthik@2009'),
+('megha_567', 'Megha Varma', '7901234567', 'Female', 'megha@2010'),
+('rohan_678', 'Rohan Kapoor', '7912345678', 'Male', 'rohan@2011'),
+('sneha_789', 'Sneha Krishnan', '7923456789', 'Female', 'sneha@2012'),
+('gaurav_890', 'Gaurav Menon', '7934567890', 'Male', 'gaurav@2013'),
+('aparna_901', 'Aparna Das', '7945678901', 'Female', 'aparna@2014'),
+('naveen_012', 'Naveen Babu', '7956789012', 'Male', 'naveen@2015'),
+('keerthi_123', 'Keerthi Pillai', '7967890123', 'Female', 'keerthi@2016'),
+('suresh_234', 'Suresh Kumar', '7978901234', 'Male', 'suresh@2017'),
+('ananya_345', 'Ananya Shankar', '7989012345', 'Female', 'ananya@2018'),
+('prakash_456', 'Prakash Reddy', '7990123456', 'Male', 'prakash@2019'),
+('ishita_567', 'Ishita Nair', '7001234567', 'Female', 'ishita@2020');
+
+
+2. CREATE TABLE branch (
+    branch_name VARCHAR(100) PRIMARY KEY,  
+    phone_no VARCHAR(15) NOT NULL UNIQUE, 
+    street VARCHAR(255) NOT NULL,  
+    city VARCHAR(100) NOT NULL,  
+    state VARCHAR(100) NOT NULL,  
+    max_slots_car INT NOT NULL,  
+    max_slots_bike INT NOT NULL  
+);
+
+INSERT INTO branch (branch_name, phone_no, street, city, state, max_slots_car, max_slots_bike) VALUES
+('Kochi Central', '9876543210', 'MG Road', 'Kochi', 'Kerala', 22, 12),
+('Mumbai Downtown', '8765432109', 'Fort Area', 'Mumbai', 'Maharashtra', 25, 15),
+('Pandalam Junction', '7654321098', 'Main Road', 'Pandalam', 'Kerala', 15, 10),
+('Chennai Marina', '6543210987', 'Marina Beach Road', 'Chennai', 'Tamil Nadu', 20, 20),
+('Bangalore MG', '5432109876', 'MG Road', 'Bangalore', 'Karnataka', 23, 18);
+
+3. CREATE TABLE attendant (
+    attendant_id VARCHAR(20) PRIMARY KEY,  
+    attendant_name VARCHAR(100) NOT NULL,
+    phone_no VARCHAR(15) NOT NULL UNIQUE,
+    branch_name VARCHAR(100) NOT NULL,
+    gender ENUM('Male', 'Female') NOT NULL,  
+    attendant_password VARCHAR(255) NOT NULL,
+    shift ENUM('Morning', 'Afternoon', 'Evening', 'Night') NOT NULL,
+    FOREIGN KEY (branch_name) REFERENCES branch(branch_name) ON DELETE CASCADE
+);
+
+INSERT INTO attendant (attendant_id, attendant_name, phone_no, branch_name, gender, attendant_password, shift) VALUES
+-- Kochi Central
+('AT101', 'Sunil Kumar', '6012345678', 'Kochi Central', 'Male', 'attendant@101', 'Morning'),
+('AT102', 'Priya Das', '6123456789', 'Kochi Central', 'Female', 'attendant@102', 'Afternoon'),
+('AT103', 'Arvind Menon', '6234567890', 'Kochi Central', 'Male', 'attendant@103', 'Evening'),
+('AT104', 'Sonia Pillai', '6345678901', 'Kochi Central', 'Female', 'attendant@104', 'Night'),
+
+-- Mumbai Downtown
+('AT105', 'Kiran Babu', '6456789012', 'Mumbai Downtown', 'Male', 'attendant@105', 'Morning'),
+('AT106', 'Nithya Raj', '6567890123', 'Mumbai Downtown', 'Female', 'attendant@106', 'Afternoon'),
+('AT107', 'Ravi Shankar', '6678901234', 'Mumbai Downtown', 'Male', 'attendant@107', 'Evening'),
+('AT108', 'Shweta Krishnan', '6789012345', 'Mumbai Downtown', 'Female', 'attendant@108', 'Night'),
+
+-- Pandalam Junction
+('AT109', 'Ajay Verma', '6890123456', 'Pandalam Junction', 'Male', 'attendant@109', 'Morning'),
+('AT110', 'Bhavna Iyer', '6901234567', 'Pandalam Junction', 'Female', 'attendant@110', 'Afternoon'),
+('AT111', 'Mohan Raj', '6912345678', 'Pandalam Junction', 'Male', 'attendant@111', 'Evening'),
+('AT112', 'Anita Nair', '6923456789', 'Pandalam Junction', 'Female', 'attendant@112', 'Night'),
+
+-- Chennai Marina
+('AT113', 'Sandeep Reddy', '6934567890', 'Chennai Marina', 'Male', 'attendant@113', 'Morning'),
+('AT114', 'Revathi Menon', '6945678901', 'Chennai Marina', 'Female', 'attendant@114', 'Afternoon'),
+('AT115', 'Venkatesh Kumar', '6956789012', 'Chennai Marina', 'Male', 'attendant@115', 'Evening'),
+('AT116', 'Madhavi Pillai', '6967890123', 'Chennai Marina', 'Female', 'attendant@116', 'Night'),
+
+-- Bangalore MG
+('AT117', 'Karthik Varma', '6978901234', 'Bangalore MG', 'Male', 'attendant@117', 'Morning'),
+('AT118', 'Swathi Ramesh', '6989012345', 'Bangalore MG', 'Female', 'attendant@118', 'Afternoon'),
+('AT119', 'Yashwant Das', '6990123456', 'Bangalore MG', 'Male', 'attendant@119', 'Evening'),
+('AT120', 'Preeti Iyer', '6001234567', 'Bangalore MG', 'Female', 'attendant@120', 'Night');
+
+4. CREATE TABLE admin (
+    admin_id VARCHAR(20) PRIMARY KEY, 
+    admin_name VARCHAR(100) NOT NULL,
+    phone_no VARCHAR(15) NOT NULL UNIQUE,
+    branch_name VARCHAR(100) NOT NULL,
+    gender ENUM('Male', 'Female') NOT NULL,
+    admin_password VARCHAR(255) NOT NULL,
+    rate_per_hour DECIMAL(6,2) NOT NULL, 
+    FOREIGN KEY (branch_name) REFERENCES branch(branch_name) ON DELETE CASCADE
+);
+
+INSERT INTO admin (admin_id, admin_name, phone_no, branch_name, gender, admin_password, rate_per_hour) VALUES
+('AD101', 'Anil Kumar', '9123456789', 'Kochi Central', 'Male', 'admin@101', 50.00),
+('AD102', 'Meera Iyer', '9234567890', 'Mumbai Downtown', 'Female', 'admin@102', 48.00),
+('AD103', 'Ravi Shankar', '9345678901', 'Pandalam Junction', 'Male', 'admin@103', 52.00),
+('AD104', 'Lakshmi Menon', '9456789012', 'Chennai Marina', 'Female', 'admin@104', 46.00),
+('AD105', 'Rahul Nair', '9567890123', 'Bangalore MG', 'Male', 'admin@105', 49.00);
+
+5. CREATE TABLE slots (
+    sl_no INT PRIMARY KEY AUTO_INCREMENT,  
+    slot_id VARCHAR(20) NOT NULL,  
+    branch_name VARCHAR(100) NOT NULL,  
+    type ENUM('Car', 'Bike') NOT NULL,  
+    status ENUM('Parked', 'Vacant') NOT NULL DEFAULT 'Vacant',  
+    FOREIGN KEY (branch_name) REFERENCES branch(branch_name) ON DELETE CASCADE
+);
+
+INSERT INTO slots (slot_id, branch_name, type, status) VALUES
+-- Bangalore MG (23 Car slots, 18 Bike slots)
+('S101', 'Bangalore MG', 'Car', 'Vacant'),
+('S102', 'Bangalore MG', 'Car', 'Parked'),
+('S103', 'Bangalore MG', 'Car', 'Vacant'),
+('S104', 'Bangalore MG', 'Car', 'Parked'),
+('S105', 'Bangalore MG', 'Car', 'Vacant'),
+('S106', 'Bangalore MG', 'Car', 'Parked'),
+('S107', 'Bangalore MG', 'Car', 'Vacant'),
+('S108', 'Bangalore MG', 'Car', 'Parked'),
+('S109', 'Bangalore MG', 'Car', 'Vacant'),
+('S110', 'Bangalore MG', 'Car', 'Parked'),
+('S111', 'Bangalore MG', 'Car', 'Vacant'),
+('S112', 'Bangalore MG', 'Car', 'Parked'),
+('S113', 'Bangalore MG', 'Car', 'Vacant'),
+('S114', 'Bangalore MG', 'Car', 'Parked'),
+('S115', 'Bangalore MG', 'Car', 'Vacant'),
+('S116', 'Bangalore MG', 'Car', 'Parked'),
+('S117', 'Bangalore MG', 'Car', 'Vacant'),
+('S118', 'Bangalore MG', 'Car', 'Parked'),
+('S119', 'Bangalore MG', 'Car', 'Vacant'),
+('S120', 'Bangalore MG', 'Car', 'Parked'),
+('S121', 'Bangalore MG', 'Car', 'Vacant'),
+('S122', 'Bangalore MG', 'Car', 'Parked'),
+('S123', 'Bangalore MG', 'Car', 'Vacant'),
+('S124', 'Bangalore MG', 'Bike', 'Vacant'),
+('S125', 'Bangalore MG', 'Bike', 'Parked'),
+('S126', 'Bangalore MG', 'Bike', 'Vacant'),
+('S127', 'Bangalore MG', 'Bike', 'Parked'),
+('S128', 'Bangalore MG', 'Bike', 'Vacant'),
+('S129', 'Bangalore MG', 'Bike', 'Parked'),
+('S130', 'Bangalore MG', 'Bike', 'Vacant'),
+('S131', 'Bangalore MG', 'Bike', 'Parked'),
+('S132', 'Bangalore MG', 'Bike', 'Vacant'),
+('S133', 'Bangalore MG', 'Bike', 'Parked'),
+('S134', 'Bangalore MG', 'Bike', 'Vacant'),
+('S135', 'Bangalore MG', 'Bike', 'Parked'),
+('S136', 'Bangalore MG', 'Bike', 'Vacant'),
+('S137', 'Bangalore MG', 'Bike', 'Parked'),
+('S138', 'Bangalore MG', 'Bike', 'Vacant'),
+('S139', 'Bangalore MG', 'Bike', 'Parked'),
+('S140', 'Bangalore MG', 'Bike', 'Vacant'),
+('S141', 'Bangalore MG', 'Bike', 'Vacant'),
+
+('S101', 'Chennai Marina', 'Car', 'Vacant'),
+('S102', 'Chennai Marina', 'Car', 'Parked'),
+('S103', 'Chennai Marina', 'Car', 'Vacant'),
+('S104', 'Chennai Marina', 'Car', 'Parked'),
+('S105', 'Chennai Marina', 'Car', 'Vacant'),
+('S106', 'Chennai Marina', 'Car', 'Parked'),
+('S107', 'Chennai Marina', 'Car', 'Vacant'),
+('S108', 'Chennai Marina', 'Car', 'Parked'),
+('S109', 'Chennai Marina', 'Car', 'Vacant'),
+('S110', 'Chennai Marina', 'Car', 'Parked'),
+('S111', 'Chennai Marina', 'Car', 'Vacant'),
+('S112', 'Chennai Marina', 'Car', 'Parked'),
+('S113', 'Chennai Marina', 'Car', 'Vacant'),
+('S114', 'Chennai Marina', 'Car', 'Parked'),
+('S115', 'Chennai Marina', 'Car', 'Vacant'),
+('S116', 'Chennai Marina', 'Car', 'Parked'),
+('S117', 'Chennai Marina', 'Car', 'Vacant'),
+('S118', 'Chennai Marina', 'Car', 'Parked'),
+('S119', 'Chennai Marina', 'Car', 'Vacant'),
+('S120', 'Chennai Marina', 'Car', 'Parked'),
+('S121', 'Chennai Marina', 'Bike', 'Vacant'),
+('S122', 'Chennai Marina', 'Bike', 'Parked'),
+('S123', 'Chennai Marina', 'Bike', 'Vacant'),
+('S124', 'Chennai Marina', 'Bike', 'Parked'),
+('S125', 'Chennai Marina', 'Bike', 'Vacant'),
+('S126', 'Chennai Marina', 'Bike', 'Parked'),
+('S127', 'Chennai Marina', 'Bike', 'Vacant'),
+('S128', 'Chennai Marina', 'Bike', 'Parked'),
+('S129', 'Chennai Marina', 'Bike', 'Vacant'),
+('S130', 'Chennai Marina', 'Bike', 'Parked'),
+('S131', 'Chennai Marina', 'Bike', 'Vacant'),
+('S132', 'Chennai Marina', 'Bike', 'Parked'),
+('S133', 'Chennai Marina', 'Bike', 'Vacant'),
+('S134', 'Chennai Marina', 'Bike', 'Parked'),
+('S135', 'Chennai Marina', 'Bike', 'Vacant'),
+('S136', 'Chennai Marina', 'Bike', 'Parked'),
+('S137', 'Chennai Marina', 'Bike', 'Vacant'),
+('S138', 'Chennai Marina', 'Bike', 'Parked'),
+('S139', 'Chennai Marina', 'Bike', 'Vacant'),
+('S140', 'Chennai Marina', 'Bike', 'Parked'),
+
+('S101', 'Kochi Central', 'Car', 'Vacant'),
+('S102', 'Kochi Central', 'Car', 'Parked'),
+('S103', 'Kochi Central', 'Car', 'Vacant'),
+('S104', 'Kochi Central', 'Car', 'Parked'),
+('S105', 'Kochi Central', 'Car', 'Vacant'),
+('S106', 'Kochi Central', 'Car', 'Parked'),
+('S107', 'Kochi Central', 'Car', 'Vacant'),
+('S108', 'Kochi Central', 'Car', 'Parked'),
+('S109', 'Kochi Central', 'Car', 'Vacant'),
+('S110', 'Kochi Central', 'Car', 'Parked'),
+('S111', 'Kochi Central', 'Car', 'Vacant'),
+('S112', 'Kochi Central', 'Car', 'Parked'),
+('S113', 'Kochi Central', 'Car', 'Vacant'),
+('S114', 'Kochi Central', 'Car', 'Parked'),
+('S115', 'Kochi Central', 'Car', 'Vacant'),
+('S116', 'Kochi Central', 'Car', 'Parked'),
+('S117', 'Kochi Central', 'Car', 'Vacant'),
+('S118', 'Kochi Central', 'Car', 'Parked'),
+('S119', 'Kochi Central', 'Car', 'Vacant'),
+('S120', 'Kochi Central', 'Car', 'Parked'),
+('S121', 'Kochi Central', 'Car', 'Vacant'),
+('S122', 'Kochi Central', 'Car', 'Parked'),
+('S123', 'Kochi Central', 'Bike', 'Vacant'),
+('S124', 'Kochi Central', 'Bike', 'Parked'),
+('S125', 'Kochi Central', 'Bike', 'Vacant'),
+('S126', 'Kochi Central', 'Bike', 'Parked'),
+('S127', 'Kochi Central', 'Bike', 'Vacant'),
+('S128', 'Kochi Central', 'Bike', 'Parked'),
+('S129', 'Kochi Central', 'Bike', 'Vacant'),
+('S130', 'Kochi Central', 'Bike', 'Parked'),
+('S131', 'Kochi Central', 'Bike', 'Vacant'),
+('S132', 'Kochi Central', 'Bike', 'Parked'),
+('S133', 'Kochi Central', 'Bike', 'Vacant'),
+('S134', 'Kochi Central', 'Bike', 'Parked'),
+
+('S101', 'Pandalam Junction', 'Car', 'Vacant'),
+('S102', 'Pandalam Junction', 'Car', 'Parked'),
+('S103', 'Pandalam Junction', 'Car', 'Vacant'),
+('S104', 'Pandalam Junction', 'Car', 'Parked'),
+('S105', 'Pandalam Junction', 'Car', 'Vacant'),
+('S106', 'Pandalam Junction', 'Car', 'Parked'),
+('S107', 'Pandalam Junction', 'Car', 'Vacant'),
+('S108', 'Pandalam Junction', 'Car', 'Parked'),
+('S109', 'Pandalam Junction', 'Car', 'Vacant'),
+('S110', 'Pandalam Junction', 'Car', 'Parked'),
+('S111', 'Pandalam Junction', 'Car', 'Vacant'),
+('S112', 'Pandalam Junction', 'Car', 'Parked'),
+('S113', 'Pandalam Junction', 'Car', 'Vacant'),
+('S114', 'Pandalam Junction', 'Car', 'Parked'),
+('S115', 'Pandalam Junction', 'Car', 'Vacant'),
+('S116', 'Pandalam Junction', 'Bike', 'Vacant'),
+('S117', 'Pandalam Junction', 'Bike', 'Parked'),
+('S118', 'Pandalam Junction', 'Bike', 'Vacant'),
+('S119', 'Pandalam Junction', 'Bike', 'Parked'),
+('S120', 'Pandalam Junction', 'Bike', 'Vacant'),
+('S121', 'Pandalam Junction', 'Bike', 'Parked'),
+('S122', 'Pandalam Junction', 'Bike', 'Vacant'),
+('S123', 'Pandalam Junction', 'Bike', 'Parked'),
+('S124', 'Pandalam Junction', 'Bike', 'Vacant'),
+('S125', 'Pandalam Junction', 'Bike', 'Parked'),
+
+-- Mumbai Central (25 Car slots, 15 Bike slots)
+('S101', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S102', 'Mumbai Downtown', 'Car', 'Parked'),
+('S103', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S104', 'Mumbai Downtown', 'Car', 'Parked'),
+('S105', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S106', 'Mumbai Downtown', 'Car', 'Parked'),
+('S107', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S108', 'Mumbai Downtown', 'Car', 'Parked'),
+('S109', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S110', 'Mumbai Downtown', 'Car', 'Parked'),
+('S111', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S112', 'Mumbai Downtown', 'Car', 'Parked'),
+('S113', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S114', 'Mumbai Downtown', 'Car', 'Parked'),
+('S115', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S116', 'Mumbai Downtown', 'Car', 'Parked'),
+('S117', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S118', 'Mumbai Downtown', 'Car', 'Parked'),
+('S119', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S120', 'Mumbai Downtown', 'Car', 'Parked'),
+('S121', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S122', 'Mumbai Downtown', 'Car', 'Parked'),
+('S123', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S124', 'Mumbai Downtown', 'Car', 'Parked'),
+('S125', 'Mumbai Downtown', 'Car', 'Vacant'),
+('S126', 'Mumbai Downtown', 'Bike', 'Vacant'),
+('S127', 'Mumbai Downtown', 'Bike', 'Parked'),
+('S128', 'Mumbai Downtown', 'Bike', 'Vacant'),
+('S129', 'Mumbai Downtown', 'Bike', 'Parked'),
+('S130', 'Mumbai Downtown', 'Bike', 'Vacant'),
+('S131', 'Mumbai Downtown', 'Bike', 'Parked'),
+('S132', 'Mumbai Downtown', 'Bike', 'Vacant'),
+('S133', 'Mumbai Downtown', 'Bike', 'Parked'),
+('S134', 'Mumbai Downtown', 'Bike', 'Vacant'),
+('S135', 'Mumbai Downtown', 'Bike', 'Parked'),
+('S136', 'Mumbai Downtown', 'Bike', 'Vacant'),
+('S137', 'Mumbai Downtown', 'Bike', 'Parked'),
+('S138', 'Mumbai Downtown', 'Bike', 'Vacant'),
+('S139', 'Mumbai Downtown', 'Bike', 'Parked'),
+('S140', 'Mumbai Downtown', 'Bike', 'Vacant');
+
+6. CREATE TABLE vehicles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id VARCHAR(20) NOT NULL,
+    vehicle_no VARCHAR(20) NOT NULL,
+    vehicle_name VARCHAR(50) NOT NULL,
+    slot_id VARCHAR(20) NOT NULL,
+    secret_no INT NOT NULL,
+    registered_at DATETIME NOT NULL,
+    checkout_at DATETIME NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+INSERT INTO vehicles (user_id, vehicle_no, vehicle_name, slot_id, secret_no, registered_at, checkout_at)
+VALUES
+('neha_789', 'TN01ZX4321', 'Maruti Swift', 'S109', 2345, '2025-03-10 07:30:00', '2025-03-10 11:45:00'),
+('ishita_567', 'KL07AB1234', 'Hyundai Creta', 'S101', 9876, '2025-03-10 08:45:00', '2025-03-10 12:30:00'),
+('arjun_678', 'MH12XY5678', 'Honda City', 'S105', 5432, '2025-03-10 10:00:00', '2025-03-10 15:00:00'),
+('neha_789', 'TN01ZX4321', 'Maruti Swift', 'S110', 2345, '2025-03-11 12:45:00', '2025-03-11 17:00:00'),
+('ishita_567', 'KL07AB1234', 'Hyundai Creta', 'S102', 9876, '2025-03-11 14:15:00', '2025-03-11 18:00:00'),
+('arjun_678', 'MH12XY5678', 'Honda City', 'S106', 5432, '2025-03-11 16:30:00', '2025-03-11 20:00:00'),
+('neha_789', 'TN01ZX4321', 'Maruti Swift', 'S101', 2345, '2025-03-12 18:30:00', '2025-03-12 22:00:00'),
+('ishita_567', 'KL07AB1234', 'Hyundai Creta', 'S103', 9876, '2025-03-12 19:00:00', '2025-03-12 22:30:00'),
+('arjun_678', 'MH12XY5678', 'Honda City', 'S107', 5432, '2025-03-12 21:45:00', '2025-03-12 23:59:00'),
+('ishita_567', 'KL07AB1234', 'Hyundai Creta', 'S104', 9876, '2025-03-13 09:30:00', NULL),
+('neha_789', 'TN01ZX4321', 'Maruti Swift', 'S102', 2345, '2025-03-13 08:00:00', NULL),
+('arjun_678', 'MH12XY5678', 'Honda City', 'S108', 5432, '2025-03-13 11:15:00', NULL);
+
+7. CREATE TABLE parking_record (
+    id INT PRIMARY KEY AUTO_INCREMENT, 
+    user_id VARCHAR(20) NOT NULL,
+    vehicle_no VARCHAR(20) NOT NULL,
+    branch_name VARCHAR(100) NOT NULL,
+    attendant_in VARCHAR(50) NOT NULL,
+    attendant_out VARCHAR(50) NULL,  
+    profit DECIMAL(10,2) NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+INSERT INTO parking_record (user_id, vehicle_no, branch_name, attendant_in, attendant_out, profit)
+VALUES
+('neha_789', 'TN01ZX4321', 'Bangalore MG', 'AT117', 'AT118', 207.25), 
+('ishita_567', 'KL07AB1234', 'Kochi Central', 'AT101', 'AT102', 182.50),
+('arjun_678', 'MH12XY5678', 'Chennai Marina', 'AT113', 'AT114', 230.00), 
+('neha_789', 'TN01ZX4321', 'Bangalore MG', 'AT118', 'AT119', 207.25), 
+('ishita_567', 'KL07AB1234', 'Kochi Central', 'AT106', 'AT107', 182.50), 
+('arjun_678', 'MH12XY5678', 'Chennai Marina', 'AT114', 'AT115', 161.00), 
+('neha_789', 'TN01ZX4321', 'Mumbai Downtown', 'AT105', 'AT106', 168.00), 
+('ishita_567', 'KL07AB1234', 'Pandalam Junction', 'AT109', 'AT110', 182.00), 
+('arjun_678', 'MH12XY5678', 'Kochi Central', 'AT103', 'AT104', 107.50), 
+('ishita_567', 'KL07AB1234', 'Pandalam Junction', 'AT109', NULL, NULL), 
+('neha_789', 'TN01ZX4321', 'Mumbai Downtown', 'AT105', NULL, NULL), 
+('arjun_678', 'MH12XY5678', 'Kochi Central', 'AT102', NULL, NULL); 
+
+
+ALTER TABLE vehicles DROP FOREIGN KEY vehicles_ibfk_1;
+
+ALTER TABLE vehicles
+ADD CONSTRAINT fk_vehicles_user_id
+FOREIGN KEY (user_id) REFERENCES users(user_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+ALTER TABLE parking_record DROP FOREIGN KEY parking_record_ibfk_1;
+
+ALTER TABLE parking_record
+ADD CONSTRAINT parking_record_ibfk_1
+FOREIGN KEY (user_id) REFERENCES users(user_id)
+ON UPDATE CASCADE;
+
+ALTER TABLE parking_record
+ADD CONSTRAINT fk_att_in
+FOREIGN KEY (attendant_in)
+REFERENCES attendant(attendant_id)
+ON UPDATE CASCADE;
+
+ALTER TABLE parking_record
+ADD CONSTRAINT fk_att_out
+FOREIGN KEY (attendant_out)
+REFERENCES attendant(attendant_id)
+ON UPDATE CASCADE;
